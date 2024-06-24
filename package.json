@@ -1,5 +1,5 @@
 {
-  "name": "opaca-node-red",
+  "name": "opaca-node",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -7,10 +7,10 @@
   },
   "author": "",
   "license": "ISC",
-  "opaca-node-red" : {
+  "node-red" : {
         "nodes": {
-            "opaca-actions": "nodes/load-actions-node/opaca-actions.js",
-            "invoke-action": "nodes/invoke-action-node/invoke-action.js"
+            "opaca-actions": "/nodes/invoke-action-node/invoke-action.js",
+            "invoke-action": "/nodes/load-actions-node/opaca-actions.js"
         }
   }
 }

@@ -12,21 +12,14 @@
             return this.name||"invoke action";
         },
         paletteLabel: "invoke action",
-        oneditprepare: function() {
-
-            var select = $('#node-input-choices');
         
-            mapOfActions.forEach(function(actions) {
-                select.append($('<option>').text(acitons).attr('value', actions));
-            });
-            }
     });
 </script>
 
 <script type="text/html" data-template-name="invoke-action">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-example4">
+        <input type="text" id="node-input-name" placeholder="Name">
     </div>
 </script>
 

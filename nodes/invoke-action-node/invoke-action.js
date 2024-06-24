@@ -5,9 +5,7 @@ module.exports = function(RED) {
         var node = this;
 
         node.on('input', async function(msg) {
-            var choices = config.choices;
-            msg.payload =  choices;
-
+            
             node.send(msg);
         });
     }
