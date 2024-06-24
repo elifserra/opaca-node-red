@@ -1,7 +1,6 @@
 const apiUrl = "http://localhost:8000/agents";
 
 var mapOfActions;
-//const fetch = require('node-fetch');
 module.exports = function(RED) {
     async function fetchData(node) {
         
