@@ -1,5 +1,5 @@
 {
-  "name": "opaca-node",
+  "name": "opaca-node-red",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -7,13 +7,10 @@
   },
   "author": "",
   "license": "ISC",
-  "node-red" : {
+  "opaca-node-red" : {
         "nodes": {
             "opaca-actions": "nodes/load-actions-node/opaca-actions.js",
             "invoke-action": "nodes/invoke-action-node/invoke-action.js"
         }
-  },
-  "dependencies": {
-    "axios": "^0.24.0"
   }
 }

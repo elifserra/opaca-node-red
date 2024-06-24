@@ -1,6 +1,5 @@
 const apiUrl = "http://localhost:8000/agents";
 
-var mapOfActions;
 module.exports = function(RED) {
     async function fetchData(node) {
         
@@ -21,8 +20,8 @@ module.exports = function(RED) {
             }
 
             );
-            mapOfActions = new Map(actions.map(i => [i.name, i]));
-            node.warn(mapOfActions) ;
+        
+            node.warn(new Map(actions.map(i => [i.name, i]))) ;
         } catch (error) {
             node.error("Fetch error: " + error);
             return null;
