@@ -26,3 +26,6 @@ Please note that the `invoke-action-node` currently is not functioning. It is on
    * Click "import" and import the `flows.json` file in the workspace
 
 
+Note that for testing the subflows, the OPACA Runtime Platform should be active in the background and running on localhost:8000
+
+In the subflows, while testing the actions with the "Action Result" subflow, action name should be passed as name and the parameters should be passed in the payload as a json object (in the inject node).
