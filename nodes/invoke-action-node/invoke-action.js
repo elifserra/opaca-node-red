@@ -5,7 +5,6 @@ module.exports = function(RED) {
         var node = this;
 
         node.on('input', async function(msg) {
-            //const x = fetchData(node);
             var choices = config.choices;
             msg.payload =  choices;
 
