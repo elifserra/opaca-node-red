@@ -19,7 +19,7 @@ Please note that the `invoke-action-node` currently is not functioning. It is on
 1) To deploy the custom nodes:
    * Navigate to the $.node-red on your terminal and run the following command: npm install <directory_of_the_repository>
    * Restart node red
-   * On the UI, use the inject node to see the result of the `load-actions-node`
+   * On the UI, connect the inject node to the `load-actions-node`, deploy and inject the default msg.
 
 2) To test the subflows:
    * On the upper right corner of the node-red UI navigate to the menu
