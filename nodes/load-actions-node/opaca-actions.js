@@ -7,8 +7,9 @@ module.exports = function(RED) {
             const response = await fetch(apiUrl, {
                 method: 'GET'
             });
+
             const actions = [];
-            const data = await response.json().then( data => {
+            await response.json().then( data => {
                 data = data.map(o => o.actions);
                 
                 data.forEach(element =>
@@ -20,20 +21,34 @@ module.exports = function(RED) {
             }
 
             );
-        
-            node.warn(new Map(actions.map(i => [i.name, i]))) ;
+            node.actionsList = actions.map(i => i.name);
+            node.warn(node.actionsList);    
+            //node.warn(new Map(actions.map(i => [i.name, i]))) ;
         } catch (error) {
             node.error("Fetch error: " + error);
-            return null;
         }
     }
     function MyNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
 
+        // Retrieve the parameters from the configuration node
+        node.name = config.name;
+        node.action = config.action;
+        node.actionsList = config.actionsList;
+        //node.parameters = config.parameters;
+
         node.on('input', async function(msg) {
-            const x = fetchData(node);
+            fetchData(node);
+            node.warn(node.actionsList);
+            const action = node.action;
+            //const parameters = JSON.parse(node.parameters);
+;
+
         });
     }
+    
     RED.nodes.registerType("opaca-actions", MyNode);
+
+    
 }
