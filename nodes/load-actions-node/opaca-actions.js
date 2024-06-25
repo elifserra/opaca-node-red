@@ -8,12 +8,6 @@ module.exports = function(RED) {
                 method: 'GET'
             });
 
-            // Retrieve the parameters from the configuration node
-            node.name = config.name;
-            node.action = config.action;
-            node.parameters = config.parameters;
-
-
             const actions = [];
             await response.json().then( data => {
                 data = data.map(o => o.actions);
@@ -27,8 +21,9 @@ module.exports = function(RED) {
             }
 
             );
-        
-            node.warn(new Map(actions.map(i => [i.name, i]))) ;
+            node.actionsList = actions.map(i => i.name);
+            node.warn(node.actionsList);    
+            //node.warn(new Map(actions.map(i => [i.name, i]))) ;
         } catch (error) {
             node.error("Fetch error: " + error);
         }
@@ -37,16 +32,23 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         var node = this;
 
+        // Retrieve the parameters from the configuration node
+        node.name = config.name;
+        node.action = config.action;
+        node.actionsList = config.actionsList;
+        //node.parameters = config.parameters;
+
         node.on('input', async function(msg) {
             fetchData(node);
-
+            node.warn(node.actionsList);
             const action = node.action;
-            const parameters = JSON.parse(node.parameters);
-
-            // Example usage
-            node.warn(`Action: ${action}, Parameters: ${JSON.stringify(parameters)}`);
+            //const parameters = JSON.parse(node.parameters);
+;
 
         });
     }
+    
     RED.nodes.registerType("opaca-actions", MyNode);
+
+    
 }
