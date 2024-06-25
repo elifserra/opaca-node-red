@@ -2,7 +2,6 @@ const apiUrl = "http://localhost:8000/agents";
 
 module.exports = function(RED) {
     async function fetchData(node) {
-        
         try {
             const response = await fetch(apiUrl, {
                 method: 'GET'
@@ -19,11 +18,9 @@ module.exports = function(RED) {
                 );
                 
             }
-
             );
-            node.actionsList = actions.map(i => i.name);
-            node.warn(node.actionsList);    
-            //node.warn(new Map(actions.map(i => [i.name, i]))) ;
+
+            node.warn(new Map(actions.map(i => [i.name, i]))) ;
         } catch (error) {
             node.error("Fetch error: " + error);
         }
@@ -32,19 +29,10 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         var node = this;
 
-        // Retrieve the parameters from the configuration node
-        node.name = config.name;
-        node.action = config.action;
-        node.actionsList = config.actionsList;
-        //node.parameters = config.parameters;
-
         node.on('input', async function(msg) {
             fetchData(node);
-            node.warn(node.actionsList);
-            const action = node.action;
-            //const parameters = JSON.parse(node.parameters);
-;
-
+            
+            node.send(msg);
         });
     }
     

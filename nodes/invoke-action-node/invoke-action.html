@@ -15,7 +15,7 @@
     </div>
 </script>
 
-<script type="text/html" data-help-name="opaca-actions">
+<script type="text/html" data-help-name="invoke-action">
     <p>A custom node to perform OPACA actions.</p>
 </script>
 
@@ -30,10 +30,10 @@
             actionsList: { value: ["jkcdbkjdc","jbdskcd sckd"]}
         },
         inputs: 1,
-        outputs: 0,
+        outputs: 1,
         icon: "file.svg",
         label: function() {
-            return this.name || "OPACA actions";
+            return this.name || "invoke action";
         },
         oneditprepare: function() {
             $("#node-input-name").val(this.name);

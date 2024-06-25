@@ -1,22 +1,8 @@
 <script type="text/html" data-template-name="opaca-actions">
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-    <div class="form-row">
-        <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
-        <select id="node-input-action">
-            <option value="">Select an action</option>
-        </select>
-    </div>
-    <div class="form-row">
-        <label for="node-input-parameters"><i class="fa fa-sliders"></i> Parameters</label>
-        <input type="text" id="node-input-parameters" placeholder="Parameters (JSON)">
-    </div>
 </script>
 
 <script type="text/html" data-help-name="opaca-actions">
-    <p>A custom node to perform OPACA actions.</p>
+    <p>A custom node to retrieve OPACA actions.</p>
 </script>
 
 <script type="text/javascript">
@@ -24,33 +10,12 @@
         category: 'function',
         color: '#46b99c',
         defaults: {
-            name: { value:"" },
-            action: { value: "Aksiyon" },
-            parameters: { value: "{}" },
-            actionsList: { value: ["jkcdbkjdc","jbdskcd sckd"]}
         },
         inputs: 1,
         outputs: 0,
         icon: "file.svg",
         label: function() {
             return this.name || "OPACA actions";
-        },
-        oneditprepare: function() {
-            $("#node-input-name").val(this.name);
-            $("#node-input-action").val(this.action);
-            $("#node-input-parameters").val(this.parameters);
-
-            // Actions list
-            $('#node-input-action').empty().append('<option value="">Select an action</option>');
-            this.actionsList.forEach(action => {
-                $('#node-input-action').append(`<option value="${action}">${action}</option>`);
-            });
-        },
-        oneditsave: function() {
-            this.name = $("#node-input-name").val();
-            this.action = $("#node-input-action").val();
-            this.parameters = $("#node-input-parameters").val();
-            this.actionsList = ["jkcdbkjdc","jbdskcd sckd"];
         }
     });
 </script>
