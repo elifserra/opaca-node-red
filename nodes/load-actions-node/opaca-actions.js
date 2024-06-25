@@ -23,7 +23,7 @@ module.exports = function(RED) {
             );
             node.actionsList = actions.map(i => i.name);
             node.warn(node.actionsList);    
-            //node.warn(new Map(actions.map(i => [i.name, i]))) ;
+            node.warn(new Map(actions.map(i => [i.name, i]))) ;
         } catch (error) {
             node.error("Fetch error: " + error);
         }

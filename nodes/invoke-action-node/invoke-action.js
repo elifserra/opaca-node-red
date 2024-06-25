@@ -18,10 +18,12 @@ async function fetchData(node) {
             );
             
         }
-
         );
+
+        
+        node.warn(node.actionsList);
+        node.warn(node.actionParams);
        
-        //node.warn(new Map(actions.map(i => [i.name, i]))) ;
     } catch (error) {
         node.error("Fetch error: " + error);
     }
@@ -37,8 +39,8 @@ module.exports = function(RED) {
         // Retrieve the parameters from the configuration node
         node.name = config.name;
         node.action = config.action;
-        //node.actionsList = config.actionsList;
-        //node.parameters = config.parameters;
+        node.actionsList = config.actionsList;
+        node.actionParams = config.actionParams;
 
         node.on('input', async function(msg) {
             fetchData(node);
