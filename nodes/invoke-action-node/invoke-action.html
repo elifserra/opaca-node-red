@@ -35,10 +35,36 @@
         label: function() {
             return this.name || "OPACA actions";
         },
-        oneditprepare: function() {
+        oneditprepare: async function() {
+
             $("#node-input-name").val(this.name);
             $("#node-input-action").val(this.action);
             $("#node-input-parameters").val(this.parameters);
+
+            async function fetchData() {
+                const apiUrl = "http://localhost:8000/agents";
+                var actList = [];    
+                try {
+                    const response = await fetch(apiUrl, { method: 'GET' });
+                    const actions = [];
+                    const data = await response.json();
+                    data.forEach(agent => {
+                        if (agent.actions) {
+                            agent.actions.forEach(action => {
+                                actions.push(action);
+                            });
+                        }
+                    });
+                    actList = actions.map(i => i.name);
+                    return actList;
+                } catch (error) {
+                    console.error("Fetch error:", error);   
+                    return null;    
+                }
+            }
+
+
+            this.actionsList = await fetchData();
 
             // Actions list
             $('#node-input-action').empty().append('<option value="">Select an action</option>');
@@ -46,11 +72,10 @@
                 $('#node-input-action').append(`<option value="${action}">${action}</option>`);
             });
         },
-        oneditsave: function() {
+        oneditsave: async function() {
             this.name = $("#node-input-name").val();
             this.action = $("#node-input-action").val();
-            this.parameters = $("#node-input-parameters").val();
-            this.actionsList = ["jkcdbkjdc","jbdskcd sckd"];
+            this.parameters = $("#node-input-parameters").val();            
         }
     });
 </script>
