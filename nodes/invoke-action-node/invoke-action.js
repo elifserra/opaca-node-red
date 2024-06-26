@@ -35,11 +35,14 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         var node = this;
 
+        this.parameters = config.parameters;
 
+        //node.warn(config.parameters);
 
         node.on('input', async function(msg) {
 
-            //fetchData(node);
+            msg.payload = this.parameters;
+            node.send(msg);
         });
     }
     

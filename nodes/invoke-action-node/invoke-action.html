@@ -1,10 +1,5 @@
 <script type="text/html" data-template-name="invoke-action">
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-
-    <div class="form-row">
         <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
         <select id="node-input-action">
             <option value="">Select an action</option>
@@ -12,7 +7,6 @@
     </div>
     <div class="form-row" id="parameters-container">
         <label for="node-input-parameters"><i class="fa fa-sliders"></i> Parameters</label>
-        
     </div>
 </script>
 
@@ -20,16 +14,21 @@
     <p>A custom node to perform OPACA actions.</p>
 </script>
 
+
 <script type="text/javascript">
+
+
+
     RED.nodes.registerType('invoke-action',{
         category: 'function',
         color: '#46b99c',
         defaults: {
             name: { value:"" },
             action: { value: "" },
-            parameters: { value: "{}" },
+            parameters: { value: {} },
             paramsHtml: { value: "" }
         },
+
         inputs: 1,
         outputs: 1,
         icon: "file.svg",
@@ -38,6 +37,7 @@
         },
 
         oneditprepare: async function() {
+            debugger;
 
             async function fetchData() {
                 const apiUrl = "http://localhost:8000/agents";
@@ -60,18 +60,18 @@
                 }
             }
 
-
             
-            //actionParams: { value: []}
             var actions = await fetchData();
             var actionsList = actions.map(action => action.name);
             var actionParams = actions.map(action => [action.name,action.parameters]);
+            
 
             // Actions list
             $('#node-input-action').empty().append(`<option value="">${this.action}</option>`);
             actionsList.forEach(action => {
                 $('#node-input-action').append(`<option value="${action}">${action}</option>`);
             });
+
 
             $('#parameters-container').empty().append(this.paramsHtml);
 
@@ -83,15 +83,26 @@
                 
                 this.paramsHtml = "";
                 for (var key in params) {
-                    this.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="node-input-${key}" placeholder="${params[key].type}">`;
+                    //this.parameters.push({id:key, value:null});
+                    this.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="node-input-${key}"}">`;
+                    
                 }
                 $('#parameters-container').empty().append(this.paramsHtml);
             }.bind(this));
 
         },
 
+        oneditsave: function() {
+            this.action = this.nodeActionBox.val();
+
+
+            this.parameters.forEach(box => {
+                var inputElement = $(`#${box.id}`);
+                box.value = inputElement.val(); // Get the value of each input element
+            });
+
+        }
+
     });
 
 </script>
-
-
