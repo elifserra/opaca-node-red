@@ -9,8 +9,11 @@
             <option value="">Select an action</option>
         </select>
     </div>
+    <div class="form-row">
+        <button id="save-parameters-button">Save Parameters</button>
+    </div>
     <div class="form-row" id="parameters-container">
-        <label for="node-input-parameters"><i class="fa fa-sliders"></i> Parameters</label>
+        
         
     </div>
 </script>
@@ -25,23 +28,40 @@
         color: '#46b99c',
         defaults: {
             name: { value:"" },
-            action: { value: "Aksiyon" },
-            parameters: { value: "{}" },
-            actionsList: { value: ["jkcdbkjdc","jbdskcd sckd"]},
-            actionParams: { value: []}
+            action: { value: "" },
+            actionsList: { value: [""]},
+            actionParams: { value: []},
+            nodeNameBox: { value: null },
+            nodeActionBox: { value: null},
+            nodeParametersBoxes: { value: null },
+            nodeParametersBoxesMap: { value: [] },
+            parametersContainer: { value: null },
+            parameters : { value: {} },
+            paramsHtml: { value: "" }
         },
         inputs: 1,
-        outputs: 0,
+        outputs: 1,
         icon: "file.svg",
         label: function() {
-            return this.name || "OPACA actions";
+            return this.name || "invoke actions";
         },
 
         oneditprepare: async function() {
 
-            $("#node-input-name").val(this.name);
-            $("#node-input-action").val(this.action);
-            $("#node-input-parameters").val(this.parameters);
+            this.nodeNameBox = $("#node-input-name");
+            this.nodeActionBox = $("#node-input-action");
+            this.parametersContainer = $("#parameters-container");
+
+            this.nodeParametersBoxes = [];
+            this.parameters = {};
+
+            this.nodeNameBox.val(this.name);
+            this.nodeActionBox.val(this.action);
+
+            this.nodeParametersBoxesMap.forEach(box => {
+                var inputElement = $(`#${box.id}`);
+                inputElement.val(this.parameters[box.id]); // Set the value of each input element
+            });
 
             async function fetchData() {
                 const apiUrl = "http://localhost:8000/agents";
@@ -65,36 +85,50 @@
             }
 
 
-            var actions = await fetchData();
-            this.actionsList = actions.map(action => action.name);
-            this.actionParams = actions.map(action => [action.name,action.parameters]);
-            // Actions list
-            $('#node-input-action').empty().append('<option value="">Select an action</option>');
+            var actions = await fetchData();                                                     // Fetch actions from API
+            this.actionsList = actions.map(action => action.name);                               // Actions list
+            this.actionParams = actions.map(action => [action.name,action.parameters]);          // Action parameters as key-value pairs key: {name: param}
+
+
+            this.nodeActionBox.empty().append(`<option value="">${this.action}</option>`);
             this.actionsList.forEach(action => {
-                $('#node-input-action').append(`<option value="${action}">${action}</option>`);
+                this.nodeActionBox.append(`<option value="${action}">${action}</option>`);
             });
 
-            $('#node-input-action').on('change', function() {
-                var selectedAction = $('#node-input-action').val();
-                var selectedActionParams = this.actionParams.find(action => action[0] === selectedAction);
+            this.parametersContainer.empty().append(this.paramsHtml);
+
+            this.nodeActionBox.on('change', function() {
+                this.action = this.nodeActionBox.val();
+                var selectedActionParams = this.actionParams.find(action => action[0] === this.action);
                 var params = selectedActionParams[1];
-                var paramsHtml = "";
+                this.paramsHtml = "";
                 for (var key in params) {
-                    paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" placeholder="${params[key].type}">`;
+                    this.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" placeholder="${params[key].type}">`;
+                    this.nodeParametersBoxes.push({ id: key, value: null });                     // Store the input boxes to access them later
                 }
-                $('#parameters-container').empty().append(paramsHtml);
+                this.parametersContainer.empty().append(this.paramsHtml);
             }.bind(this));
 
+            $("#save-parameters-button").on('click', function () {
+
+            }.bind(this));
+        
         },
 
-        oneditsave: async function() {
-            this.name = $("#node-input-name").val();
-            this.action = $("#node-input-action").val();
-            this.parameters = $("#node-input-parameters").val();            
+
+
+        oneditsave: function() { 
+            
+           this.action = this.nodeActionBox.val();
+
+           this.nodeParametersBoxes.forEach(box => {
+                var inputElement = $(`#${box.id}`);
+                box.value = inputElement.val(); // Get the value of each input element
+                this.parameters[box.id] = box.value;
+            });
+
         }
 
     });
 
 </script>
-
-

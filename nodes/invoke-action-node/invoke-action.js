@@ -1,53 +1,25 @@
-const apiUrl = "http://localhost:8000/agents";
-
-async function fetchData(node) {
-        
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'GET'
-        });
-
-        const actions = [];
-        await response.json().then( data => {
-            data = data.map(o => o.actions);
-            
-            data.forEach(element =>
-                element.forEach(element =>
-                    actions.push(element)
-                )
-            );
-            
-        }
-        );
-
-        
-        node.warn(node.actionsList);
-        node.warn(node.actionParams);
-       
-    } catch (error) {
-        node.error("Fetch error: " + error);
-    }
-}
-
-
+// Description: This file contains the code for the node that invokes the action on the device.
 module.exports = function(RED) {
 
     function MyNode(config) {
-        RED.nodes.createNode(this, config);
-        var node = this;
+        RED.nodes.createNode(this, config);                                // creating the node
+        var node = this;                                                   // creating a reference to the node
 
-        // Retrieve the parameters from the configuration node
-        node.name = config.name;
-        node.action = config.action;
-        node.actionsList = config.actionsList;
-        node.actionParams = config.actionParams;
+        // Retrieve the parameters from the configuration node 
+        node.name = config.name;                                          // name of the node
+        node.action = config.action;                                      // selected action to be invoked
+        node.actionsList = config.actionsList;                            // list of actions
+        node.actionParams = config.actionParams;                          // map arameters of the action
+        node.parameters = config.parameters;                              // list of parameters
 
-        node.on('input', async function(msg) {
-            fetchData(node);
+        node.on('input', function(msg) {      
+            node.warn(node.parameters);    
+            msg.payload = node.parameters;
+            node.send(msg);                                               // sending the message to the next node 
         });
+
     }
     
-   RED.nodes.registerType("invoke-action", MyNode);
+   RED.nodes.registerType("invoke-action", MyNode);                       // registering the node
 
 }
-
