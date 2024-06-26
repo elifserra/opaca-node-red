@@ -31,6 +31,7 @@ module.exports = function(RED) {
         var node = this;
 
         node.on('input', async function(msg) {
+            
             fetchData(node);
         });
     }

@@ -1,5 +1,10 @@
 <script type="text/html" data-template-name="invoke-action">
     <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
         <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
         <select id="node-input-action">
             <option value="">Select an action</option>
@@ -22,7 +27,8 @@
         defaults: {
             name: { value:"" },
             action: { value: "" },
-            parameters: { value: "{}" }
+            parameters: { value: "{}" },
+            paramsHtml: { value: "" }
         },
         inputs: 1,
         outputs: 1,
@@ -54,26 +60,32 @@
                 }
             }
 
+
+            
+            //actionParams: { value: []}
             var actions = await fetchData();
             var actionsList = actions.map(action => action.name);
             var actionParams = actions.map(action => [action.name,action.parameters]);
 
             // Actions list
-            $('#node-input-action').empty().append('<option value="">Select an action</option>');
+            $('#node-input-action').empty().append(`<option value="">${this.action}</option>`);
             actionsList.forEach(action => {
                 $('#node-input-action').append(`<option value="${action}">${action}</option>`);
             });
 
+            $('#parameters-container').empty().append(this.paramsHtml);
+
+
             $('#node-input-action').on('change', function() {
-                var selectedAction = this.action;
+                var selectedAction = $('#node-input-action').val();
                 var selectedActionParams = actionParams.find(action => action[0] === selectedAction);
                 var params = selectedActionParams[1];
-                var paramsHtml = "";
+                
+                this.paramsHtml = "";
                 for (var key in params) {
-                    paramsHtml += `<label for="${key}">${key}</label><input type="text" id="node-input-${key}" placeholder="${params[key].type}">`;
-
+                    this.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="node-input-${key}" placeholder="${params[key].type}">`;
                 }
-                $('#parameters-container').empty().append(paramsHtml);
+                $('#parameters-container').empty().append(this.paramsHtml);
             }.bind(this));
 
         },
