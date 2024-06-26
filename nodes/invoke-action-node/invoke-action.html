@@ -1,9 +1,5 @@
 <script type="text/html" data-template-name="invoke-action">
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-    <div class="form-row">
         <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
         <select id="node-input-action">
             <option value="">Select an action</option>
@@ -15,7 +11,7 @@
     </div>
 </script>
 
-<script type="text/html" data-help-name="opaca-actions">
+<script type="text/html" data-help-name="invoke-action">
     <p>A custom node to perform OPACA actions.</p>
 </script>
 
@@ -25,23 +21,17 @@
         color: '#46b99c',
         defaults: {
             name: { value:"" },
-            action: { value: "Aksiyon" },
-            parameters: { value: "{}" },
-            actionsList: { value: ["jkcdbkjdc","jbdskcd sckd"]},
-            actionParams: { value: []}
+            action: { value: "" },
+            parameters: { value: "{}" }
         },
         inputs: 1,
-        outputs: 0,
+        outputs: 1,
         icon: "file.svg",
         label: function() {
-            return this.name || "OPACA actions";
+            return this.name || "invoke action";
         },
 
         oneditprepare: async function() {
-
-            $("#node-input-name").val(this.name);
-            $("#node-input-action").val(this.action);
-            $("#node-input-parameters").val(this.parameters);
 
             async function fetchData() {
                 const apiUrl = "http://localhost:8000/agents";
@@ -64,34 +54,29 @@
                 }
             }
 
-
             var actions = await fetchData();
-            this.actionsList = actions.map(action => action.name);
-            this.actionParams = actions.map(action => [action.name,action.parameters]);
+            var actionsList = actions.map(action => action.name);
+            var actionParams = actions.map(action => [action.name,action.parameters]);
+
             // Actions list
             $('#node-input-action').empty().append('<option value="">Select an action</option>');
-            this.actionsList.forEach(action => {
+            actionsList.forEach(action => {
                 $('#node-input-action').append(`<option value="${action}">${action}</option>`);
             });
 
             $('#node-input-action').on('change', function() {
-                var selectedAction = $('#node-input-action').val();
-                var selectedActionParams = this.actionParams.find(action => action[0] === selectedAction);
+                var selectedAction = this.action;
+                var selectedActionParams = actionParams.find(action => action[0] === selectedAction);
                 var params = selectedActionParams[1];
                 var paramsHtml = "";
                 for (var key in params) {
-                    paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" placeholder="${params[key].type}">`;
+                    paramsHtml += `<label for="${key}">${key}</label><input type="text" id="node-input-${key}" placeholder="${params[key].type}">`;
+
                 }
                 $('#parameters-container').empty().append(paramsHtml);
             }.bind(this));
 
         },
-
-        oneditsave: async function() {
-            this.name = $("#node-input-name").val();
-            this.action = $("#node-input-action").val();
-            this.parameters = $("#node-input-parameters").val();            
-        }
 
     });
 
