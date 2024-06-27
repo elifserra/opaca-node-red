@@ -100,7 +100,7 @@
             this.actionParams = actions.map(action => [action.name,action.parameters]);          // Action parameters as key-value pairs key: {name: param}
 
 
-            this.nodeActionBox.empty().append(`<option value="">${this.action}</option>`);
+            this.nodeActionBox.empty().append(`<option value="${this.action}">${this.action}</option>`);
             this.actionsList.forEach(action => {
                 this.nodeActionBox.append(`<option value="${action}">${action}</option>`);
             });
