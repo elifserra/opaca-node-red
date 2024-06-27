@@ -47,21 +47,31 @@
         },
 
         oneditprepare: async function() {
+            
+            if(this.parameters){
+                this.paramsHtml = "";
+                for (var key in this.parameters) {
+                    this.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${this.parameters[key]}" placeholder="${this.parameters[key]}">`;
+                }
+            }
 
-            this.nodeNameBox = $("#node-input-name");
+                        
+            this.nodeParametersBoxes.forEach(box => {
+                var inputElement = $(`#${box.id}`);
+                box.value = inputElement.val(); // Get the value of each input element
+                this.parameters[box.id] = box.value;
+            });
+
+            //this.nodeNameBox = $("#node-input-name");
             this.nodeActionBox = $("#node-input-action");
             this.parametersContainer = $("#parameters-container");
 
-            this.nodeParametersBoxes = [];
-            this.parameters = {};
+            //this.nodeParametersBoxes = [];
+            //this.parameters = {};
 
-            this.nodeNameBox.val(this.name);
-            this.nodeActionBox.val(this.action);
+            //this.nodeActionBox.val(this.action);
 
-            this.nodeParametersBoxesMap.forEach(box => {
-                var inputElement = $(`#${box.id}`);
-                inputElement.val(this.parameters[box.id]); // Set the value of each input element
-            });
+
 
             async function fetchData() {
                 const apiUrl = "http://localhost:8000/agents";
@@ -102,14 +112,18 @@
                 var selectedActionParams = this.actionParams.find(action => action[0] === this.action);
                 var params = selectedActionParams[1];
                 this.paramsHtml = "";
+                this.nodeParametersBoxes = [];
+                this.parameters = [];
                 for (var key in params) {
                     this.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" placeholder="${params[key].type}">`;
-                    this.nodeParametersBoxes.push({ id: key, value: null });                     // Store the input boxes to access them later
+                    this.nodeParametersBoxes.push({ id: `${key}`, value: null });                     // Store the input boxes to access them later
                 }
                 this.parametersContainer.empty().append(this.paramsHtml);
             }.bind(this));
 
             $("#save-parameters-button").on('click', function () {
+
+                //this.oneditsave();
 
             }.bind(this));
         
@@ -119,7 +133,7 @@
 
         oneditsave: function() { 
             
-           this.action = this.nodeActionBox.val();
+           //this.action = this.nodeActionBox.val();
 
            this.nodeParametersBoxes.forEach(box => {
                 var inputElement = $(`#${box.id}`);
