@@ -36,8 +36,9 @@
             nodeParametersBoxes: { value: null },
             nodeParametersBoxesMap: { value: [] },
             parametersContainer: { value: null },
-            parameters : { value: {} },
-            paramsHtml: { value: "" }
+            parameters : { value: [] },
+            paramsHtml: { value: "" },
+            node      : { value: this }
         },
         inputs: 1,
         outputs: 1,
@@ -47,31 +48,6 @@
         },
 
         oneditprepare: async function() {
-            
-            if(this.parameters){
-                this.paramsHtml = "";
-                for (var key in this.parameters) {
-                    this.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${this.parameters[key]}" placeholder="${this.parameters[key]}">`;
-                }
-            }
-
-                        
-            this.nodeParametersBoxes.forEach(box => {
-                var inputElement = $(`#${box.id}`);
-                box.value = inputElement.val(); // Get the value of each input element
-                this.parameters[box.id] = box.value;
-            });
-
-            //this.nodeNameBox = $("#node-input-name");
-            this.nodeActionBox = $("#node-input-action");
-            this.parametersContainer = $("#parameters-container");
-
-            //this.nodeParametersBoxes = [];
-            //this.parameters = {};
-
-            //this.nodeActionBox.val(this.action);
-
-
 
             async function fetchData() {
                 const apiUrl = "http://localhost:8000/agents";
@@ -94,53 +70,119 @@
                 }
             }
 
+            
+            var that = this;
+            
+            var actions = await fetchData();                                                     
+            that.actionsList = actions.map(action => action.name);                               
+            that.actionParams = actions.map(action => [action.name,action.parameters]);  
 
-            var actions = await fetchData();                                                     // Fetch actions from API
-            this.actionsList = actions.map(action => action.name);                               // Actions list
-            this.actionParams = actions.map(action => [action.name,action.parameters]);          // Action parameters as key-value pairs key: {name: param}
+            if(that.parameters){
+                console.log("parameters are not empty");
+                that.paramsHtml = "";
+                for (var key in that.parameters) {
+                    that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
+                }
+            }
+            
+            $("#save-parameters-button").on('click', function () {
+                console.log("Save parameters button clicked");
+                
+                that.nodeParametersBoxes.forEach(box => {
+                    var inputElement = $(`#${box.id}`);
+                    box.value = inputElement.val(); // Get the value of each input element
+                });
+
+                // Convert the list of parameter boxes to an object with key-value pairs
+                var parameters = {};
+                that.nodeParametersBoxes.forEach(box => {
+                    parameters[box.id] = box.value;
+                });
+                that.parameters = parameters; // Save the parameters as an object
+
+                console.log("Parameters saved:", that.parameters);
+
+                RED.nodes.dirty(true); // Deploy butonunu aktif yapar
+                RED.nodes.node(that.id).parameters = that.parameters; // Konfigürasyonu günceller
+
+            }.bind(this));
 
 
-            this.nodeActionBox.empty().append(`<option value="${this.action}">${this.action}</option>`);
-            this.actionsList.forEach(action => {
-                this.nodeActionBox.append(`<option value="${action}">${action}</option>`);
+            $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
+            that.actionsList.forEach(action => {
+                $("#node-input-action").append(`<option value="${action}">${action}</option>`);
             });
 
-            this.parametersContainer.empty().append(this.paramsHtml);
+            $("#parameters-container").empty().append(that.paramsHtml);
 
-            this.nodeActionBox.on('change', function() {
-                this.action = this.nodeActionBox.val();
-                var selectedActionParams = this.actionParams.find(action => action[0] === this.action);
+            $("#node-input-action").on('change', function() {
+                console.log("Action changed"); 
+                that.action = $("#node-input-action").val();
+                var selectedActionParams = that.actionParams.find(action => action[0] === that.action);
                 var params = selectedActionParams[1];
-                this.paramsHtml = "";
-                this.nodeParametersBoxes = [];
-                this.parameters = [];
+                that.paramsHtml = "";
+                //that.parameters = [];
+                that.nodeParametersBoxes = [];
                 for (var key in params) {
-                    this.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" placeholder="${params[key].type}">`;
-                    this.nodeParametersBoxes.push({ id: `${key}`, value: null });                     // Store the input boxes to access them later
+                    that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" placeholder="${params[key].type}">`;
+                    that.nodeParametersBoxes.push({ id: `${key}`, value: null });                     // Store the input boxes to access them later
                 }
-                this.parametersContainer.empty().append(this.paramsHtml);
+                $("#parameters-container").empty().append(that.paramsHtml);
             }.bind(this));
 
-            $("#save-parameters-button").on('click', function () {
 
-                //this.oneditsave();
-
-            }.bind(this));
         
         },
 
 
 
         oneditsave: function() { 
-            
-           //this.action = this.nodeActionBox.val();
+            /*
+            var that = this;
 
-           this.nodeParametersBoxes.forEach(box => {
+            that.nodeParametersBoxes.forEach(box => {
                 var inputElement = $(`#${box.id}`);
                 box.value = inputElement.val(); // Get the value of each input element
-                this.parameters[box.id] = box.value;
+                that.parameters[box.id] = box.value;
             });
 
+            console.log("DONNEEE", that.parameters);
+            
+            */
+
+            var that = this;
+
+            that.nodeParametersBoxes.forEach(box => {
+                var inputElement = $(`#${box.id}`);
+                box.value = inputElement.val(); // Get the value of each input element
+            });
+
+            // Convert the list of parameter boxes to an object with key-value pairs
+            var parameters = {};
+            that.nodeParametersBoxes.forEach(box => {
+                parameters[box.id] = box.value;
+            });
+            that.parameters = parameters; // Save the parameters as an object
+
+            RED.nodes.dirty(true); // Deploy butonunu aktif yapar
+            RED.nodes.node(that.id).parameters = that.parameters; // Konfigürasyonu günceller
+        },
+
+
+        oneditcancel: function () {
+            var that = this;
+
+            $("#parameters-container").empty().append(that.paramsHtml);
+
+           
+            if (that.parameters) {
+                console.log("oneditcancel called");
+                that.paramsHtml = "";
+                for (var key in that.parameters) {
+                    that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}-unique" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
+                }
+                $("#parameters-container").empty().append(that.paramsHtml);
+            }
         }
 
     });
