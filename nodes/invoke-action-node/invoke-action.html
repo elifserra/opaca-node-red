@@ -5,24 +5,81 @@
     </div>
     <div class="form-row">
         <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
+        <input type="hidden" id="node-input-actiontype">
         <select id="node-input-action">
             <option value="">Select an action</option>
         </select>
     </div>
-    <div class="form-row">
-        <button id="save-parameters-button">Save Parameters</button>
-    </div>
     <div class="form-row" id="parameters-container">
-        
-        
+        <!-- Parameters will be added here -->
     </div>
 </script>
 
-<script type="text/html" data-help-name="opaca-actions">
+<script type="text/html" data-help-name="invoke-actions">
     <p>A custom node to perform OPACA actions.</p>
 </script>
 
-<script type="text/javascript">
+<!-- JavaScript dosyasını dahil etme -->
+<script type="text/javascript" >
+
+    class Parameter{
+        constructor(name, type, value=""){
+            this.name = name;
+            this.type = type;
+            this.value = value;
+        }
+
+    }
+
+    function saveParameters(node) {
+
+        node.nodeParametersBoxes.forEach(box => {
+            var inputElement = $(`#${box.id}`);
+            box.value = inputElement.val(); 
+        });
+
+        var parameters = {};
+        node.nodeParametersBoxes.forEach(box => {
+            parameters[box.id] = box.value;
+            node.paramOutputs.forEach(param => {
+                if(param.id === box.id){
+                    param.value.value = box.value;
+                }
+            });
+        });
+
+        node.parameters = parameters; 
+        
+        var nod = RED.nodes.node(node.id);
+        nod.status({ fill: "blue", shape: "dot", text: "configured" });
+
+        
+        RED.nodes.dirty(true); 
+        RED.nodes.node(node.id).parameters = node.parameters; 
+        RED.nodes.node(node.id).paramOutputs = node.paramOutputs;
+    }
+
+    async function fetchData() {
+        const apiUrl = "http://localhost:8000/agents";
+        var actList = [];    
+        try {
+            const response = await fetch(apiUrl, { method: 'GET' });
+            const actions = [];
+            const data = await response.json();
+            data.forEach(agent => {
+                if (agent.actions) {
+                    agent.actions.forEach(action => {
+                        actions.push(action);
+                    });
+                }
+            });
+            return actions;
+        } catch (error) {
+            console.error("Fetch error:", error);   
+            return null;    
+        }
+    }
+
     RED.nodes.registerType('invoke-action',{
         category: 'function',
         color: '#46b99c',
@@ -38,7 +95,7 @@
             parametersContainer: { value: null },
             parameters : { value: [] },
             paramsHtml: { value: "" },
-            node      : { value: this }
+            paramOutputs: { value: [] }
         },
         inputs: 1,
         outputs: 1,
@@ -46,30 +103,8 @@
         label: function() {
             return this.name || "invoke actions";
         },
-
+        
         oneditprepare: async function() {
-
-            async function fetchData() {
-                const apiUrl = "http://localhost:8000/agents";
-                var actList = [];    
-                try {
-                    const response = await fetch(apiUrl, { method: 'GET' });
-                    const actions = [];
-                    const data = await response.json();
-                    data.forEach(agent => {
-                        if (agent.actions) {
-                            agent.actions.forEach(action => {
-                                actions.push(action);
-                            });
-                        }
-                    });
-                    return actions;
-                } catch (error) {
-                    console.error("Fetch error:", error);   
-                    return null;    
-                }
-            }
-
             
             var that = this;
             
@@ -78,35 +113,13 @@
             that.actionParams = actions.map(action => [action.name,action.parameters]);  
 
             if(that.parameters){
-                console.log("parameters are not empty");
                 that.paramsHtml = "";
                 for (var key in that.parameters) {
                     that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
                 }
+                $("#parameters-container").empty().append(that.paramsHtml);
             }
             
-            $("#save-parameters-button").on('click', function () {
-                console.log("Save parameters button clicked");
-                
-                that.nodeParametersBoxes.forEach(box => {
-                    var inputElement = $(`#${box.id}`);
-                    box.value = inputElement.val(); // Get the value of each input element
-                });
-
-                // Convert the list of parameter boxes to an object with key-value pairs
-                var parameters = {};
-                that.nodeParametersBoxes.forEach(box => {
-                    parameters[box.id] = box.value;
-                });
-                that.parameters = parameters; // Save the parameters as an object
-
-                console.log("Parameters saved:", that.parameters);
-
-                RED.nodes.dirty(true); // Deploy butonunu aktif yapar
-                RED.nodes.node(that.id).parameters = that.parameters; // Konfigürasyonu günceller
-
-            }.bind(this));
-
 
             $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
             that.actionsList.forEach(action => {
@@ -115,75 +128,58 @@
 
             $("#parameters-container").empty().append(that.paramsHtml);
 
+
+
             $("#node-input-action").on('change', function() {
                 console.log("Action changed"); 
                 that.action = $("#node-input-action").val();
                 var selectedActionParams = that.actionParams.find(action => action[0] === that.action);
                 var params = selectedActionParams[1];
                 that.paramsHtml = "";
-                //that.parameters = [];
                 that.nodeParametersBoxes = [];
+                that.paramOutputs = [];
                 for (var key in params) {
-                    that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" placeholder="${params[key].type}">`;
-                    that.nodeParametersBoxes.push({ id: `${key}`, value: null });                     // Store the input boxes to access them later
+                    that.paramsHtml += `<label for="${key}">${key}</label>
+                                        <input type="text" id="${key}" placeholder="${params[key].type}">`;
+                    that.nodeParametersBoxes.push({ id: `${key}`, value: null });   
+                    that.paramOutputs.push({id : `${key}`, value: new Parameter(key,params[key].type, null)});              
                 }
                 $("#parameters-container").empty().append(that.paramsHtml);
+
+                for (var key in params) {
+                    $(`#${key}`).typedInput({
+                        types: ['str', 'msg'],
+                        default: 'str',
+                        typeField: $("#node-input-actiontype"),
+                    });
+                }   
+
             }.bind(this));
 
+            for (var key in that.parameters) {
+                $(`#${key}`).typedInput({
+                    types: ['str', 'msg'],
+                    default: 'str',
+                    typeField: $("#node-input-actiontype"),
+                });
+            }
 
-        
+            that.nodeParametersBoxes.forEach(box => {
+                var inputElement = $(`#${box.id}`);
+                inputElement.on('change', function() {
+                    console.log("Input changed");
+                }.bind(this));
+            });
+
         },
 
 
 
         oneditsave: function() { 
-            /*
-            var that = this;
-
-            that.nodeParametersBoxes.forEach(box => {
-                var inputElement = $(`#${box.id}`);
-                box.value = inputElement.val(); // Get the value of each input element
-                that.parameters[box.id] = box.value;
-            });
-
-            console.log("DONNEEE", that.parameters);
-            
-            */
-
-            var that = this;
-
-            that.nodeParametersBoxes.forEach(box => {
-                var inputElement = $(`#${box.id}`);
-                box.value = inputElement.val(); // Get the value of each input element
-            });
-
-            // Convert the list of parameter boxes to an object with key-value pairs
-            var parameters = {};
-            that.nodeParametersBoxes.forEach(box => {
-                parameters[box.id] = box.value;
-            });
-            that.parameters = parameters; // Save the parameters as an object
-
-            RED.nodes.dirty(true); // Deploy butonunu aktif yapar
-            RED.nodes.node(that.id).parameters = that.parameters; // Konfigürasyonu günceller
+           saveParameters(this);
         },
 
 
-        oneditcancel: function () {
-            var that = this;
-
-            $("#parameters-container").empty().append(that.paramsHtml);
-
-           
-            if (that.parameters) {
-                console.log("oneditcancel called");
-                that.paramsHtml = "";
-                for (var key in that.parameters) {
-                    that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}-unique" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
-                }
-                $("#parameters-container").empty().append(that.paramsHtml);
-            }
-        }
 
     });
 
