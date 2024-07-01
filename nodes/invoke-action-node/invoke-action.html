@@ -1,3 +1,4 @@
+<!-- HTML Template for the Node-RED Editor -->
 <script type="text/html" data-template-name="invoke-action">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -15,53 +16,66 @@
     </div>
 </script>
 
+<!-- Help Text for the Node -->
 <script type="text/html" data-help-name="invoke-actions">
     <p>A custom node to perform OPACA actions.</p>
 </script>
 
-<!-- JavaScript dosyasını dahil etme -->
-<script type="text/javascript" >
+<!-- JavaScript Code for the Custom Node -->
+<script type="text/javascript">
 
-    class Parameter{
-        constructor(name, type, value=""){
+    /**
+     * Class representing a parameter.
+     * @class
+     */
+    class Parameter {
+        /**
+         * Creates a parameter.
+         * @param {string} name - The name of the parameter.
+         * @param {string} type - The type of the parameter.
+         * @param {string} [value=""] - The value of the parameter.
+         */
+        constructor(name, type, value = "") {
             this.name = name;
             this.type = type;
             this.value = value;
         }
-
     }
 
+    /**
+     * Save parameters from the input fields.
+     * @param {object} node - The Node-RED node object.
+     */
     function saveParameters(node) {
-
         node.nodeParametersBoxes.forEach(box => {
             var inputElement = $(`#${box.id}`);
-            box.value = inputElement.val(); 
+            box.value = inputElement.val(); // Retrieve the value from the input field.
         });
 
         var parameters = {};
         node.nodeParametersBoxes.forEach(box => {
-            parameters[box.id] = box.value;
+            parameters[box.id] = box.value; // Assign values to parameters.
             node.paramOutputs.forEach(param => {
-                if(param.id === box.id){
-                    param.value.value = box.value;
+                if (param.id === box.id) {
+                    param.value.value = box.value; // Update parameter output values.
                 }
             });
         });
 
-        node.parameters = parameters; 
-        
-        var nod = RED.nodes.node(node.id);
-        nod.status({ fill: "blue", shape: "dot", text: "configured" });
+        node.parameters = parameters;
 
-        
-        RED.nodes.dirty(true); 
-        RED.nodes.node(node.id).parameters = node.parameters; 
+        RED.nodes.dirty(true); // Mark node as dirty to indicate changes.
+        RED.nodes.node(node.id).parameters = node.parameters;
         RED.nodes.node(node.id).paramOutputs = node.paramOutputs;
     }
 
+    /**
+     * Fetch data from the API.
+     * @returns {Promise<Array>} The actions list.
+     */
     async function fetchData() {
         const apiUrl = "http://localhost:8000/agents";
-        var actList = [];    
+        var actList = [];
         try {
             const response = await fetch(apiUrl, { method: 'GET' });
             const actions = [];
@@ -75,25 +89,28 @@
             });
             return actions;
         } catch (error) {
-            console.error("Fetch error:", error);   
-            return null;    
+            console.error("Fetch error:", error);
+            return null;
         }
     }
 
-    RED.nodes.registerType('invoke-action',{
+    /**
+     * Register the custom node type with Node-RED.
+     */
+    RED.nodes.registerType('invoke-action', {
         category: 'function',
         color: '#46b99c',
         defaults: {
-            name: { value:"" },
+            name: { value: "" },
             action: { value: "" },
-            actionsList: { value: [""]},
-            actionParams: { value: []},
+            actionsList: { value: [""] },
+            actionParams: { value: [] },
             nodeNameBox: { value: null },
-            nodeActionBox: { value: null},
+            nodeActionBox: { value: null },
             nodeParametersBoxes: { value: null },
             nodeParametersBoxesMap: { value: [] },
             parametersContainer: { value: null },
-            parameters : { value: [] },
+            parameters: { value: [] },
             paramsHtml: { value: "" },
             paramOutputs: { value: [] }
         },
@@ -104,22 +121,23 @@
             return this.name || "invoke actions";
         },
         
+        /**
+         * Prepare the edit dialog.
+         */
         oneditprepare: async function() {
-            
             var that = this;
             
-            var actions = await fetchData();                                                     
-            that.actionsList = actions.map(action => action.name);                               
-            that.actionParams = actions.map(action => [action.name,action.parameters]);  
+            var actions = await fetchData(); // Fetch actions from API.
+            that.actionsList = actions.map(action => action.name);
+            that.actionParams = actions.map(action => [action.name, action.parameters]);
 
-            if(that.parameters){
+            if (that.parameters) {
                 that.paramsHtml = "";
                 for (var key in that.parameters) {
                     that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
                 }
                 $("#parameters-container").empty().append(that.paramsHtml);
             }
-            
 
             $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
             that.actionsList.forEach(action => {
@@ -128,10 +146,9 @@
 
             $("#parameters-container").empty().append(that.paramsHtml);
 
-
-
+            // Handle action selection change.
             $("#node-input-action").on('change', function() {
-                console.log("Action changed"); 
+                console.log("Action changed");
                 that.action = $("#node-input-action").val();
                 var selectedActionParams = that.actionParams.find(action => action[0] === that.action);
                 var params = selectedActionParams[1];
@@ -141,21 +158,22 @@
                 for (var key in params) {
                     that.paramsHtml += `<label for="${key}">${key}</label>
                                         <input type="text" id="${key}" placeholder="${params[key].type}">`;
-                    that.nodeParametersBoxes.push({ id: `${key}`, value: null });   
-                    that.paramOutputs.push({id : `${key}`, value: new Parameter(key,params[key].type, null)});              
+                    that.nodeParametersBoxes.push({ id: `${key}`, value: null });
+                    that.paramOutputs.push({ id: `${key}`, value: new Parameter(key, params[key].type, null) });
                 }
                 $("#parameters-container").empty().append(that.paramsHtml);
 
+                // Initialize typedInput for each parameter
                 for (var key in params) {
                     $(`#${key}`).typedInput({
                         types: ['str', 'msg'],
                         default: 'str',
                         typeField: $("#node-input-actiontype"),
                     });
-                }   
-
+                }
             }.bind(this));
 
+            // Initialize typedInput for each saved parameter
             for (var key in that.parameters) {
                 $(`#${key}`).typedInput({
                     types: ['str', 'msg'],
@@ -164,23 +182,24 @@
                 });
             }
 
+            // Add change event listeners for parameter input fields
             that.nodeParametersBoxes.forEach(box => {
                 var inputElement = $(`#${box.id}`);
                 inputElement.on('change', function() {
                     console.log("Input changed");
                 }.bind(this));
             });
-
         },
 
-
-
-        oneditsave: function() { 
-           saveParameters(this);
+        /**
+         * Save the node configuration.
+         */
+        oneditsave: function() {
+            saveParameters(this);
+            // Set the node status to blue when "Done" is clicked
+            var node = RED.nodes.node(this.id);
+            node.status({ fill: "blue", shape: "dot", text: "configured" });
         },
-
-
-
     });
 
 </script>
