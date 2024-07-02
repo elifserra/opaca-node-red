@@ -6,7 +6,6 @@
     </div>
     <div class="form-row">
         <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
-        <input type="hidden" id="node-input-actiontype">
         <select id="node-input-action">
             <option value="">Select an action</option>
         </select>
@@ -112,7 +111,8 @@
             parametersContainer: { value: null },
             parameters: { value: [] },
             paramsHtml: { value: "" },
-            paramOutputs: { value: [] }
+            paramOutputs: { value: [] },
+            defaultTypes: { value: []}
         },
         inputs: 1,
         outputs: 1,
@@ -167,8 +167,7 @@
                 for (var key in params) {
                     $(`#${key}`).typedInput({
                         types: ['str', 'msg'],
-                        default: 'str',
-                        typeField: $("#node-input-actiontype"),
+                        default: 'str'
                     });
                 }
             }.bind(this));
@@ -177,8 +176,7 @@
             for (var key in that.parameters) {
                 $(`#${key}`).typedInput({
                     types: ['str', 'msg'],
-                    default: 'str',
-                    typeField: $("#node-input-actiontype"),
+                    default: 'str'
                 });
             }
 
@@ -187,6 +185,8 @@
                 var inputElement = $(`#${box.id}`);
                 inputElement.on('change', function() {
                     console.log("Input changed");
+                    //that.defaultTypes[key] = $(`#${box.id}`).typedInput('type');
+                    //console.log(that.defaultTypes[key]);
                 }.bind(this));
             });
         },
@@ -197,9 +197,7 @@
         oneditsave: function() {
             saveParameters(this);
             // Set the node status to blue when "Done" is clicked
-            var node = RED.nodes.node(this.id);
-            node.status({ fill: "blue", shape: "dot", text: "configured" });
-        },
+        }
     });
 
 </script>
