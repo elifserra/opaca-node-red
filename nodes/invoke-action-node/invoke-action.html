@@ -46,10 +46,17 @@
      * @param {object} node - The Node-RED node object.
      */
     function saveParameters(node) {
+        var types = {};
         node.nodeParametersBoxes.forEach(box => {
             var inputElement = $(`#${box.id}`);
             box.value = inputElement.val(); // Retrieve the value from the input field.
+            types[box.id] = inputElement.typedInput('type');
         });
+
+        node.defaultTypes = types;
+
+        console.log(node.defaultTypes);
+        
 
         var parameters = {};
         node.nodeParametersBoxes.forEach(box => {
@@ -61,7 +68,10 @@
             });
         });
 
+        
+
         node.parameters = parameters;
+        console.log(node.parameters);
 
         RED.nodes.dirty(true); // Mark node as dirty to indicate changes.
         RED.nodes.node(node.id).parameters = node.parameters;
@@ -167,7 +177,8 @@
                 for (var key in params) {
                     $(`#${key}`).typedInput({
                         types: ['str', 'msg'],
-                        default: 'str'
+                        default: 'str',
+                        typefield: $(`#${key}-type`)
                     });
                 }
             }.bind(this));
@@ -176,28 +187,25 @@
             for (var key in that.parameters) {
                 $(`#${key}`).typedInput({
                     types: ['str', 'msg'],
-                    default: 'str'
+                    default: that.defaultTypes[key],
+                    typefield: $(`#${key}-type`)
                 });
             }
-
-            // Add change event listeners for parameter input fields
-            that.nodeParametersBoxes.forEach(box => {
-                var inputElement = $(`#${box.id}`);
-                inputElement.on('change', function() {
-                    console.log("Input changed");
-                    //that.defaultTypes[key] = $(`#${box.id}`).typedInput('type');
-                    //console.log(that.defaultTypes[key]);
-                }.bind(this));
-            });
         },
 
         /**
          * Save the node configuration.
          */
-        oneditsave: function() {
+
+        oneditcancel: function() {
+            console.log("Cancel clicked");
             saveParameters(this);
-            // Set the node status to blue when "Done" is clicked
-        }
+        },
+        oneditsave: function() {
+            console.log("Save clicked");
+            saveParameters(this);
+        },
+
     });
 
 </script>
