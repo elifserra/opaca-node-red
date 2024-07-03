@@ -1,54 +1,83 @@
-const apiUrl = "http://localhost:8000/agents";
+const apiUrl = "http://10.42.6.107:8000/agents";
+const loginUrl = "http://10.42.6.107:8000/login";
+
+
+async function setGlobalValue(variableName, value) {
+    try {
+        const response = await fetch(`http://localhost:3000/variable/${variableName}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ value: value })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log("Global value set: ", value);
+        const data = await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 
 module.exports = function(RED) {
-    async function fetchData(node) {
+    async function fetchData(node, username, password) {
+        var authentication = JSON.stringify({ username, password });
         
         try {
+            const response = await fetch(loginUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: authentication
+            });
+            
+            const token = await response.text();
+            node.context().global.set("token", token);
+            console.log("Token obtained: ", token);
+        } catch (error) {
+            console.error("Fetch error: " + error);
+        }
+        
+        const token = node.context().global.get("token");
+        console.log("Stored token: ", token);
+
+        try {
             const response = await fetch(apiUrl, {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
 
-            const actions = [];
-            await response.json().then( data => {
-                data = data.map(o => o.actions);
-                
-                data.forEach(element =>
-                    element.forEach(element =>
-                        actions.push(element)
-                    )
-                );
-                
-            }
-
-            );
-            node.actionsList = actions.map(i => i.name);
-            node.warn(node.actionsList);    
-            node.warn(new Map(actions.map(i => [i.name, i]))) ;
+            const data = await response.json();
+            const actions = data.flatMap(agent => agent.actions || []);
+            node.warn(new Map(actions.map(i => [i.name, i])));
         } catch (error) {
             node.error("Fetch error: " + error);
         }
     }
+
     function MyNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
+        this.username = config.username;
+        this.password = config.password;
 
-        // Retrieve the parameters from the configuration node
-        node.name = config.name;
-        node.action = config.action;
-        node.actionsList = config.actionsList;
-        //node.parameters = config.parameters;
-
-        node.on('input', async function(msg) {
-            fetchData(node);
-            node.warn(node.actionsList);
-            const action = node.action;
-            //const parameters = JSON.parse(node.parameters);
-;
-
+        node.on('input', async function() {
+            await fetchData(node, this.username, this.password);
         });
+
+        setGlobalValue("token", this.context().global.get("token"));
+
     }
-    
+
     RED.nodes.registerType("opaca-actions", MyNode);
 
     
-}
+
+};

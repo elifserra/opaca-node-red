@@ -4,14 +4,17 @@
  * @param {string} queryString - The query string to send in the request body.
  * @param {object} msg - The message object to update with the response.
  */
-async function invokeAction(endpoint, queryString, msg) {
-    var url = "http://localhost:8000/invoke/" + endpoint;
-
+async function invokeAction(endpoint, queryString, msg,node) {
+    var url = "http://10.42.6.107:8000/invoke/" + endpoint;
+    console.log(`INVOKE ACTIONN"+${node.context().global.get("token")}`);
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'  // Inform the server that the body is JSON
+                'Content-Type': 'application/json',  // Inform the server that the body is JSON
+                
+                Authorization: `Bearer ${node.context().global.get("token")}`
+                
             },
             body: queryString
         });
@@ -29,15 +32,18 @@ async function invokeAction(endpoint, queryString, msg) {
  * @param {Array} parameterArray - The array of parameters to convert.
  * @returns {string} - The JSON string representation of the parameters.
  */
-function toJsonString(parameterArray) {
+function toJsonString(parameterArray, msg) {
     var jsonString = "{";
     var length = parameterArray.length - 1;
     var count = 0;
 
     parameterArray.forEach(element => {
         jsonString += "\"" + element.value.name + "\":"; // Add parameter name
-        element.value.type === "string" ? jsonString += "\"" + element.value.value + "\"" : jsonString += element.value.value; // Add parameter value
-        count !== length ? jsonString += "," : jsonString += "}"; // Add comma between parameters except the last one
+
+        if(element.value.value === "payload") jsonString += "\"" + msg.payload + "\"";
+        else element.value.type === "string" ? jsonString += "\"" + element.value.value + "\"" : jsonString += element.value.value;
+        count !== length ? jsonString += "," : jsonString += "}";
+
         count++;
     });
 
@@ -45,6 +51,25 @@ function toJsonString(parameterArray) {
     return jsonString; // Return the JSON string
 }
 
+async function setGlobalValue(variableName, value) {
+    try {
+        const response = await fetch(`http://localhost:3000/variable/${variableName}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ value: value })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 /**
  * Module export function to define the custom Node-RED node.
  * @param {object} RED - The Node-RED module object.
@@ -61,18 +86,24 @@ module.exports = function(RED) {
         this.parameters = config.parameters; // Parameters from configuration
         this.action = config.action; // Action from configuration
 
-        var node = this;
+        var node = this; // Store the node object
+
+        console.log("from invoke"+node.context().global.get("token"))
+
+
 
         /**
          * Event handler for node input.
          * @param {object} msg - The input message object.
          */
         node.on('input', async function(msg) {
-            await invokeAction(node.action, toJsonString(node.paramOutputs), msg); // Invoke the action with parameters
+            await invokeAction(node.action, toJsonString(node.paramOutputs,msg), msg,node); // Invoke the action with parameters
             node.send(msg); // Send the updated message object
         });
     }
 
     // Register the custom node type with Node-RED
     RED.nodes.registerType("invoke-action", MyNode);
+
+    
 };

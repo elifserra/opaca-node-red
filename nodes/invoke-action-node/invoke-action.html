@@ -45,7 +45,7 @@
      * Save parameters from the input fields.
      * @param {object} node - The Node-RED node object.
      */
-    function saveParameters(node) {
+    async function saveParameters(node) {
         var types = {};
         node.nodeParametersBoxes.forEach(box => {
             var inputElement = $(`#${box.id}`);
@@ -56,7 +56,6 @@
         node.defaultTypes = types;
 
         console.log(node.defaultTypes);
-        
 
         var parameters = {};
         node.nodeParametersBoxes.forEach(box => {
@@ -68,25 +67,39 @@
             });
         });
 
-        
-
         node.parameters = parameters;
         console.log(node.parameters);
 
         RED.nodes.dirty(true); // Mark node as dirty to indicate changes.
         RED.nodes.node(node.id).parameters = node.parameters;
         RED.nodes.node(node.id).paramOutputs = node.paramOutputs;
+
+    }
+
+
+    async function getGlobalValue(variableName,node) {
+        const response = await fetch(`http://localhost:3000/variable/${variableName}`, { method: 'GET' });
+        const data = await response.json();
+        if (variableName === "token") {
+            node.token = data.value;
+        }
     }
 
     /**
      * Fetch data from the API.
      * @returns {Promise<Array>} The actions list.
      */
-    async function fetchData() {
-        const apiUrl = "http://localhost:8000/agents";
+    async function fetchData(node) {
+        console.log("Fetching datdadd                  "+node.token);
+        const apiUrl = "http://10.42.6.107:8000/agents";
         var actList = [];
         try {
-            const response = await fetch(apiUrl, { method: 'GET' });
+            const response = await fetch(apiUrl, { 
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${node.token}`
+                }
+            });
             const actions = [];
             const data = await response.json();
             data.forEach(agent => {
@@ -122,7 +135,8 @@
             parameters: { value: [] },
             paramsHtml: { value: "" },
             paramOutputs: { value: [] },
-            defaultTypes: { value: []}
+            defaultTypes: { value: []},
+            token : { value: "" }
         },
         inputs: 1,
         outputs: 1,
@@ -136,8 +150,12 @@
          */
         oneditprepare: async function() {
             var that = this;
+
+
+            await getGlobalValue("token",that);
+            console.log("Tokennnnnnn: ", that.token); // Get the token from the global variable.
             
-            var actions = await fetchData(); // Fetch actions from API.
+            var actions = await fetchData(that); // Fetch actions from API.
             that.actionsList = actions.map(action => action.name);
             that.actionParams = actions.map(action => [action.name, action.parameters]);
 
@@ -201,6 +219,7 @@
             console.log("Cancel clicked");
             saveParameters(this);
         },
+        
         oneditsave: function() {
             console.log("Save clicked");
             saveParameters(this);

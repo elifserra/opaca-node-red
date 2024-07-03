@@ -7,10 +7,15 @@
   },
   "author": "",
   "license": "ISC",
-  "node-red" : {
-        "nodes": {
-            "opaca-actions": "/nodes/invoke-action-node/invoke-action.js",
-            "invoke-action": "/nodes/load-actions-node/opaca-actions.js"
-        }
+  "node-red": {
+    "nodes": {
+      "opaca-actions": "/nodes/invoke-action-node/invoke-action.js",
+      "invoke-action": "/nodes/load-actions-node/opaca-actions.js"
+    }
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
   }
 }
