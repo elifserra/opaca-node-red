@@ -10,10 +10,10 @@ module.exports = function(RED) {
         const pythonCommand = process.platform === 'win32' ? 'python' : 'python3';
         const command = `${pythonCommand} "${scriptPath}"`;
 
-        exec(command);
+        
 
         node.on('input', function(msg) {
-
+            exec(command);
         });
     }
     RED.nodes.registerType("camera", CustomWebcamNode);
