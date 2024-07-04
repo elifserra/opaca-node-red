@@ -40,7 +40,8 @@ function toJsonString(parameterArray, msg) {
     parameterArray.forEach(element => {
         jsonString += "\"" + element.value.name + "\":"; // Add parameter name
 
-        if(element.value.value === "payload") jsonString += "\"" + msg.payload + "\"";
+        if(element.value.value === "payload" && element.value.type === "string") jsonString += "\"" + msg.payload + "\"";
+        else if(element.value.value === "payload")  jsonString += msg.payload;
         else element.value.type === "string" ? jsonString += "\"" + element.value.value + "\"" : jsonString += element.value.value;
         count !== length ? jsonString += "," : jsonString += "}";
 

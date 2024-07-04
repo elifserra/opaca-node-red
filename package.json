@@ -10,7 +10,8 @@
   "node-red": {
     "nodes": {
       "opaca-actions": "/nodes/invoke-action-node/invoke-action.js",
-      "invoke-action": "/nodes/load-actions-node/opaca-actions.js"
+      "invoke-action": "/nodes/load-actions-node/opaca-actions.js",
+      "camera": "/nodes/camera-node/camera.js"
     }
   },
   "dependencies": {
