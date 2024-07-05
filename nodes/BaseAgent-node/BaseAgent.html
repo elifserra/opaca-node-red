@@ -1,0 +1,32 @@
+<!-- HTML Template for the Node-RED Editor -->
+<script type="text/html" data-template-name="BaseAgent">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
+        <select id="node-input-action">
+            <option value="">Select an action</option>
+        </select>
+    </div>
+    <div class="form-row" id="parameters-container">
+        <!-- Parameters will be added here -->
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('BaseAgent', {
+        category: 'ZEKI',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'icons/zekı_logo.png',
+        label: function() {
+            return this.name || 'BaseAgent';
+        }
+    });
+</script>

@@ -1,3 +1,4 @@
+var BaseAgent = require("../BaseAgent-node/BaseAgent.js");
 module.exports = function(RED) {
 
     function FridgeAgentNode(config) {

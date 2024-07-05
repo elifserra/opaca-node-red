@@ -15,8 +15,6 @@ async function setGlobalValue(variableName, value) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        console.log("Global value set: ", value);
         const data = await response.json();
     } catch (error) {
         console.error('Error:', error);
@@ -38,13 +36,11 @@ module.exports = function(RED) {
             
             const token = await response.text();
             node.context().global.set("token", token);
-            console.log("Token obtained: ", token);
         } catch (error) {
-            console.error("Fetch error: " + error);
+            console.error("Fetch OPACA error: " + error);
         }
         
         const token = node.context().global.get("token");
-        console.log("Stored token: ", token);
 
         try {
             const response = await fetch(apiUrl, {
@@ -55,10 +51,15 @@ module.exports = function(RED) {
             });
 
             const data = await response.json();
+            data.forEach(agent => {
+                node.context().global.set(agent.agentId, agent.actions);
+            });
+            
             const actions = data.flatMap(agent => agent.actions || []);
-            node.warn(new Map(actions.map(i => [i.name, i])));
+            return actions;
+
         } catch (error) {
-            node.error("Fetch error: " + error);
+            node.error("Fetch OPACA SECOND error: " + error);
         }
     }
 
@@ -68,8 +69,11 @@ module.exports = function(RED) {
         this.username = config.username;
         this.password = config.password;
 
+        
         node.on('input', async function() {
-            await fetchData(node, this.username, this.password);
+           var actions =  await fetchData(node, node.username, node.password);
+           node.warn(actions);
+
         });
 
         setGlobalValue("token", this.context().global.get("token"));

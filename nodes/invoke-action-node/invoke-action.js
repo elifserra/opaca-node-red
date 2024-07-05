@@ -6,7 +6,6 @@
  */
 async function invokeAction(endpoint, queryString, msg,node) {
     var url = "http://10.42.6.107:8000/invoke/" + endpoint;
-    console.log(`INVOKE ACTIONN"+${node.context().global.get("token")}`);
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -52,25 +51,6 @@ function toJsonString(parameterArray, msg) {
     return jsonString; // Return the JSON string
 }
 
-async function setGlobalValue(variableName, value) {
-    try {
-        const response = await fetch(`http://localhost:3000/variable/${variableName}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ value: value })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
 /**
  * Module export function to define the custom Node-RED node.
  * @param {object} RED - The Node-RED module object.
@@ -88,10 +68,6 @@ module.exports = function(RED) {
         this.action = config.action; // Action from configuration
 
         var node = this; // Store the node object
-
-        console.log("from invoke"+node.context().global.get("token"))
-
-
 
         /**
          * Event handler for node input.

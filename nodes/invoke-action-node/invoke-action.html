@@ -90,7 +90,6 @@
      * @returns {Promise<Array>} The actions list.
      */
     async function fetchData(node) {
-        console.log("Fetching datdadd                  "+node.token);
         const apiUrl = "http://10.42.6.107:8000/agents";
         var actList = [];
         try {
@@ -153,7 +152,6 @@
 
 
             await getGlobalValue("token",that);
-            console.log("Tokennnnnnn: ", that.token); // Get the token from the global variable.
             
             var actions = await fetchData(that); // Fetch actions from API.
             that.actionsList = actions.map(action => action.name);
@@ -216,12 +214,10 @@
          */
 
         oneditcancel: function() {
-            console.log("Cancel clicked");
             saveParameters(this);
         },
         
         oneditsave: function() {
-            console.log("Save clicked");
             saveParameters(this);
         },
 

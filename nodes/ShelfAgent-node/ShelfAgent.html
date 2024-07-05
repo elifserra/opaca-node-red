@@ -1,15 +1,175 @@
+<!-- HTML Template for the Node-RED Editor -->
+<script type="text/html" data-template-name="ShelfAgent">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-agentId"><i class="fa fa-tag"></i> Agent ID</label>
+        <input type="text" id="node-input-agentId" value="shelf-agent" placeholder="Agent ID">
+    </div>
+    <div class="form-row">
+        <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
+        <select id="node-input-action">
+            <option value="">Select an action</option>
+        </select>
+    </div>
+    <div class="form-row" id="parameters-container">
+        <!-- Parameters will be added here -->
+    </div>
+</script>
+
+
 <script type="text/javascript">
+
+    async function getActionsFromJavaScript(variableName){
+        const response = await fetch(`http://localhost:3000/variable/${variableName}`, { method: 'GET' });
+        const data = await response.json();
+        return data.value;
+    }
+
+    async function saveParameters(node) {
+        var types = {};
+        node.nodeParametersBoxes.forEach(box => {
+            var inputElement = $(`#${box.id}`);
+            box.value = inputElement.val(); // Retrieve the value from the input field.
+            types[box.id] = inputElement.typedInput('type');
+        });
+
+        node.defaultTypes = types;
+
+        console.log(node.defaultTypes);
+
+        var parameters = {};
+        node.nodeParametersBoxes.forEach(box => {
+            parameters[box.id] = box.value; // Assign values to parameters.
+            node.paramOutputs.forEach(param => {
+                if (param.id === box.id) {
+                    param.value.value = box.value; // Update parameter output values.
+                }
+            });
+        });
+
+        node.parameters = parameters;
+        console.log(node.parameters);
+
+        RED.nodes.dirty(true); // Mark node as dirty to indicate changes.
+        RED.nodes.node(node.id).parameters = node.parameters;
+        RED.nodes.node(node.id).paramOutputs = node.paramOutputs;
+
+    }
+
+
     RED.nodes.registerType('ShelfAgent', {
         category: 'ZEKI',
         color: '#a6bbcf',
         defaults: {
-            name: { value: "" }
+            name: { value: "" },
+            agentId: { value: "" },
+            actions: { value: null },
+            actionsList: { value: [] },
+            actionParams: { value: [] },
+            action: { value: "" },
+            paramsHtml: { value: "" },
+            paramOutputs: { value: [] },
+            nodeParametersBoxes: { value: [] },
+            parameters: { value: [] },
+            defaultTypes: { value: [] }
         },
         inputs: 1,
         outputs: 1,
-        icon: 'icons/zekı_logo.png',
+        icon: 'public/zekı_logo.png',
         label: function() {
             return this.name || 'ShelfAgent';
-        }
+        },
+
+
+        oneditprepare : async function(){
+            var that = this;
+            console.log("AGENT ID",that.agentId);
+            that.actions = await getActionsFromJavaScript("actions");
+            that.actionsList = that.actions.map(action => action.name);
+            that.actionParams = that.actions.map(action => [action.name, action.parameters]);
+
+            if (that.parameters) {
+                that.paramsHtml = "";
+                for (var key in that.parameters) {
+                    that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
+                }
+                $("#parameters-container").empty().append(that.paramsHtml);
+            }
+
+            console.log(that.actions);
+
+            $("#node-input-agentId").on('change', function() {
+                console.log("Agent ID changed");
+                that.agentId = $("#node-input-agentId").val();
+                that.action = "";
+                $("#node-input-action").empty();
+                console.log(that.agentId);
+            }.bind(this));
+
+            $("#node-input-action").empty().append(`<option value="">${that.action}</option>`);
+            that.actionsList.forEach(action => {
+                $("#node-input-action").append(`<option value="${action}">${action}</option>`);
+            });
+
+            $("#parameters-container").empty().append(that.paramsHtml);
+
+            // Handle action selection change.
+            $("#node-input-action").on('change', function() {
+                console.log("Action changed");
+                that.action = $("#node-input-action").val();
+                console.log(that.action);
+                var selectedActionParams = that.actionParams.find(action => action[0] === that.action);
+                var params = selectedActionParams[1];
+                that.paramsHtml = "";
+                that.nodeParametersBoxes = [];
+                that.paramOutputs = [];
+                for (var key in params) {
+                    that.paramsHtml += `<label for="${key}">${key}</label>
+                                        <input type="text" id="${key}" placeholder="${params[key].type}">`;
+                    that.nodeParametersBoxes.push({ id: `${key}`, value: null });
+                    that.paramOutputs.push({ id: `${key}`, value: new Parameter(key, params[key].type, null) });
+                }
+                $("#parameters-container").empty().append(that.paramsHtml);
+
+                // Initialize typedInput for each parameter
+                for (var key in params) {
+                    $(`#${key}`).typedInput({
+                        types: ['str', 'msg'],
+                        default: 'str',
+                        typefield: $(`#${key}-type`)
+                    });
+                }
+            }.bind(this));
+
+
+                        // Initialize typedInput for each saved parameter
+            for (var key in that.parameters) {
+                $(`#${key}`).typedInput({
+                    types: ['str', 'msg'],
+                    default: that.defaultTypes[key],
+                    typefield: $(`#${key}-type`)
+                });
+            }
+
+
+            
+
+
+            // Called when the edit dialog is opened.
+        },
+
+        oneditcancel : function(){
+            saveParameters(this);
+        },
+
+        oneditsave : function(){
+            saveParameters(this);
+        },
+
+
+
     });
 </script>

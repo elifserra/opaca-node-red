@@ -17,7 +17,8 @@
       "RoomBookingAgent": "/nodes/RoomBookingAgent-node/RoomBookingAgent.js",
       "SensorsAgent": "/nodes/SensorsAgent-node/SensorsAgent.js",
       "ShelfAgent": "/nodes/ShelfAgent-node/ShelfAgent.js",
-      "WayfindingAgent": "/nodes/WayfindingAgent-node/WayfindingAgent.js"
+      "WayfindingAgent": "/nodes/WayfindingAgent-node/WayfindingAgent.js",
+      "BaseAgent": "/nodes/BaseAgent-node/BaseAgent.js"
     }
   },
   "dependencies": {
