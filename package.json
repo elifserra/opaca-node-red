@@ -11,7 +11,13 @@
     "nodes": {
       "opaca-actions": "/nodes/invoke-action-node/invoke-action.js",
       "invoke-action": "/nodes/load-actions-node/opaca-actions.js",
-      "camera": "/nodes/camera-node/camera.js"
+      "camera": "/nodes/camera-node/camera.js",
+      "FridgeAgent" : "/nodes/FridgeAgent-node/FridgeAgent.js",
+      "HomeAssistantAgent" : "/nodes/HomeAssistantAgent-node/HomeAssistantAgent.js",
+      "RoomBookingAgent": "/nodes/RoomBookingAgent-node/RoomBookingAgent.js",
+      "SensorsAgent": "/nodes/SensorsAgent-node/SensorsAgent.js",
+      "ShelfAgent": "/nodes/ShelfAgent-node/ShelfAgent.js",
+      "WayfindingAgent": "/nodes/WayfindingAgent-node/WayfindingAgent.js"
     }
   },
   "dependencies": {
