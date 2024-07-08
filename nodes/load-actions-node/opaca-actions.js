@@ -21,6 +21,25 @@ async function setGlobalValue(variableName, value) {
     }
 }
 
+async function sendActionstoHTML(variableName, value) {
+    try {
+        const response = await fetch(`http://localhost:3000/variable/${variableName}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ value: value })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
 module.exports = function(RED) {
     async function fetchData(node, username, password) {
         var authentication = JSON.stringify({ username, password });
@@ -53,6 +72,9 @@ module.exports = function(RED) {
             const data = await response.json();
             data.forEach(agent => {
                 node.context().global.set(agent.agentId, agent.actions);
+                node.warn(agent.agentId);
+                node.warn(agent.actions);
+                sendActionstoHTML(agent.agentId, agent.actions);
             });
             
             const actions = data.flatMap(agent => agent.actions || []);
@@ -64,16 +86,16 @@ module.exports = function(RED) {
     }
 
     function MyNode(config) {
+        const path = require('path');
+        const { exec } = require('child_process');
         RED.nodes.createNode(this, config);
         var node = this;
         this.username = config.username;
         this.password = config.password;
-
         
         node.on('input', async function() {
            var actions =  await fetchData(node, node.username, node.password);
-           node.warn(actions);
-
+           //node.warn(actions);
         });
 
         setGlobalValue("token", this.context().global.get("token"));

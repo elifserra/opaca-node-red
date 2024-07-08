@@ -28,6 +28,18 @@
         return data.value;
     }
 
+    async function getData(that){
+        console.log("Agent ID changedddddddddddddddddddddddd");
+        that.actions = await getActionsFromJavaScript(that.agentId);
+        that.actionsList = that.actions.map(action => action.name);
+        that.actionParams = that.actions.map(action => [action.name, action.parameters]);
+        $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
+            that.actionsList.forEach(action => {
+                $("#node-input-action").append(`<option value="${action}">${action}</option>`);
+        });
+    }
+
+
     async function saveParameters(node) {
         var types = {};
         node.nodeParametersBoxes.forEach(box => {
@@ -74,7 +86,8 @@
             paramOutputs: { value: [] },
             nodeParametersBoxes: { value: [] },
             parameters: { value: [] },
-            defaultTypes: { value: [] }
+            defaultTypes: { value: [] },
+            isAgentIDChanged: { value: false }
         },
         inputs: 1,
         outputs: 1,
@@ -86,83 +99,95 @@
 
         oneditprepare : async function(){
             var that = this;
-            console.log("AGENT ID",that.agentId);
-            that.actions = await getActionsFromJavaScript("actions");
-            that.actionsList = that.actions.map(action => action.name);
-            that.actionParams = that.actions.map(action => [action.name, action.parameters]);
+            if($("#node-input-agentId").val() != ""){
 
-            if (that.parameters) {
-                that.paramsHtml = "";
-                for (var key in that.parameters) {
-                    that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
-                }
-                $("#parameters-container").empty().append(that.paramsHtml);
-            }
-
-            console.log(that.actions);
-
-            $("#node-input-agentId").on('change', function() {
-                console.log("Agent ID changed");
                 that.agentId = $("#node-input-agentId").val();
-                that.action = "";
-                $("#node-input-action").empty();
-                console.log(that.agentId);
-            }.bind(this));
-
-            $("#node-input-action").empty().append(`<option value="">${that.action}</option>`);
-            that.actionsList.forEach(action => {
-                $("#node-input-action").append(`<option value="${action}">${action}</option>`);
-            });
-
-            $("#parameters-container").empty().append(that.paramsHtml);
-
-            // Handle action selection change.
-            $("#node-input-action").on('change', function() {
-                console.log("Action changed");
-                that.action = $("#node-input-action").val();
-                console.log(that.action);
-                var selectedActionParams = that.actionParams.find(action => action[0] === that.action);
-                var params = selectedActionParams[1];
-                that.paramsHtml = "";
-                that.nodeParametersBoxes = [];
-                that.paramOutputs = [];
-                for (var key in params) {
-                    that.paramsHtml += `<label for="${key}">${key}</label>
-                                        <input type="text" id="${key}" placeholder="${params[key].type}">`;
-                    that.nodeParametersBoxes.push({ id: `${key}`, value: null });
-                    that.paramOutputs.push({ id: `${key}`, value: new Parameter(key, params[key].type, null) });
+                that.isAgentIDChanged = false;
+                //$("#parameters-container").empty().append(that.paramsHtml);
+                
+                console.log("AGENT ID",that.agentId);
+                that.actions = await getActionsFromJavaScript(that.agentId);
+                that.actionsList = that.actions.map(action => action.name);
+                that.actionParams = that.actions.map(action => [action.name, action.parameters]);
+                
+                
+                if (that.parameters) {
+                    that.paramsHtml = "";
+                    for (var key in that.parameters) {
+                        that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
+                    }
+                    //$("#parameters-container").empty().append(that.paramsHtml);
                 }
+
+                console.log(that.actions);
+
+                $("#node-input-agentId").on('change', function() {
+                    console.log("Agent ID changed");
+                    that.agentId = $("#node-input-agentId").val();
+                    that.agentId = $("#node-input-agentId").val();
+                    that.paramsHtml = "";
+                    that.nodeParametersBoxes = [];
+                    that.paramOutputs = [];
+                    that.action = "";
+                    that.parameters = {};
+                    $("#parameters-container").empty().append(that.paramsHtml);
+                    getData(that);
+                    that.parameters = {};
+                    getData(that);
+                    $("#node-input-action").empty();
+                    console.log(that.agentId);
+                }.bind(this));
+
+                $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
+                that.actionsList.forEach(action => {
+                    $("#node-input-action").append(`<option value="${action}">${action}</option>`);
+                });
+
                 $("#parameters-container").empty().append(that.paramsHtml);
 
-                // Initialize typedInput for each parameter
-                for (var key in params) {
+                // Handle action selection change.
+                $("#node-input-action").on('change', function() {
+                    console.log("Action changed");
+                    that.action = $("#node-input-action").val();
+                    console.log(that.action);
+                    var selectedActionParams = that.actionParams.find(action => action[0] === that.action);
+                    var params = selectedActionParams[1];
+                    that.paramsHtml = "";
+                    that.nodeParametersBoxes = [];
+                    that.paramOutputs = [];
+                    for (var key in params) {
+                        that.paramsHtml += `<label for="${key}">${key}</label>
+                                            <input type="text" id="${key}" placeholder="${params[key].type}">`;
+                        that.nodeParametersBoxes.push({ id: `${key}`, value: null });
+                        that.paramOutputs.push({ id: `${key}`, value: new Parameter(key, params[key].type, null) });
+                    }
+                    $("#parameters-container").empty().append(that.paramsHtml);
+
+                    // Initialize typedInput for each parameter
+                    for (var key in params) {
+                        $(`#${key}`).typedInput({
+                            types: ['str', 'msg'],
+                            default: 'str',
+                            typefield: $(`#${key}-type`)
+                        });
+                    }
+                }.bind(this));
+
+                
+                // Initialize typedInput for each saved parameter
+                for (var key in that.parameters) {
                     $(`#${key}`).typedInput({
                         types: ['str', 'msg'],
-                        default: 'str',
+                        default: that.defaultTypes[key],
                         typefield: $(`#${key}-type`)
                     });
                 }
-            }.bind(this));
-
-
-                        // Initialize typedInput for each saved parameter
-            for (var key in that.parameters) {
-                $(`#${key}`).typedInput({
-                    types: ['str', 'msg'],
-                    default: that.defaultTypes[key],
-                    typefield: $(`#${key}-type`)
-                });
+                
             }
-
-
-            
-
-
-            // Called when the edit dialog is opened.
         },
 
         oneditcancel : function(){
-            saveParameters(this);
+            saveParameters(this);            
         },
 
         oneditsave : function(){
