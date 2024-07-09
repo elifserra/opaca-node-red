@@ -72,7 +72,7 @@ async function sendActionstoHTML(variableName, value) {
 }
 
 module.exports = function(RED){
-    function BaseAgentNode(config){
+    function HomeAssistantAgentNode(config){
         RED.nodes.createNode(this,config);  
         var node = this;
         this.paramOutputs = config.paramOutputs;
@@ -81,14 +81,7 @@ module.exports = function(RED){
         this.agentId = config.agentId;
         this.actions = config.actions;
 
-        var actions = null;
-        try{
-            actions = node.context().global.get(this.agentId);
-        }
-        catch(error){
-            
-        }
-        
+        var actions = node.context().global.get(this.agentId);
     
 
         node.on('input', async function(msg){   
@@ -98,5 +91,5 @@ module.exports = function(RED){
         });
 
     }
-    RED.nodes.registerType("BaseAgent",BaseAgentNode);
+    RED.nodes.registerType("HomeAssistantAgent",HomeAssistantAgentNode);
 }
