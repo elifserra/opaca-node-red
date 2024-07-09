@@ -1,1 +1,0 @@
-const CATEGORY_NAME = 'ZEKI'
