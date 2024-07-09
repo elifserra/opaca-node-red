@@ -40,7 +40,6 @@ print("Press and hold 'enter' to record...")
 while True:
     try:
 
-        
         # Wait until space is pressed
         keyboard.wait('enter')
 
@@ -83,7 +82,6 @@ while True:
         detected_voice = label_names[guess]
 
         requests.post("http://localhost:3000/variable/detected_voice", json={"value": detected_voice})
-
         time.sleep(1)
         requests.post("http://localhost:3000/variable/detected_voice", json={"value": "None"})
 
