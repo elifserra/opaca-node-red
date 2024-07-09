@@ -72,7 +72,7 @@ async function sendActionstoHTML(variableName, value) {
 }
 
 module.exports = function(RED){
-    function BaseAgentNode(config){
+    function BaseAgent(config){
         RED.nodes.createNode(this,config);  
         var node = this;
         this.paramOutputs = config.paramOutputs;
@@ -89,8 +89,6 @@ module.exports = function(RED){
             
         }
         
-    
-
         node.on('input', async function(msg){   
             await invokeAction(node.action, toJsonString(node.paramOutputs,msg), msg,node); // Invoke the action with parameters
             node.send(msg); // Send the message to the next node
@@ -98,5 +96,5 @@ module.exports = function(RED){
         });
 
     }
-    RED.nodes.registerType("BaseAgent",BaseAgentNode);
+    RED.nodes.registerType("BaseAgent",BaseAgent);
 }
