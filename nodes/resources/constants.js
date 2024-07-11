@@ -87,6 +87,7 @@ async function fetchData(node, username, password, apiUrl, loginUrl) {
         
         const token = await response.text();
         node.context().global.set("token", token);
+        node.warn("Token: " + token);
     } catch (error) {
         console.error("Fetch OPACA error: " + error);
     }
