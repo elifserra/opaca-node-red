@@ -18,6 +18,7 @@ Subflows are alternatives for custom nodes. The ones included here are for testi
    If using Docker, starting the Docker container should be enough.
 2) Deploying the custom nodes:
    * Navigate to the `$ .node-red` directory on your terminal and run the following command: `npm install <directory_of_the_repository>`
+     
      `<directory_of_the_repository>` is the directory where the `package.json` file is located, i.e. the cloned project directory.
    * Restart node red
    * On the node red workspace, connect the inject node to the `opaca-actions` node, provide username and password (the url is not actively used currently, you are free not to pass any url), deploy and inject the default msg.
