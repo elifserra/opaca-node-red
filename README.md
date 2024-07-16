@@ -4,28 +4,29 @@ Node-red custom nodes and subflows for creating flows on OPACA actions
 nodes module
 
 ## about
-`nodes` package contains two packages for custom nodes:
-* `load-actions-node`: loads all actions with their attributes (parameters, result etc.)
-* `invoke-action-node`: invokes an action given the name and parameters (not functioning yet)
+`nodes` module contains packages for custom nodes. The module provides the custom node palette for ZEKI Reallabor services.
 
-Please note that the `invoke-action-node` currently is not functioning. It is only a prototype and is being developed. Hence it does not provide any functionality about OPACA yet.
+`subflows` module contains a `flows.json` file that can be deployed on node-red and contains two flows that use two other "subflows".
+Subflows are alternatives for custom nodes. The ones included here are for testing and trying purposes in general. Are not related to the Reallabor Services.
 
-`subflows` package contains a `flows.json` file that can be deployed on node-red and contains two flows that use two other "subflows":
-* First subflow "List All Services" functions the same way as the custom `load-actions-node` but using multiple nodes that are provided by node-red.
-* Second subflow "Action Result" is for invoking actions in the OPACA Platform.
+`examples` module contains a couple of example flows created using the custom opaca/reallabor nodes.
 
 
 ## quick start
-1) To deploy the custom nodes:
-   * Navigate to the $.node-red on your terminal and run the following command: npm install <directory_of_the_repository>
+1) Running Node-RED:
+   On terminal, run `$ node-red` command (if you have node red locally deployed)
+   If using Docker, starting the Docker container should be enough.
+2) Deploying the custom nodes:
+   * Navigate to the `$ .node-red` directory on your terminal and run the following command: `npm install <directory_of_the_repository>`
+     `<directory_of_the_repository>` is the directory where the `package.json` file is located, i.e. the cloned project directory.
    * Restart node red
-   * On the UI, connect the inject node to the `load-actions-node`, deploy and inject the default msg.
+   * On the node red workspace, connect the inject node to the `opaca-actions` node, provide username and password (the url is not actively used currently, you are free not to pass any url), deploy and inject the default msg.
+     Note that it is important to run the `opaca-actions` node first to provide authentication for the further uses of the reallabor services.
+3) Testing the subflows and example flows:
+   * On the upper right corner of the node-red workspace navigate to the menu
+   * Click "import" and import the `flows.json` for the subflows and `examples.json` for reallabor service examples in the workspace. The example flows should immediately be deployed on the workspace.
 
-2) To test the subflows:
-   * On the upper right corner of the node-red UI navigate to the menu
-   * Click "import" and import the `flows.json` file in the workspace
 
-
-Note that for testing the subflows, the OPACA Runtime Platform should be active in the background and running on localhost:8000
+Note that the subflows are using a locally deployed OPACA Runtime Platform using the demo services, hence the platform should be active in the background and running on localhost:8000 if you want to test the subflows.
 
 In the subflows, while testing the actions with the "Action Result" subflow, action name should be passed as name and the parameters should be passed in the payload as a json object (in the inject node).
