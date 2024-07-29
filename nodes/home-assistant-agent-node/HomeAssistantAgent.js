@@ -20,6 +20,7 @@ module.exports = function(RED){
         }
          
         node.on('input', async function(msg){   
+            node.warn(helper_methods.toJsonString(node.paramOutputs,msg));
             await helper_methods.invokeAction(node.action, helper_methods.toJsonString(node.paramOutputs,msg), msg,node); // Invoke the action with parameters
             node.send(msg); // Send the message to the next node
             node.warn(actions); // Log the actions for debugging

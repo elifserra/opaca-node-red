@@ -24,6 +24,8 @@ app.get('/variable/:name', (req, res) => {
     }
 });
 
+
+
 // POST endpoint: Değişkenin değerini günceller
 app.post('/variable/:name', (req, res) => {
     const varName = req.params.name;
