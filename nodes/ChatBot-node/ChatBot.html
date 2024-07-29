@@ -226,7 +226,7 @@
     }
 
 
-    async function sendMessagesToGPT(messages, send = true) {
+    async function sendMessagesToGPT(messages, send = true, apiKey) {
         
         var modelName = send ? "gpt-4o-mini" : "gpt-3.5-turbo";
         console.log(modelName); 
@@ -237,7 +237,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer sk-proj-FMah6efczx2EXI1fWrwIT3BlbkFJGhdW21Th0Z1lMJhnzMWj'
+                    'Authorization': `Bearer ${apiKey}` 
                 },
                 body: JSON.stringify({
                     model: modelName,
@@ -259,7 +259,7 @@
         that.conversation += ("<div class='user-message'>" + that.userMessage + "</div>");
         $("#chat-history").append("<div class='user-message'>" + that.userMessage + "</div>");
         $("#user-text").val('');
-        sendMessagesToGPT(messages,true).then(function(response) {
+        sendMessagesToGPT(messages,true,that.apiKey).then(function(response) {
             that.gptMessage = response;
             console.log(that.gptMessage);
             let parsedResponse = parseGPTResponse(that.gptMessage);
@@ -316,7 +316,9 @@
             that.sendButton = document.getElementById('send-button');
             that.clearButton = document.getElementById('clear-button');
             that.recordButton = document.getElementById('record-button');
-            that.apiKey = "sk-proj-FMah6efczx2EXI1fWrwIT3BlbkFJGhdW21Th0Z1lMJhnzMWj";
+            var data = await fetch('example').then(response => response.json());
+            that.apiKey = data.value;
+            console.log(that.apiKey);
             that.opacaToken = await getToken("admin",12345,"http://10.42.6.107:8000/login");
             that.agentsAsJsonObject = await getOpacaAgentsandActions(that.opacaToken,"http://10.42.6.107:8000/agents");
             that.agentsAsJsonString = JSON.stringify(that.agentsAsJsonObject,null,2);

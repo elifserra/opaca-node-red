@@ -2,6 +2,11 @@ module.exports = function(RED) {
     function ChatBot(config) {
         RED.nodes.createNode(this, config);
         var node = this;
+        var openaiAPIKey = process.env.OPENAI_API_KEY;
+        console.log("OpenAI API Key: " + openaiAPIKey);
+        RED.httpAdmin.get('/example', function(req, res) {
+            res.json({ value: 'sk-proj-'+openaiAPIKey });
+        });
 
 
         // Event listener kurma
@@ -18,6 +23,7 @@ module.exports = function(RED) {
 
         node.on('input', function(msg) {
             node.warn("ChatBot node called");
+            node.warn(openaiAPIKey);
             node.send(msg);
         });
     }
