@@ -1,0 +1,440 @@
+<script type="text/html" data-template-name="ChatBot">
+
+    <style>
+        #chat-container {
+            border: 1px solid #252525;
+            padding: 10px;
+            width: 800px;
+            height: 1000px;
+            overflow-y: auto;
+            background-color: rgb(80, 78, 78);
+        }
+        #chat-history {
+            margin-bottom: 10px;
+            color: black;
+        }
+        .user-message, .bot-message {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #6b818a;
+            text-align: right;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .bot-message {
+            background-color: #a1a0a0;
+            text-align: left;
+            align-self: flex-start;
+            margin-right: auto;
+        }
+        #user-input {
+            display: flex;
+        }
+        #user-text {
+            flex: 1;
+            padding: 10px 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        #send-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #b0cf7d;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+
+        #clear-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #272c1f;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+
+        #record-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #788ba1;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+
+    </style>
+
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div id="chat-container">
+        <div id="chat-history"></div>
+        <div id="user-input">
+            <input type="text" id="user-text" placeholder="Type your message">
+            <button id="send-button">Send</button>
+            <button id="clear-button">Clear</button>
+            <button id="record-button">🎤</button> 
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+
+    var messages = [];
+    let mediaRecorder;
+
+    async function transcribeAudio(audioBlob, apiKey) {
+        const formData = new FormData();
+        formData.append('file', audioBlob, 'audio.wav');
+        formData.append('model', 'whisper-1');
+
+        const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+        return result.text;
+    }
+
+    async function startRecording(that) {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mediaRecorder = new MediaRecorder(stream);
+        let audioChunks = [];
+    
+        mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+        };
+    
+        mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks);
+            const text = await transcribeAudio(audioBlob,that.apiKey);
+            that.userInput.value = text;
+            sendMessage(that);
+            console.log(text);
+        };
+    
+        return mediaRecorder;
+    }
+
+    async function getOpacaAgentsandActions(token,apiUrl) {
+        try{
+            const response = await fetch(apiUrl,{
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            return data;
+        }
+        catch(error){
+            console.error("Error fetching data for Opaca agents and actions: ", error);
+            return null;
+        }
+    }
+
+    async function getToken(username, password,loginUrl) {
+        var authentication = JSON.stringify({username, password}); 
+        try{
+            const response = await fetch(loginUrl, {               
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: authentication,
+            });
+            const token = await response.text();                 
+            return token                                         
+        }
+        catch(error){
+            console.error("Authentication failed: ", error);     
+            return null;                                                                      
+        }
+    }
+
+    function toJsonString(actionName,actionParameters,actionsMap) {
+        var jsonString = "{";
+        var keys = Object.keys(actionParameters);
+        var length = keys.length-1;
+        var count = 0;
+
+        for(var param in actionParameters){
+            jsonString += "\"" + param + "\":"; 
+            if(actionsMap.get(actionName)[param].type === "integer"){
+                jsonString += actionParameters[param]; 
+            }
+            else{
+                jsonString += "\""+actionParameters[param]+"\""; 
+            }
+            count !== length ? jsonString += "," : jsonString += "}";
+            count++;
+        }
+        return jsonString; 
+    }
+
+
+    async function invokeAction(endpoint, queryString,opacaToken) {
+        var url = "http://10.42.6.107:8000/invoke/" + endpoint;
+        var response1 = null;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',  // Inform the server that the body is JSON
+                    
+                    Authorization: `Bearer ${opacaToken}` // Send the token in the Authorization header
+                    
+                },
+                body: queryString
+            });
+            
+            response1 = await response.json(); // Parse the JSON of the response
+        } catch (error) {
+            console.error("Fetch error: " + error); // Log any errors during the fetch
+        }
+        return response1; // Return the response
+    }
+
+    function parseGPTResponse(response) {
+        try {
+            // Remove any leading or trailing whitespace
+            response = response.trim();
+            
+            // Parse the JSON string into an object
+            let jsonResponse = JSON.parse(response);
+
+            // Return the parsed object
+            return jsonResponse;
+        } catch (error) {
+            console.error("Error parsing JSON response:", error);
+            return null;
+        }
+    }
+
+
+    async function sendMessagesToGPT(messages, send = true) {
+        
+        var modelName = send ? "gpt-4o-mini" : "gpt-3.5-turbo";
+        console.log(modelName); 
+
+        console.log(messages);
+        if(send){
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer sk-proj-FMah6efczx2EXI1fWrwIT3BlbkFJGhdW21Th0Z1lMJhnzMWj'
+                },
+                body: JSON.stringify({
+                    model: modelName,
+                    messages: messages
+                })
+            });
+            const completion = await response.json();
+            return completion.choices[0].message.content;
+        }
+        else{
+            return "123";
+        }
+    
+    }
+    
+    async function sendMessage(that){
+        that.userMessage = $("#user-text").val();
+        messages.push({"role": "user", "content": that.userMessage});
+        that.conversation += ("<div class='user-message'>" + that.userMessage + "</div>");
+        $("#chat-history").append("<div class='user-message'>" + that.userMessage + "</div>");
+        $("#user-text").val('');
+        sendMessagesToGPT(messages,true).then(function(response) {
+            that.gptMessage = response;
+            console.log(that.gptMessage);
+            let parsedResponse = parseGPTResponse(that.gptMessage);
+            console.log(parsedResponse);
+            that.conversation += ("<div class='bot-message'>" + parsedResponse["Answer"] + "</div>");
+            if(parsedResponse["Agent"] === "none" && parsedResponse["Action"] === "none"){
+                $("#chat-history").append("<div class='bot-message'>" + parsedResponse["Answer"] + "</div>");
+            }
+            else{
+                var queryString = toJsonString(parsedResponse["Action"],parsedResponse["Parameters"],that.actionsMap);
+                console.log(queryString); 
+                invokeAction(parsedResponse["Action"],queryString,that.opacaToken).then(function(response){
+                    messages.push({ "role": "system", "content": ("User request : " +that.userMessage + " Assistant response : " + queryString+" Invoke action result : " + response)})
+                    that.conversation += ("<div class='bot-message'>" + parsedResponse["Answer"] + response + "</div>");
+                    $("#chat-history").append("<div class='bot-message'>" + parsedResponse["Answer"] + response + "</div>");
+                    
+                });
+            }
+        }).catch(function(error) {
+            console.error('Error:', error);
+            $("#chat-history").append("<div class='bot-message'>Sorry, there was an error processing your request.</div>");
+        });
+
+    }
+
+    RED.nodes.registerType('ChatBot', {
+        category: 'ZEKI',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            isButtonClicked : { value: false },
+            userMessage : { value: "" },
+            gptMessage : { value: "" },
+            actionsMap : { value: new Map() },
+            opacaToken : { value: "" },
+            apiKey : { value: "" },
+            agentsAsJsonObject : { value: null },
+            agentsAsJsonString : { value: "" },
+            userInput : { value: null},
+            sendButton : { value: null},
+            clearButton : { value: null},
+            recordButton : { value: null}
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'icons/zekı_logo.png',
+        label: function() {
+            return this.name || 'ChatBot';
+        },
+
+        oneditprepare : async function(){
+            var that = this;
+            that.userInput = document.getElementById('user-text');
+            that.sendButton = document.getElementById('send-button');
+            that.clearButton = document.getElementById('clear-button');
+            that.recordButton = document.getElementById('record-button');
+            that.apiKey = "sk-proj-FMah6efczx2EXI1fWrwIT3BlbkFJGhdW21Th0Z1lMJhnzMWj";
+            that.opacaToken = await getToken("admin",12345,"http://10.42.6.107:8000/login");
+            that.agentsAsJsonObject = await getOpacaAgentsandActions(that.opacaToken,"http://10.42.6.107:8000/agents");
+            that.agentsAsJsonString = JSON.stringify(that.agentsAsJsonObject,null,2);
+            that.actionsMap = new Map();
+            that.agentsAsJsonObject.forEach(agent => {
+                agent.actions.forEach(action => {
+                    that.actionsMap.set(action.name, action.parameters);
+                });
+            });
+
+            const systemMessage = {"role": "system", "content": `You are a helpful assistant. and your name is GPT5. if somebody says hey you should say your name and introduce yourself Here, users give commands to you and you have to respond to them. 
+                You are responsible for interacting agents, their actions, and parameters.
+                I am attaching the information about the agents and their actions as JsonString here ${that.agentsAsJsonString}.
+                Based on the user's command, you need to determine the appropriate agent and its action. 
+                Then, provide the necessary parameter values for the action.
+
+                When you respond to a user command, first identify the appropriate agent(s) and action(s). Then, provide the required parameter values. 
+                Kindly answer the user, but ensure that you include the necessary information at the end of your response.
+                After kindly answering the question. For me to uderstand agent(s) and action(s) and parameters.you can use the following format and I want you to give ansewer following json string.
+                Provide the response in the following JSON format:
+                Do not forget parameters. If there are no parameters, you can leave the Parameters field as empty list, it should be dynamic. Please always follow the format below:
+                {
+                    "Answer": "your response to the user question you should be helpful and informative.",
+                    "Agent": "name of the agent",
+                    "Action": "name of the action",
+                        "Parameters": {
+                        "parameter1": "value1" if no parameter write "[]"
+                        "parameter2": "value2", if no parameter write "[]"
+                        .
+                        .
+                        .
+                        .
+                        .
+                    }
+                }
+                
+                if the action requires no parameters, you can leave the Parameters field as empty list []. If the action requires parameters, you should provide the necessary parameter values.
+
+                Sometimes user can ask something like "What can you do?" or "What are your capabilities?" or "What are your features?"
+                or something not related to actions, agents or parameters. In such cases you can answer as a normal chatbot. 
+                again in such cases you should follow the format above same as above. but you can leave the Agent and Action fields as none and parameters as empty list Howerver you shoud fill "Answer" section always.
+                for this scenerios, you should return always JSON format. Do not forget that it is crucial.
+                {
+                    "Answer": "your response to the user question you should be helpful and informative.",
+                    "Agent": "none",
+                    "Action": "none",
+                        "Parameters": {
+                        "parameter1": "[]"
+                        "parameter2": "[]"
+                    }
+                }
+                However, if the user asks a question related to agents, actions, or parameters, you need to respond accordingly.
+                Do not give action results because Yo do not know the action results. Later as a system message, I will provide the action results to you For example
+                Do not give such a answers "To find the location of the glass in the kitchen, I will need to use the Shelf Agent to locate the shelf containing the glass item. 2" This is important avoid and do not use such a answers. 
+                Do not give info about action and agents because it is about software user should not know about it. But you should be informative and helpful.
+                Do not forget you should always follow the format above.
+                I will give you the message history and you should remember the previous messages and give the answer accordingly.
+                In this way you will have context and you will be able to give the correct answer.
+                Do not forget having context is important. You should always remember the previous messages and give the answer accordingly.
+                Because user can ask something related to previous messages. You should check the previous messages and remember them.
+                `
+            };
+
+
+
+            document.addEventListener('keydown', async (event) => {
+                if (event.code === 'KeyR' && !mediaRecorder && document.activeElement !== that.userInput) {
+                    mediaRecorder = await startRecording(that);
+                    mediaRecorder.start();
+                    that.recordButton.textContent = '🛑'; // Recording state
+                }
+            });
+
+            document.addEventListener('keyup', (event) => {
+                if (event.code === 'KeyR' && mediaRecorder) {
+                    mediaRecorder.stop();
+                    mediaRecorder = null;
+                    that.recordButton.textContent = '🎤'; // Ready state
+                }
+            });
+
+
+
+
+
+            if(messages.length === 0) 
+                messages.push(systemMessage);
+
+            $("#clear-button").click(function() {
+                that.conversation = "";
+                $("#chat-history").empty();
+                messages.push(systemMessage);
+            });
+
+            $("#send-button").click(function() {
+                sendMessage(that);
+            });
+
+            if(that.conversation === undefined) {
+                that.conversation = "<div class='bot-message'>Hello! How can I help you today?</div>";
+            }
+
+            $("#chat-history").empty().append(that.conversation);
+
+
+
+        },
+
+        oneditsave : async function(){
+            var that = this;
+            console.log("done");
+            $("#chat-history").empty().append(that.conversation);
+        },
+
+        oneditclick : async function(){
+            var that = this;
+            console.log("cancelled");
+            $("#chat-history").empty().append(that.conversation);
+        },
+    });
+</script>

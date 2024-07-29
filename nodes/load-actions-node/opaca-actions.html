@@ -1,15 +1,30 @@
 <script type="text/html" data-template-name="opaca-actions">
+    <div class="form-row">
+        <label for="node-input-username"><i class="fa fa-tag"></i>Username</label>
+        <input type="text" id="node-input-username" placeholder="Username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-tag"></i>Password</label>
+        <input type="text" id="node-input-password" placeholder="Password">
+    </div>
+    <div class="form-row">
+        <label for="node-input-url"><i class="fa fa-tag"></i>Url</label>
+        <input type="text" id="node-input-url" placeholder="Url">
+    </div>
 </script>
 
 <script type="text/html" data-help-name="opaca-actions">
-    <p>A custom node to retrieve OPACA actions.</p>
+    <p>A custom node to load OPACA actions.</p>
 </script>
 
 <script type="text/javascript">
     RED.nodes.registerType('opaca-actions',{
-        category: 'function',
+        category: 'ZEKI',
         color: '#46b99c',
         defaults: {
+            username: { vaule: "" },
+            password:{ vaule: "" },
+            url: { value: "" }
         },
         inputs: 1,
         outputs: 0,

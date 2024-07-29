@@ -1,42 +1,24 @@
-const apiUrl = "http://localhost:8000/agents";
+const apiUrl = "http://10.42.6.107:8000/agents";
+const loginUrl = "http://10.42.6.107:8000/login";
+var path = 'C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/constants.js';
+const helper_methods = require(path);
+
 
 module.exports = function(RED) {
-    async function fetchData(node) {
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'GET'
-            });
 
-            const actions = [];
-            await response.json().then( data => {
-                data = data.map(o => o.actions);
-                
-                data.forEach(element =>
-                    element.forEach(element =>
-                        actions.push(element)
-                    )
-                );
-                
-            }
-            );
-
-            node.warn(new Map(actions.map(i => [i.name, i]))) ;
-        } catch (error) {
-            node.error("Fetch error: " + error);
-        }
-    }
     function MyNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
-
-        node.on('input', async function(msg) {
-            fetchData(node);
-            
-            node.send(msg);
+        this.username = config.username;
+        this.password = config.password;
+        
+        node.on('input', async function() {
+           var actions = await  helper_methods.fetchData(node, node.username, node.password,apiUrl,loginUrl);
+           node.warn(actions);
         });
-    }
-    
-    RED.nodes.registerType("opaca-actions", MyNode);
 
-    
-}
+        helper_methods.setGlobalValue("token", this.context().global.get("token"));
+
+    }
+    RED.nodes.registerType("opaca-actions", MyNode);
+};
