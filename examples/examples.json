@@ -1,0 +1,1108 @@
+[
+    {
+        "id": "9c44dcf820830aeb",
+        "type": "tab",
+        "label": "Example Flows",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2fc2a32c6566408c",
+        "type": "opaca-actions",
+        "z": "9c44dcf820830aeb",
+        "username": "admin",
+        "password": "12345",
+        "url": "http://10.42.6.107:8000",
+        "x": 560,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "e64c270176bad92a",
+        "type": "inject",
+        "z": "9c44dcf820830aeb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 240,
+        "y": 80,
+        "wires": [
+            [
+                "2fc2a32c6566408c"
+            ]
+        ]
+    },
+    {
+        "id": "bbfbf675ea7f7581",
+        "type": "HomeAssistantAgent",
+        "z": "9c44dcf820830aeb",
+        "name": "GetSensorId",
+        "agentId": "home-assistant-agent",
+        "actions": [
+            {
+                "name": "GetSensorsList",
+                "description": "Get list of all devices with 'multisensor' in their name. Those include the different sub-sensors of the multisensors, each including the main sensor's ID in their name as well as what they measure.",
+                "parameters": {},
+                "result": {
+                    "type": "array",
+                    "required": true,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            {
+                "name": "GetSensorId",
+                "description": "Get sensor ID corresponding to a given room. Room name does not have to be a perfect match.",
+                "parameters": {
+                    "room": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "string",
+                    "required": false
+                }
+            },
+            {
+                "name": "GetTemperature",
+                "description": "Get temperature value for a given sensor",
+                "parameters": {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "number",
+                    "required": true
+                }
+            },
+            {
+                "name": "GetCo2",
+                "description": "Get Co2 value for a given sensor",
+                "parameters": {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "number",
+                    "required": true
+                }
+            },
+            {
+                "name": "GetValue",
+                "description": "Get the value for a given sensor and property, searching in the list of sensors for a match",
+                "parameters": {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "number",
+                    "required": true
+                }
+            }
+        ],
+        "actionsList": [
+            "GetSensorsList",
+            "GetSensorId",
+            "GetTemperature",
+            "GetCo2",
+            "GetValue"
+        ],
+        "actionParams": [
+            [
+                "GetSensorsList",
+                {}
+            ],
+            [
+                "GetSensorId",
+                {
+                    "room": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "GetTemperature",
+                {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "GetCo2",
+                {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "GetValue",
+                {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ]
+        ],
+        "action": "GetSensorId",
+        "paramsHtml": "<label for=\"room\">room</label><input type=\"text\" id=\"room\" value=\"küche\" placeholder=\"küche\">",
+        "paramOutputs": [
+            {
+                "id": "room",
+                "value": {
+                    "name": "room",
+                    "type": "string",
+                    "value": "küche"
+                }
+            }
+        ],
+        "nodeParametersBoxes": [
+            {
+                "id": "room",
+                "value": "küche"
+            }
+        ],
+        "parameters": {
+            "room": "küche"
+        },
+        "defaultTypes": {
+            "room": "str"
+        },
+        "isAgentIDChanged": false,
+        "x": 350,
+        "y": 340,
+        "wires": [
+            [
+                "7309f42e428caba7",
+                "1a2c633a5576e856"
+            ]
+        ]
+    },
+    {
+        "id": "7309f42e428caba7",
+        "type": "HomeAssistantAgent",
+        "z": "9c44dcf820830aeb",
+        "name": "Get Co2 from the sensor",
+        "agentId": "home-assistant-agent",
+        "actions": [
+            {
+                "name": "GetSensorsList",
+                "description": "Get list of all devices with 'multisensor' in their name. Those include the different sub-sensors of the multisensors, each including the main sensor's ID in their name as well as what they measure.",
+                "parameters": {},
+                "result": {
+                    "type": "array",
+                    "required": true,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            {
+                "name": "GetSensorId",
+                "description": "Get sensor ID corresponding to a given room. Room name does not have to be a perfect match.",
+                "parameters": {
+                    "room": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "string",
+                    "required": false
+                }
+            },
+            {
+                "name": "GetTemperature",
+                "description": "Get temperature value for a given sensor",
+                "parameters": {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "number",
+                    "required": true
+                }
+            },
+            {
+                "name": "GetCo2",
+                "description": "Get Co2 value for a given sensor",
+                "parameters": {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "number",
+                    "required": true
+                }
+            },
+            {
+                "name": "GetValue",
+                "description": "Get the value for a given sensor and property, searching in the list of sensors for a match",
+                "parameters": {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "number",
+                    "required": true
+                }
+            }
+        ],
+        "actionsList": [
+            "GetSensorsList",
+            "GetSensorId",
+            "GetTemperature",
+            "GetCo2",
+            "GetValue"
+        ],
+        "actionParams": [
+            [
+                "GetSensorsList",
+                {}
+            ],
+            [
+                "GetSensorId",
+                {
+                    "room": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "GetTemperature",
+                {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "GetCo2",
+                {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "GetValue",
+                {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ]
+        ],
+        "action": "GetCo2",
+        "paramsHtml": "<label for=\"sensorId\">sensorId</label><input type=\"text\" id=\"sensorId\" value=\"payload\" placeholder=\"payload\">",
+        "paramOutputs": [
+            {
+                "id": "sensorId",
+                "value": {
+                    "name": "sensorId",
+                    "type": "string",
+                    "value": "payload"
+                }
+            }
+        ],
+        "nodeParametersBoxes": [
+            {
+                "id": "sensorId",
+                "value": "payload"
+            }
+        ],
+        "parameters": {
+            "sensorId": "payload"
+        },
+        "defaultTypes": {
+            "sensorId": "msg"
+        },
+        "isAgentIDChanged": false,
+        "x": 650,
+        "y": 280,
+        "wires": [
+            [
+                "276163e62309d280",
+                "1e3af1f49c6dee58"
+            ]
+        ]
+    },
+    {
+        "id": "c355cc22eab3ceac",
+        "type": "inject",
+        "z": "9c44dcf820830aeb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 340,
+        "wires": [
+            [
+                "bbfbf675ea7f7581"
+            ]
+        ]
+    },
+    {
+        "id": "276163e62309d280",
+        "type": "debug",
+        "z": "9c44dcf820830aeb",
+        "name": "display",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "1a2c633a5576e856",
+        "type": "HomeAssistantAgent",
+        "z": "9c44dcf820830aeb",
+        "name": "Get Temperature from the sensor",
+        "agentId": "home-assistant-agent",
+        "actions": [
+            {
+                "name": "GetSensorsList",
+                "description": "Get list of all devices with 'multisensor' in their name. Those include the different sub-sensors of the multisensors, each including the main sensor's ID in their name as well as what they measure.",
+                "parameters": {},
+                "result": {
+                    "type": "array",
+                    "required": true,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            {
+                "name": "GetSensorId",
+                "description": "Get sensor ID corresponding to a given room. Room name does not have to be a perfect match.",
+                "parameters": {
+                    "room": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "string",
+                    "required": false
+                }
+            },
+            {
+                "name": "GetTemperature",
+                "description": "Get temperature value for a given sensor",
+                "parameters": {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "number",
+                    "required": true
+                }
+            },
+            {
+                "name": "GetCo2",
+                "description": "Get Co2 value for a given sensor",
+                "parameters": {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "number",
+                    "required": true
+                }
+            },
+            {
+                "name": "GetValue",
+                "description": "Get the value for a given sensor and property, searching in the list of sensors for a match",
+                "parameters": {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "number",
+                    "required": true
+                }
+            }
+        ],
+        "actionsList": [
+            "GetSensorsList",
+            "GetSensorId",
+            "GetTemperature",
+            "GetCo2",
+            "GetValue"
+        ],
+        "actionParams": [
+            [
+                "GetSensorsList",
+                {}
+            ],
+            [
+                "GetSensorId",
+                {
+                    "room": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "GetTemperature",
+                {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "GetCo2",
+                {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "GetValue",
+                {
+                    "sensorId": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ]
+        ],
+        "action": "GetTemperature",
+        "paramsHtml": "<label for=\"sensorId\">sensorId</label>\n                                        <input type=\"text\" id=\"sensorId\" placeholder=\"string\">",
+        "paramOutputs": [
+            {
+                "id": "sensorId",
+                "value": {
+                    "name": "sensorId",
+                    "type": "string",
+                    "value": "payload"
+                }
+            }
+        ],
+        "nodeParametersBoxes": [
+            {
+                "id": "sensorId",
+                "value": "payload"
+            }
+        ],
+        "parameters": {
+            "sensorId": "payload"
+        },
+        "defaultTypes": {
+            "sensorId": "msg"
+        },
+        "isAgentIDChanged": false,
+        "x": 660,
+        "y": 400,
+        "wires": [
+            [
+                "afe6b6c4aec8f04a"
+            ]
+        ]
+    },
+    {
+        "id": "afe6b6c4aec8f04a",
+        "type": "debug",
+        "z": "9c44dcf820830aeb",
+        "name": "display",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "263193c999ae0292",
+        "type": "inject",
+        "z": "9c44dcf820830aeb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 580,
+        "wires": [
+            [
+                "328782bf5864f93b"
+            ]
+        ]
+    },
+    {
+        "id": "328782bf5864f93b",
+        "type": "ShelfAgent",
+        "z": "9c44dcf820830aeb",
+        "name": "Find the intended item in shelf",
+        "agentId": "shelf-agent",
+        "actions": [
+            {
+                "name": "FindInShelf",
+                "description": "Find the ID of the shelf that should contain the given item, or -1 if no such shelf exists.",
+                "parameters": {
+                    "item": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "integer",
+                    "required": true
+                }
+            },
+            {
+                "name": "OpenShelf",
+                "description": "Open the shelf with the given ID. Only use this action when you can see the shelf!",
+                "parameters": {
+                    "shelf": {
+                        "type": "integer",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "boolean",
+                    "required": true
+                }
+            },
+            {
+                "name": "CloseShelf",
+                "description": "Close the shelf with the given ID. Only use this action when you can see the shelf!",
+                "parameters": {
+                    "shelf": {
+                        "type": "integer",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "boolean",
+                    "required": true
+                }
+            }
+        ],
+        "actionsList": [
+            "FindInShelf",
+            "OpenShelf",
+            "CloseShelf"
+        ],
+        "actionParams": [
+            [
+                "FindInShelf",
+                {
+                    "item": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "OpenShelf",
+                {
+                    "shelf": {
+                        "type": "integer",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "CloseShelf",
+                {
+                    "shelf": {
+                        "type": "integer",
+                        "required": true
+                    }
+                }
+            ]
+        ],
+        "action": "FindInShelf",
+        "paramsHtml": "<label for=\"item\">item</label><input type=\"text\" id=\"item\" value=\"glass\" placeholder=\"glass\">",
+        "paramOutputs": [
+            {
+                "id": "item",
+                "value": {
+                    "name": "item",
+                    "type": "string",
+                    "value": "glass"
+                }
+            }
+        ],
+        "nodeParametersBoxes": [
+            {
+                "id": "item",
+                "value": "glass"
+            }
+        ],
+        "parameters": {
+            "item": "glass"
+        },
+        "defaultTypes": {
+            "item": "str"
+        },
+        "isAgentIDChanged": false,
+        "x": 410,
+        "y": 580,
+        "wires": [
+            [
+                "99605129deed21f1"
+            ]
+        ]
+    },
+    {
+        "id": "99605129deed21f1",
+        "type": "ShelfAgent",
+        "z": "9c44dcf820830aeb",
+        "name": "Open the shelf the item is in",
+        "agentId": "shelf-agent",
+        "actions": [
+            {
+                "name": "FindInShelf",
+                "description": "Find the ID of the shelf that should contain the given item, or -1 if no such shelf exists.",
+                "parameters": {
+                    "item": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "integer",
+                    "required": true
+                }
+            },
+            {
+                "name": "OpenShelf",
+                "description": "Open the shelf with the given ID. Only use this action when you can see the shelf!",
+                "parameters": {
+                    "shelf": {
+                        "type": "integer",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "boolean",
+                    "required": true
+                }
+            },
+            {
+                "name": "CloseShelf",
+                "description": "Close the shelf with the given ID. Only use this action when you can see the shelf!",
+                "parameters": {
+                    "shelf": {
+                        "type": "integer",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "boolean",
+                    "required": true
+                }
+            }
+        ],
+        "actionsList": [
+            "FindInShelf",
+            "OpenShelf",
+            "CloseShelf"
+        ],
+        "actionParams": [
+            [
+                "FindInShelf",
+                {
+                    "item": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "OpenShelf",
+                {
+                    "shelf": {
+                        "type": "integer",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "CloseShelf",
+                {
+                    "shelf": {
+                        "type": "integer",
+                        "required": true
+                    }
+                }
+            ]
+        ],
+        "action": "OpenShelf",
+        "paramsHtml": "<label for=\"shelf\">shelf</label><input type=\"text\" id=\"shelf\" value=\"payload\" placeholder=\"payload\">",
+        "paramOutputs": [
+            {
+                "id": "shelf",
+                "value": {
+                    "name": "shelf",
+                    "type": "integer",
+                    "value": "payload"
+                }
+            }
+        ],
+        "nodeParametersBoxes": [
+            {
+                "id": "shelf",
+                "value": "payload"
+            }
+        ],
+        "parameters": {
+            "shelf": "payload"
+        },
+        "defaultTypes": {
+            "shelf": "msg"
+        },
+        "isAgentIDChanged": false,
+        "x": 740,
+        "y": 580,
+        "wires": [
+            [
+                "1b988b75464ea98b"
+            ]
+        ]
+    },
+    {
+        "id": "1b988b75464ea98b",
+        "type": "debug",
+        "z": "9c44dcf820830aeb",
+        "name": "display",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "4bcf24714015f627",
+        "type": "SensorAgent",
+        "z": "9c44dcf820830aeb",
+        "name": "Show Warning",
+        "agentId": "servlet-agent",
+        "actions": [
+            {
+                "name": "ShowMessage",
+                "description": null,
+                "parameters": {
+                    "message": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "seconds": {
+                        "type": "integer",
+                        "required": false
+                    }
+                },
+                "result": null
+            },
+            {
+                "name": "GetValue",
+                "description": null,
+                "parameters": {
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": {
+                    "type": "string",
+                    "required": true
+                }
+            },
+            {
+                "name": "SetTitle",
+                "description": null,
+                "parameters": {
+                    "title": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": null
+            },
+            {
+                "name": "SetValue",
+                "description": null,
+                "parameters": {
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "value": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "result": null
+            }
+        ],
+        "actionsList": [
+            "ShowMessage",
+            "GetValue",
+            "SetTitle",
+            "SetValue"
+        ],
+        "actionParams": [
+            [
+                "ShowMessage",
+                {
+                    "message": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "seconds": {
+                        "type": "integer",
+                        "required": false
+                    }
+                }
+            ],
+            [
+                "GetValue",
+                {
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "SetTitle",
+                {
+                    "title": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ],
+            [
+                "SetValue",
+                {
+                    "key": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "value": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            ]
+        ],
+        "action": "ShowMessage",
+        "paramsHtml": "<label for=\"message\">message</label><input type=\"text\" id=\"message\" value=\"co2 too high!\" placeholder=\"co2 too high!\"><label for=\"seconds\">seconds</label><input type=\"text\" id=\"seconds\" value=\"5\" placeholder=\"5\">",
+        "paramOutputs": [
+            {
+                "id": "message",
+                "value": {
+                    "name": "message",
+                    "type": "string",
+                    "value": "co2 too high!"
+                }
+            },
+            {
+                "id": "seconds",
+                "value": {
+                    "name": "seconds",
+                    "type": "integer",
+                    "value": "5"
+                }
+            }
+        ],
+        "nodeParametersBoxes": [
+            {
+                "id": "message",
+                "value": "co2 too high!"
+            },
+            {
+                "id": "seconds",
+                "value": "5"
+            }
+        ],
+        "parameters": {
+            "message": "co2 too high!",
+            "seconds": "5"
+        },
+        "defaultTypes": {
+            "message": "str",
+            "seconds": "str"
+        },
+        "isAgentIDChanged": false,
+        "x": 1140,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1e3af1f49c6dee58",
+        "type": "switch",
+        "z": "9c44dcf820830aeb",
+        "name": "Is Co2 too high?",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "450",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 920,
+        "y": 200,
+        "wires": [
+            [
+                "4bcf24714015f627"
+            ]
+        ]
+    },
+    {
+        "id": "bbdd00eb8e04337d",
+        "type": "comment",
+        "z": "9c44dcf820830aeb",
+        "name": "Authentication",
+        "info": "",
+        "x": 390,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "4e6cd0d4f56cc9a8",
+        "type": "comment",
+        "z": "9c44dcf820830aeb",
+        "name": "Example Flow 1",
+        "info": "",
+        "x": 180,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "dc82f1ee7ca98f94",
+        "type": "comment",
+        "z": "9c44dcf820830aeb",
+        "name": "Example Flow 2",
+        "info": "",
+        "x": 180,
+        "y": 520,
+        "wires": []
+    }
+]

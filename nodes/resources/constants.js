@@ -54,7 +54,7 @@ async function invokeAction(endpoint, queryString, msg,node) {
  * @returns {string} - The JSON string representation of the parameters.
  */
 function toJsonString(parameterArray, msg) {
-    var jsonString = "{";
+    /*var jsonString = "{";
     var length = parameterArray.length - 1;
     var count = 0;
 
@@ -64,6 +64,21 @@ function toJsonString(parameterArray, msg) {
         if(element.value.value === "payload" && element.value.type === "string") jsonString += "\"" + msg.payload + "\"";
         else if(element.value.value === "payload")  jsonString += msg.payload;
         else element.value.type === "string" ? jsonString += "\"" + element.value.value + "\"" : jsonString += element.value.value;
+        count !== length ? jsonString += "," : jsonString += "}";
+
+        count++;
+    });*/
+
+    var actualValue;
+    var valueAsPassed;
+
+    parameterArray.forEach(element => {
+        jsonString += "\"" + element.value.name + "\":"; // Add parameter name
+
+        element.value.value === "payload" ? actualValue = msg.payload : actualValue = element.value.value; // if msg.payload is being used
+        element.value.type === "string" ? valueAsPassed = `"${actualvalue}"` : valueAsPassed = actualvalue; // if str input is being used
+
+        jsonString += valueAsPassed;
         count !== length ? jsonString += "," : jsonString += "}";
 
         count++;
