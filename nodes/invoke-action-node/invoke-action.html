@@ -41,15 +41,11 @@
         }
     }
 
-    /**
-     * Save parameters from the input fields.
-     * @param {object} node - The Node-RED node object.
-     */
     async function saveParameters(node) {
         var types = {};
         node.nodeParametersBoxes.forEach(box => {
             var inputElement = $(`#${box.id}`);
-            box.value = inputElement.val(); // Retrieve the value from the input field.
+            box.value = inputElement.val(); 
             types[box.id] = inputElement.typedInput('type');
         });
 
@@ -59,10 +55,10 @@
 
         var parameters = {};
         node.nodeParametersBoxes.forEach(box => {
-            parameters[box.id] = box.value; // Assign values to parameters.
+            parameters[box.id] = box.value;
             node.paramOutputs.forEach(param => {
                 if (param.id === box.id) {
-                    param.value.value = box.value; // Update parameter output values.
+                    param.value.value = box.value; 
                 }
             });
         });
@@ -70,54 +66,10 @@
         node.parameters = parameters;
         console.log(node.parameters);
 
-        RED.nodes.dirty(true); // Mark node as dirty to indicate changes.
-        RED.nodes.node(node.id).parameters = node.parameters;
-        RED.nodes.node(node.id).paramOutputs = node.paramOutputs;
+        RED.nodes.dirty(true); 
 
     }
 
-
-    async function getGlobalValue(variableName,node) {
-        const response = await fetch(`http://localhost:3000/variable/${variableName}`, { method: 'GET' });
-        const data = await response.json();
-        if (variableName === "token") {
-            node.token = data.value;
-        }
-    }
-
-    /**
-     * Fetch data from the API.
-     * @returns {Promise<Array>} The actions list.
-     */
-    async function fetchData(node) {
-        const apiUrl = "http://10.42.6.107:8000/agents";
-        var actList = [];
-        try {
-            const response = await fetch(apiUrl, { 
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${node.token}`
-                }
-            });
-            const actions = [];
-            const data = await response.json();
-            data.forEach(agent => {
-                if (agent.actions) {
-                    agent.actions.forEach(action => {
-                        actions.push(action);
-                    });
-                }
-            });
-            return actions;
-        } catch (error) {
-            console.error("Fetch error:", error);
-            return null;
-        }
-    }
-
-    /**
-     * Register the custom node type with Node-RED.
-     */
     RED.nodes.registerType('invoke-action', {
         category: 'ZEKI',
         color: '#46b99c',
@@ -150,10 +102,18 @@
         oneditprepare: async function() {
             var that = this;
 
+            var actions = [];
+            var data = await fetch('agents').then(response => response.json());
+            var agents = data.value;
+            console.log(agents);
+            agents.forEach(agent => {
+                if (agent.actions) {
+                    agent.actions.forEach(action => {
+                        actions.push(action);
+                    });
+                }
+            });
 
-            await getGlobalValue("token",that);
-            
-            var actions = await fetchData(that); // Fetch actions from API.
             that.actionsList = actions.map(action => action.name);
             that.actionParams = actions.map(action => [action.name, action.parameters]);
 
@@ -174,7 +134,6 @@
 
             // Handle action selection change.
             $("#node-input-action").on('change', function() {
-                console.log("Action changed");
                 that.action = $("#node-input-action").val();
                 var selectedActionParams = that.actionParams.find(action => action[0] === that.action);
                 var params = selectedActionParams[1];
@@ -208,10 +167,6 @@
                 });
             }
         },
-
-        /**
-         * Save the node configuration.
-         */
 
         oneditcancel: function() {
             saveParameters(this);

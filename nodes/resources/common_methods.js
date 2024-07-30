@@ -103,6 +103,7 @@ async function fetchOpacaTokenAndAgents(node, username, password, apiUrl, loginU
         // Extract the token from the response
         const token = await response.text();
         node.context().global.set("token", token);
+        
     } catch (error) {
         // Log any errors that occur during the token fetch
         node.error("FETCH OPACA TOKEN ERROR : " + error);
@@ -122,6 +123,10 @@ async function fetchOpacaTokenAndAgents(node, username, password, apiUrl, loginU
 
         // Parse the response to get the list of agents
         const agents = await response.json();
+
+        RED.httpAdmin.get(`/agents`, function(req, res) { // This is for sending all agents. Because invoke action node use all agents actions together
+            res.json({ value: agents});
+        });
 
         // Set up routes for each agent to retrieve their actions
         agents.forEach(agent => {
