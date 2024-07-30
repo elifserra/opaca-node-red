@@ -44,7 +44,7 @@ function toJsonString(parameterArray, msg) {
 }
 
 
-async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
+async function fetchOpacaTokenAndAgents(node, username, password, apiUrl, loginUrl,RED) {
     var authentication = JSON.stringify({ username, password });
     try {
         const response = await fetch(loginUrl, {
@@ -62,7 +62,7 @@ async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
     }
     
     const token = node.context().global.get("token");
-
+    
     try {
         const response = await fetch(apiUrl, {
             method: 'GET',
@@ -77,7 +77,6 @@ async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
                 res.json({ value: agent.actions });
             });
         });
-        
         const actions = agents.flatMap(agent => agent.actions || []);
         return actions;
 
@@ -89,5 +88,5 @@ async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
 module.exports = {
     invokeAction,
     toJsonString,
-    fetchData
+    fetchOpacaTokenAndAgents
 };
