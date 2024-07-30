@@ -51,8 +51,6 @@
 
         node.defaultTypes = types;
 
-        console.log(node.defaultTypes);
-
         var parameters = {};
         node.nodeParametersBoxes.forEach(box => {
             parameters[box.id] = box.value;
@@ -64,7 +62,6 @@
         });
 
         node.parameters = parameters;
-        console.log(node.parameters);
 
         RED.nodes.dirty(true); 
 

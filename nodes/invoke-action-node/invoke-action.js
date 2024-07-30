@@ -3,7 +3,7 @@ const helper_methods = require(path);
 
 module.exports = function(RED) {
 
-    function MyNode(config) {
+    function InvokeActionNode(config) {
         RED.nodes.createNode(this, config);
         var node = this; 
         node.paramOutputs = config.paramOutputs; 
@@ -16,7 +16,7 @@ module.exports = function(RED) {
     }
 
 
-    RED.nodes.registerType("invoke-action", MyNode);
+    RED.nodes.registerType("invoke-action", InvokeActionNode);
 
     
 };
