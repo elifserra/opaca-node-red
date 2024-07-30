@@ -15,7 +15,7 @@ async function invokeAction(endpoint,queryString,msg,node) {
         });
 
     } catch (error) {
-        console.error("INVOKE ACTION ERROR : " + error);
+        node.error("INVOKE ACTION ERROR : " + error);
     }
 }
 
@@ -58,7 +58,7 @@ async function fetchOpacaTokenAndAgents(node, username, password, apiUrl, loginU
         const token = await response.text();
         node.context().global.set("token", token);
     } catch (error) {
-        console.error("FETCH OPACA TOKEN ERROR : " + error);
+        node.error();("FETCH OPACA TOKEN ERROR : " + error);
     }
     
     const token = node.context().global.get("token");
@@ -77,8 +77,6 @@ async function fetchOpacaTokenAndAgents(node, username, password, apiUrl, loginU
                 res.json({ value: agent.actions });
             });
         });
-        const actions = agents.flatMap(agent => agent.actions || []);
-        return actions;
 
     } catch (error) {
         node.error("FETCH OPACA AGENTS ERROR: " + error);

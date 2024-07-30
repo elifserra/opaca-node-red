@@ -13,7 +13,6 @@ module.exports = function(RED) {
         
         node.on('input', async function() {
            var actions = await  helper_methods.fetchOpacaTokenAndAgents(node, node.username, node.password,apiUrl,loginUrl,RED);
-           node.warn(actions);
         });
     }
     RED.nodes.registerType("opaca-actions", MyNode);
