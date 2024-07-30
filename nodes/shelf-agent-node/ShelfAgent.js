@@ -1,4 +1,4 @@
-var path = 'C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/constants.js';
+var path = 'C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/common_methods.js';
 const helper_methods = require(path);
 
 module.exports = function(RED){
