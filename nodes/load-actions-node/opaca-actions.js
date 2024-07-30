@@ -17,7 +17,7 @@ module.exports = function(RED) {
            node.warn(actions);
         });
 
-        helper_methods.setGlobalValue("token", this.context().global.get("token"));
+        //helper_methods.setGlobalValue("token", this.context().global.get("token"));
 
     }
     RED.nodes.registerType("opaca-actions", MyNode);

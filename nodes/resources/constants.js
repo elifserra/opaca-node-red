@@ -1,24 +1,3 @@
-// This file contains the methods that shared among all the nodes
-
-async function sendActionstoHTML(variableName, value) {
-    try {
-        const response = await fetch(`http://localhost:3000/variable/${variableName}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ value: value })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
 /**
  * Function to invoke an action on the server.
  * @param {string} endpoint - The endpoint to invoke the action.
@@ -54,20 +33,6 @@ async function invokeAction(endpoint, queryString, msg,node) {
  * @returns {string} - The JSON string representation of the parameters.
  */
 function toJsonString(parameterArray, msg) {
-    /*var jsonString = "{";
-    var length = parameterArray.length - 1;
-    var count = 0;
-
-    parameterArray.forEach(element => {
-        jsonString += "\"" + element.value.name + "\":"; // Add parameter name
-
-        if(element.value.value === "payload" && element.value.type === "string") jsonString += "\"" + msg.payload + "\"";
-        else if(element.value.value === "payload")  jsonString += msg.payload;
-        else element.value.type === "string" ? jsonString += "\"" + element.value.value + "\"" : jsonString += element.value.value;
-        count !== length ? jsonString += "," : jsonString += "}";
-
-        count++;
-    });*/
 
     var actualValue;
     var valueAsPassed;
@@ -94,7 +59,6 @@ function toJsonString(parameterArray, msg) {
 
 async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
     var authentication = JSON.stringify({ username, password });
-    
     try {
         const response = await fetch(loginUrl, {
             method: 'POST',
@@ -126,8 +90,6 @@ async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
             RED.httpAdmin.get(`/${agent.agentId}`, function(req, res) {
                 res.json({ value: agent.actions });
             });
-            node.context().global.set(agent.agentId, agent.actions);
-            sendActionstoHTML(agent.agentId, agent.actions);
         });
         
         const actions = data.flatMap(agent => agent.actions || []);
@@ -138,31 +100,8 @@ async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
     }
 }
 
-
-async function setGlobalValue(variableName, value) {
-    try {
-        const response = await fetch(`http://localhost:3000/variable/${variableName}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ value: value })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-
 module.exports = {
-    sendActionstoHTML,
     invokeAction,
     toJsonString,
-    fetchData,
-    setGlobalValue
+    fetchData
 };
