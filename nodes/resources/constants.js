@@ -72,11 +72,15 @@ function toJsonString(parameterArray, msg) {
     var actualValue;
     var valueAsPassed;
 
+    var jsonString = "{";
+    var count = 0;
+    var length = parameterArray.length - 1;
+
     parameterArray.forEach(element => {
         jsonString += "\"" + element.value.name + "\":"; // Add parameter name
 
         element.value.value === "payload" ? actualValue = msg.payload : actualValue = element.value.value; // if msg.payload is being used
-        element.value.type === "string" ? valueAsPassed = `"${actualvalue}"` : valueAsPassed = actualvalue; // if str input is being used
+        element.value.type === "string" ? valueAsPassed = `"${actualValue}"` : valueAsPassed = actualValue; // if str input is being used
 
         jsonString += valueAsPassed;
         count !== length ? jsonString += "," : jsonString += "}";

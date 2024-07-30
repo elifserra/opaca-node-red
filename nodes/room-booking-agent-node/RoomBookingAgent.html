@@ -101,7 +101,9 @@
             //$("#parameters-container").empty().append(that.paramsHtml);
             
             console.log("AGENT ID",that.agentId);
-            that.actions = await getActionsFromJavaScript(that.agentId);
+            var data = await fetch(`${that.agentId}`).then(response => response.json());
+            that.actions = data.value;
+            //that.actions = await getActionsFromJavaScript(that.agentId);
             that.actionsList = that.actions.map(action => action.name);
             that.actionParams = that.actions.map(action => [action.name, action.parameters]);
             
