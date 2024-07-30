@@ -20,7 +20,6 @@
       "WayFindingAgent": "/nodes/wayfinding-agent-node/WayFindingAgent.js",
       "SensorAgent": "/nodes/sensor-agent-node/SensorAgent.js",
       "RoomBookingAgent": "/nodes/room-booking-agent-node/RoomBookingAgent.js",
-      "ChildAgent": "/nodes/ChildAgent-node/ChildAgent.js",
       "ChatBot": "/nodes/ChatBot-node/ChatBot.js"
     }
   },
