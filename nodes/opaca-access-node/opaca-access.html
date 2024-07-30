@@ -1,0 +1,35 @@
+<!-- Template for the Opaca Access node configuration in the Node-RED editor -->
+<script type="text/html" data-template-name="opaca-access">
+    <div class="form-row">
+        <label for="node-input-username"><i class="fa fa-tag"></i> Username</label>
+        <input type="text" id="node-input-username" placeholder="Username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-tag"></i> Password</label>
+        <input type="text" id="node-input-password" placeholder="Password">
+    </div>
+</script>
+
+<!-- Help text for the Opaca Access node -->
+<script type="text/html" data-help-name="opaca-access">
+    <p>A custom node to load OPACA actions.</p>
+</script>
+
+<!-- JavaScript to register the Opaca Access node in Node-RED -->
+<script type="text/javascript">
+    RED.nodes.registerType('opaca-access', {
+        category: 'ZEKI',
+        color: '#46b99c',
+        defaults: {
+            username: { value: "" },
+            password: { value: "" },
+            url: { value: "" }
+        },
+        inputs: 1,
+        outputs: 0,
+        icon: "file.svg",
+        label: function() {
+            return this.name || "Opaca Access";
+        }
+    });
+</script>
