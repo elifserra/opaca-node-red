@@ -1,51 +1,38 @@
-/**
- * Function to invoke an action on the server.
- * @param {string} endpoint - The endpoint to invoke the action.
- * @param {string} queryString - The query string to send in the request body.
- * @param {object} msg - The message object to update with the response.
- */
-async function invokeAction(endpoint, queryString, msg,node) {
+async function invokeAction(endpoint,queryString,msg,node) {
     var url = "http://10.42.6.107:8000/invoke/" + endpoint;
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',  // Inform the server that the body is JSON
-                
+                'Content-Type': 'application/json',  
                 Authorization: `Bearer ${node.context().global.get("token")}`
-                
             },
             body: queryString
         });
         
         await response.json().then(data => {
-            msg.payload = data; // Update the message payload with the response data
+            msg.payload = data; 
         });
+
     } catch (error) {
-        console.error("Fetch error: " + error); // Log any errors during the fetch
+        console.error("INVOKE ACTION ERROR : " + error);
     }
 }
 
-
-/**
- * Convert an array of parameters to a JSON string.
- * @param {Array} parameterArray - The array of parameters to convert.
- * @returns {string} - The JSON string representation of the parameters.
- */
 function toJsonString(parameterArray, msg) {
 
     var actualValue;
     var valueAsPassed;
-
     var jsonString = "{";
     var count = 0;
     var length = parameterArray.length - 1;
 
     parameterArray.forEach(element => {
-        jsonString += "\"" + element.value.name + "\":"; // Add parameter name
 
-        element.value.value === "payload" ? actualValue = msg.payload : actualValue = element.value.value; // if msg.payload is being used
-        element.value.type === "string" ? valueAsPassed = `"${actualValue}"` : valueAsPassed = actualValue; // if str input is being used
+        jsonString += "\"" + element.value.name + "\":"; 
+
+        element.value.value === "payload" ? actualValue = msg.payload : actualValue = element.value.value; 
+        element.value.type === "string" ? valueAsPassed = `"${actualValue}"` : valueAsPassed = actualValue;
 
         jsonString += valueAsPassed;
         count !== length ? jsonString += "," : jsonString += "}";
@@ -53,7 +40,7 @@ function toJsonString(parameterArray, msg) {
         count++;
     });
 
-    return jsonString; // Return the JSON string
+    return jsonString;
 }
 
 
@@ -70,9 +57,8 @@ async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
         
         const token = await response.text();
         node.context().global.set("token", token);
-        node.warn("Token: " + token);
     } catch (error) {
-        console.error("Fetch OPACA error: " + error);
+        console.error("FETCH OPACA TOKEN ERROR : " + error);
     }
     
     const token = node.context().global.get("token");
@@ -85,18 +71,18 @@ async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
             }
         });
 
-        const data = await response.json();
-        data.forEach(agent => {
+        const agents = await response.json();
+        agents.forEach(agent => {
             RED.httpAdmin.get(`/${agent.agentId}`, function(req, res) {
                 res.json({ value: agent.actions });
             });
         });
         
-        const actions = data.flatMap(agent => agent.actions || []);
+        const actions = agents.flatMap(agent => agent.actions || []);
         return actions;
 
     } catch (error) {
-        node.error("Fetch OPACA SECOND error: " + error);
+        node.error("FETCH OPACA AGENTS ERROR: " + error);
     }
 }
 
