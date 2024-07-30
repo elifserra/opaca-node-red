@@ -4,8 +4,8 @@ module.exports = function(RED) {
         var node = this;
         var openaiAPIKey = process.env.OPENAI_API_KEY;
         console.log("OpenAI API Key: " + openaiAPIKey);
-        RED.httpAdmin.get('/example', function(req, res) {
-            res.json({ value: 'sk-proj-'+openaiAPIKey });
+        RED.httpAdmin.get('/openAIKey', function(req, res) {
+            res.json({ value: openaiAPIKey });
         });
 
 

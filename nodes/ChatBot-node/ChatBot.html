@@ -36,7 +36,7 @@
         }
         #user-text {
             flex: 1;
-            padding: 10px 20px;
+            padding: 10px;
             border: 2px solid #ccc;
             border-radius: 5px;
         }
@@ -89,9 +89,6 @@
 </script>
 
 <script type="text/javascript">
-
-    var messages = [];
-    let mediaRecorder;
 
     async function transcribeAudio(audioBlob, apiKey) {
         const formData = new FormData();
@@ -226,22 +223,22 @@
     }
 
 
-    async function sendMessagesToGPT(messages, send = true, apiKey) {
+    async function sendMessagesToGPT(send = true,that) {
         
         var modelName = send ? "gpt-4o-mini" : "gpt-3.5-turbo";
         console.log(modelName); 
 
-        console.log(messages);
+        console.log(that.gptMessages);
         if(send){
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}` 
+                    'Authorization': `Bearer ${that.apiKey}` 
                 },
                 body: JSON.stringify({
                     model: modelName,
-                    messages: messages
+                    messages: that.gptMessages
                 })
             });
             const completion = await response.json();
@@ -255,11 +252,11 @@
     
     async function sendMessage(that){
         that.userMessage = $("#user-text").val();
-        messages.push({"role": "user", "content": that.userMessage});
+        that.gptMessages.push({"role": "user", "content": that.userMessage});
         that.conversation += ("<div class='user-message'>" + that.userMessage + "</div>");
         $("#chat-history").append("<div class='user-message'>" + that.userMessage + "</div>");
         $("#user-text").val('');
-        sendMessagesToGPT(messages,true,that.apiKey).then(function(response) {
+        sendMessagesToGPT(true,that).then(function(response) {
             that.gptMessage = response;
             console.log(that.gptMessage);
             let parsedResponse = parseGPTResponse(that.gptMessage);
@@ -272,7 +269,7 @@
                 var queryString = toJsonString(parsedResponse["Action"],parsedResponse["Parameters"],that.actionsMap);
                 console.log(queryString); 
                 invokeAction(parsedResponse["Action"],queryString,that.opacaToken).then(function(response){
-                    messages.push({ "role": "system", "content": ("User request : " +that.userMessage + " Assistant response : " + queryString+" Invoke action result : " + response)})
+                    that.gptMessages.push({ "role": "system", "content": ("User request : " +that.userMessage + " Assistant response : " + queryString+" Invoke action result : " + response)})
                     that.conversation += ("<div class='bot-message'>" + parsedResponse["Answer"] + response + "</div>");
                     $("#chat-history").append("<div class='bot-message'>" + parsedResponse["Answer"] + response + "</div>");
                     
@@ -298,6 +295,8 @@
             apiKey : { value: "" },
             agentsAsJsonObject : { value: null },
             agentsAsJsonString : { value: "" },
+            gptMessages : { value: null },
+            mediaRecorder : { value: null },
             userInput : { value: null},
             sendButton : { value: null},
             clearButton : { value: null},
@@ -312,13 +311,18 @@
 
         oneditprepare : async function(){
             var that = this;
-            that.userInput = document.getElementById('user-text');
-            that.sendButton = document.getElementById('send-button');
-            that.clearButton = document.getElementById('clear-button');
-            that.recordButton = document.getElementById('record-button');
-            var data = await fetch('example').then(response => response.json());
-            that.apiKey = data.value;
-            console.log(that.apiKey);
+            if(!that.apiKey){
+
+                that.userInput = document.getElementById('user-text');
+                that.sendButton = document.getElementById('send-button');
+                that.clearButton = document.getElementById('clear-button');
+                that.recordButton = document.getElementById('record-button');
+
+                var data = await fetch('openAIKey').then(response => response.json());
+                that.apiKey = data.value;
+                console.log(that.apiKey);
+            }
+
             that.opacaToken = await getToken("admin",12345,"http://10.42.6.107:8000/login");
             that.agentsAsJsonObject = await getOpacaAgentsandActions(that.opacaToken,"http://10.42.6.107:8000/agents");
             that.agentsAsJsonString = JSON.stringify(that.agentsAsJsonObject,null,2);
@@ -328,6 +332,7 @@
                     that.actionsMap.set(action.name, action.parameters);
                 });
             });
+
 
             const systemMessage = {"role": "system", "content": `You are a helpful assistant. and your name is GPT5. if somebody says hey you should say your name and introduce yourself Here, users give commands to you and you have to respond to them. 
                 You are responsible for interacting agents, their actions, and parameters.
@@ -385,32 +390,33 @@
 
 
             document.addEventListener('keydown', async (event) => {
-                if (event.code === 'KeyR' && !mediaRecorder && document.activeElement !== that.userInput) {
-                    mediaRecorder = await startRecording(that);
-                    mediaRecorder.start();
+                if (event.code === 'KeyR' && !that.mediaRecorder && document.activeElement !== that.userInput) {
+                    that.mediaRecorder = await startRecording(that);
+                    that.mediaRecorder.start();
                     that.recordButton.textContent = '🛑'; // Recording state
                 }
             });
 
             document.addEventListener('keyup', (event) => {
-                if (event.code === 'KeyR' && mediaRecorder) {
-                    mediaRecorder.stop();
-                    mediaRecorder = null;
+                if (event.code === 'KeyR' && that.mediaRecorder) {
+                    that.mediaRecorder.stop();
+                    that.mediaRecorder = null;
                     that.recordButton.textContent = '🎤'; // Ready state
                 }
             });
 
 
-
-
-
-            if(messages.length === 0) 
-                messages.push(systemMessage);
+            if(that.gptMessages.length === 0){ 
+                that.gptMessages = [];
+                that.gptMessages.push(systemMessage);
+                console.log(that.gptMessages);
+            }
+            
 
             $("#clear-button").click(function() {
                 that.conversation = "";
                 $("#chat-history").empty();
-                messages.push(systemMessage);
+                that.gptMessages.push(systemMessage);
             });
 
             $("#send-button").click(function() {
