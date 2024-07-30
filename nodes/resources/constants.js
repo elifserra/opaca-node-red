@@ -88,7 +88,7 @@ function toJsonString(parameterArray, msg) {
 }
 
 
-async function fetchData(node, username, password, apiUrl, loginUrl) {
+async function fetchData(node, username, password, apiUrl, loginUrl,RED) {
     var authentication = JSON.stringify({ username, password });
     
     try {
@@ -119,6 +119,9 @@ async function fetchData(node, username, password, apiUrl, loginUrl) {
 
         const data = await response.json();
         data.forEach(agent => {
+            RED.httpAdmin.get(`/${agent.agentId}`, function(req, res) {
+                res.json({ value: agent.actions });
+            });
             node.context().global.set(agent.agentId, agent.actions);
             sendActionstoHTML(agent.agentId, agent.actions);
         });

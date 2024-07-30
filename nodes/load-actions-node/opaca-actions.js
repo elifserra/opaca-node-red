@@ -13,7 +13,7 @@ module.exports = function(RED) {
         this.password = config.password;
         
         node.on('input', async function() {
-           var actions = await  helper_methods.fetchData(node, node.username, node.password,apiUrl,loginUrl);
+           var actions = await  helper_methods.fetchData(node, node.username, node.password,apiUrl,loginUrl,RED);
            node.warn(actions);
         });
 
