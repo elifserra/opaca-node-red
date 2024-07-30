@@ -21,9 +21,9 @@ Subflows are alternatives for custom nodes. The ones included here are for testi
      
      `<directory_of_the_repository>` is the directory where the `package.json` file is located, i.e. the cloned project directory.
    * Then navigate to `$ <directory_of_the_repository>/API` and run the following 3 commands to start a local API used in the background:
-   	$ npm install express body-parser
-    $ npm install cors
-	$ node server js 
+   	* `$ npm install express body-parser`
+    * `$ npm install cors`
+	* `$ node server js` 
    * Restart node red
    * On the node red workspace, connect the inject node to the `opaca-actions` node, provide username and password (the url is not actively used currently, you are free not to pass any url), deploy and inject the default msg.
      Note that it is important to run the `opaca-actions` node first to provide authentication for the further uses of the reallabor services.
