@@ -19,8 +19,10 @@
     </div>
 </script>
 
-
 <script type="text/javascript">
+
+    //document.write('<script type="text/javascript" src="C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/common_methods.js"><\/script>');
+
 
     async function getParametersOfSelectedAgent(that){
         var data = await fetch(`${that.agentId}`).then(response => response.json());
@@ -85,6 +87,7 @@
 
 
         oneditprepare : async function(){
+
             var that = this;
             if($("#node-input-agentId").val() != ""){
 

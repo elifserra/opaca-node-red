@@ -15,6 +15,9 @@
  * @param {object} node - The Node-RED node context, used for logging errors and accessing global context.
  */
 // This method is called by all agents {BaseAgent, FridgeAgent, HomeAssistantAgent, RoomBookingAgent, SensorAgent, ShelfAgent, WayFindingAgent}
+
+var token = null;
+
 async function invokeAction(endpoint, queryString, msg, node) {
     // Construct the URL for the API call
     var url = "http://10.42.6.107:8000/invoke/" + endpoint;
@@ -24,11 +27,11 @@ async function invokeAction(endpoint, queryString, msg, node) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',  
-                Authorization: `Bearer ${node.context().global.get("token")}`
+                Authorization: `Bearer ${token}`
             },
             body: queryString
         });
-
+        //${node.context().global.get("token")}
         // Parse the JSON response and set the payload of the message
         await response.json().then(data => {
             msg.payload = data; 
@@ -87,12 +90,11 @@ function toJsonString(parameterArray, msg) {
  * @param {object} RED - The RED object for accessing Node-RED administrative functions. Here it is used for posting every agent actions using node-red official httpAdmin. Endpoint is the agent-id
  */
 // This method is called by just Opaca Action node to get the opaca token and agents
-async function fetchOpacaTokenAndAgents(node, username, password, apiUrl, loginUrl, RED) {
+async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RED) {
     // Create the authentication payload by stringifying username and password.
     var authentication = JSON.stringify({ username, password });
-    try {
         // Make a POST request to the login URL to obtain a token
-        const response = await fetch(loginUrl, {
+        var response = await fetch(loginUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,20 +103,11 @@ async function fetchOpacaTokenAndAgents(node, username, password, apiUrl, loginU
         });
 
         // Extract the token from the response
-        const token = await response.text();
-        node.context().global.set("token", token);
-        
-    } catch (error) {
-        // Log any errors that occur during the token fetch
-        node.error("FETCH OPACA TOKEN ERROR : " + error);
-    }
-
-    // Retrieve the token from the global context
-    const token = node.context().global.get("token");
+        token = await response.text();
+        //node.context().global.set("token", token);
     
-    try {
         // Make a GET request to the API URL to fetch agents
-        const response = await fetch(apiUrl, {
+        response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`
@@ -135,10 +128,6 @@ async function fetchOpacaTokenAndAgents(node, username, password, apiUrl, loginU
             });
         });
 
-    } catch (error) {
-        // Log any errors that occur during the agent fetch
-        node.error("FETCH OPACA AGENTS ERROR: " + error);
-    }
 }
 
 // Export the functions as a module
