@@ -20,6 +20,9 @@
     <p>A custom node to perform OPACA actions.</p>
 </script>
 
+<!-- Include the common methods script -->
+<script type="text/javascript" src="html_common_methods.js"></script>
+
 <!-- JavaScript Code for the Custom Node -->
 <script type="text/javascript">
 
@@ -39,34 +42,6 @@
             this.type = type;
             this.value = value;
         }
-    }
-
-    async function saveParameters(node) {
-
-        console.log("INVOKKKEE SAVVVE");
-        var types = {};
-        node.nodeParametersBoxes.forEach(box => {
-            var inputElement = $(`#${box.id}`);
-            box.value = inputElement.val(); 
-            types[box.id] = inputElement.typedInput('type');
-        });
-
-        node.defaultTypes = types;
-
-        var parameters = {};
-        node.nodeParametersBoxes.forEach(box => {
-            parameters[box.id] = box.value;
-            node.paramOutputs.forEach(param => {
-                if (param.id === box.id) {
-                    param.value.value = box.value; 
-                }
-            });
-        });
-
-        node.parameters = parameters;
-
-        RED.nodes.dirty(true); 
-
     }
 
     RED.nodes.registerType('invoke-action', {

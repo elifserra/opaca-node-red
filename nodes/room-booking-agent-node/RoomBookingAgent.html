@@ -15,36 +15,11 @@
     </div>
 </script>
 
+<!-- Include the common methods script -->
+<script type="text/javascript" src="html_common_methods.js"></script>
 
 <script type="text/javascript">
-
-    async function saveParameters(node) {
-        var types = {};
-        node.nodeParametersBoxes.forEach(box => {
-            var inputElement = $(`#${box.id}`);
-            box.value = inputElement.val();
-            types[box.id] = inputElement.typedInput('type');
-        });
-
-        node.defaultTypes = types;
-
-        var parameters = {};
-        node.nodeParametersBoxes.forEach(box => {
-            parameters[box.id] = box.value;
-            node.paramOutputs.forEach(param => {
-                if (param.id === box.id) {
-                    param.value.value = box.value;
-                }
-            });
-        });
-
-        node.parameters = parameters;
-
-        RED.nodes.dirty(true);
-
-    }
-
-
+    
     RED.nodes.registerType('RoomBookingAgent', {
         category: 'ZEKI',
         color: '#2ca02c',
@@ -73,56 +48,22 @@
         oneditprepare : async function(){
             var that = this;
             that.agentId = "room-booking-agent";
-            var data = await fetch(`${that.agentId}`).then(response => response.json());
-            that.actions = data.value;
-            that.actionsList = that.actions.map(action => action.name);
-            that.actionParams = that.actions.map(action => [action.name, action.parameters]);
-            
-            if (that.parameters) {
-                that.paramsHtml = "";
-                for (var key in that.parameters) {
-                    that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
-                }
-            }
-            
+            await getThisAgentNodeActions(that);
+
+            updateParametersHtmlSection(that);
+
+            $("#node-input-agentId").on('change', async function() {
+                applyChangesForAgentChange(that);
+            }.bind(this));
+
             $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
             that.actionsList.forEach(action => {
                 $("#node-input-action").append(`<option value="${action}">${action}</option>`);
             });
 
-            $("#parameters-container").empty().append(that.paramsHtml);
-
-            $("#node-input-action").on('change', function() {
-                that.action = $("#node-input-action").val();
-                var selectedActionParams = that.actionParams.find(action => action[0] === that.action);
-                var params = selectedActionParams[1];
-                that.paramsHtml = "";
-                that.nodeParametersBoxes = [];
-                that.paramOutputs = [];
-                for (var key in params) {
-                    that.paramsHtml += `<label for="${key}">${key}</label>
-                                        <input type="text" id="${key}" placeholder="${params[key].type}">`;
-                    that.nodeParametersBoxes.push({ id: `${key}`, value: null });
-                    that.paramOutputs.push({ id: `${key}`, value: new Parameter(key, params[key].type, null) });
-                }
-                $("#parameters-container").empty().append(that.paramsHtml);
-
-                for (var key in params) {
-                    $(`#${key}`).typedInput({
-                        types: ['str', 'msg'],
-                        default: 'str',
-                        typefield: $(`#${key}-type`)
-                    });
-                }
-            }.bind(this));
-
-            for (var key in that.parameters) {
-                $(`#${key}`).typedInput({
-                    types: ['str', 'msg'],
-                    default: that.defaultTypes[key],
-                    typefield: $(`#${key}-type`)
-                });
-            }
+            $("#node-input-action").on('change', function(){
+                applyChangesForActionChange(that);
+            }.bind(this));     
         },
 
         oneditcancel : function(){

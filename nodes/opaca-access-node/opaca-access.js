@@ -60,5 +60,16 @@ module.exports = function(RED) {
         });
     });
 
+    RED.httpAdmin.get('/html_common_methods.js', function(req, res) {
+        const filePath = html_common_methods_path;
+        fs.readFile(filePath, 'utf8', function(err, data) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.type('text/javascript').send(data);
+            }
+        });
+    });
+
 
 };
