@@ -19,10 +19,12 @@
     </div>
 </script>
 
+
+<!-- Include the common methods script -->
+<script type="text/javascript" src="html_common_methods.js"></script>
+
+
 <script type="text/javascript">
-
-    //document.write('<script type="text/javascript" src="C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/common_methods.js"><\/script>');
-
 
     async function getParametersOfSelectedAgent(that){
         var data = await fetch(`${that.agentId}`).then(response => response.json());
@@ -35,7 +37,7 @@
         });
     }
 
-
+/*
     async function saveParameters(node) {
         var types = {};
         node.nodeParametersBoxes.forEach(box => {
@@ -61,7 +63,7 @@
         RED.nodes.dirty(true); 
     }
 
-
+*/
     RED.nodes.registerType('BaseAgent', {
         category: 'ZEKI',
         color: '#a6bbcf',
@@ -87,6 +89,10 @@
 
 
         oneditprepare : async function(){
+
+            //var commonMethods = await fetch("common_methods.js").then(response=>response.json());
+            disp();
+            saveParameters(this);
 
             var that = this;
             if($("#node-input-agentId").val() != ""){

@@ -1,7 +1,12 @@
 const apiUrl = "http://10.42.6.107:8000/agents";                                                        // apiURL for accessing agents
 const loginUrl = "http://10.42.6.107:8000/login";                                                       // loginUrl for accessing token. This token will be used for getting agents
 var common_methods_path = 'C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/common_methods.js';   // import the common_methods
+var html_common_methods_path = 'C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/html_common_methods.js';
 const helper_methods = require(common_methods_path);
+
+const path = require('path');
+const fs = require('fs');
+
 
 module.exports = function(RED) {
     /**
@@ -42,4 +47,18 @@ module.exports = function(RED) {
             .then(() => res.json({ success: true }))
             .catch(err => res.json({ success: false, error: err.message }));
     });
+
+
+    RED.httpAdmin.get('/html_common_methods.js', function(req, res) {
+        const filePath = html_common_methods_path;
+        fs.readFile(filePath, 'utf8', function(err, data) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.type('text/javascript').send(data);
+            }
+        });
+    });
+
+
 };
