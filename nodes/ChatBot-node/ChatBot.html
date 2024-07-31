@@ -311,17 +311,17 @@
 
         oneditprepare : async function(){
             var that = this;
-            if(!that.apiKey){
+            
 
-                that.userInput = document.getElementById('user-text');
-                that.sendButton = document.getElementById('send-button');
-                that.clearButton = document.getElementById('clear-button');
-                that.recordButton = document.getElementById('record-button');
+            that.userInput = document.getElementById('user-text');
+            that.sendButton = document.getElementById('send-button');
+            that.clearButton = document.getElementById('clear-button');
+            that.recordButton = document.getElementById('record-button');
 
-                var data = await fetch('openAIKey').then(response => response.json());
-                that.apiKey = data.value;
-                console.log(that.apiKey);
-            }
+            var data = await fetch('openAIKey').then(response => response.json());
+            that.apiKey = data.value;
+            console.log(that.apiKey);
+            
 
             that.opacaToken = await getToken("admin",12345,"http://10.42.6.107:8000/login");
             that.agentsAsJsonObject = await getOpacaAgentsandActions(that.opacaToken,"http://10.42.6.107:8000/agents");

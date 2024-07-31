@@ -1,20 +1,3 @@
-<!-- HTML Template for the Node-RED Editor -->
-<script type="text/html" data-template-name="RoomBookingAgent">
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-    <div class="form-row">
-        <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
-        <select id="node-input-action">
-            <option value="">Select an action</option>
-        </select>
-    </div>
-    <div class="form-row" id="parameters-container">
-        <!-- Parameters will be added here -->
-    </div>
-</script>
-
 <!-- Include the common methods script -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
@@ -46,6 +29,9 @@
 
 
         oneditprepare : async function(){
+
+            appendTheCommonHTMLFile();
+
             var that = this;
             that.agentId = "room-booking-agent";
             await getThisAgentNodeActions(that);
@@ -64,6 +50,8 @@
             $("#node-input-action").on('change', function(){
                 applyChangesForActionChange(that);
             }.bind(this));     
+
+            await handleInvokeAction(that);
         },
 
         oneditcancel : function(){

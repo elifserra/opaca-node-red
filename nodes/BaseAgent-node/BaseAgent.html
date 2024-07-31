@@ -24,6 +24,7 @@
 <script type="text/javascript" src="html_common_methods.js"></script>
 
 
+
 <script type="text/javascript">
 
     RED.nodes.registerType('BaseAgent', {
@@ -51,6 +52,7 @@
 
 
         oneditprepare : async function(){
+            console.log(token);
             var that = this;
             if($("#node-input-agentId").val() != ""){
                 that.agentId = $("#node-input-agentId").val();

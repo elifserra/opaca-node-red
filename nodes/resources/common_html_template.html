@@ -1,0 +1,117 @@
+<!-- HTML Template for the Node-RED Editor -->
+<style>
+    .form-row {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        background: #f1f1f1;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-row label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .form-row input[type="text"], 
+    .form-row select {
+        border: 1px solid #ccc;
+        font-size: 14px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background: #fff;
+    }
+
+    .form-row input[type="text"]:focus, 
+    .form-row select:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+        background: #fff;
+    }
+
+    .form-row select {
+        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxMCI+PHBvbHlnb24gcG9pbnRzPSIwLDAgNSw1IDAsMTAiIHN0eWxlPSJmaWxsOiMwMDA7Ii8+PC9zdmc+') no-repeat right 10px center;
+        background-size: 15px 15px;
+        background: #fff;
+    }
+
+    .form-row #parameters-container {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+    }
+
+    .invoke-action-button {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .invoke-action-button button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background: linear-gradient(45deg, #007BFF, #00C6FF);
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+    }
+    .invoke-action-button button:hover {
+        background: linear-gradient(45deg, #d11151, #0099cc);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    .invoke-action-button button:active {
+        transform: scale(0.98);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .result-container {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background-color: #e9f7ef;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-container p {
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+    }
+
+</style>
+
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+</div>
+<div class="form-row">
+    <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
+    <select id="node-input-action">
+        <option value="">Select an action</option>
+    </select>
+</div>
+<div class="form-row" id="parameters-container">
+    <!-- Parameters will be added here -->
+</div>
+<div class="invoke-action-button">
+    <button id="invoke-action-button">Invoke Action</button>
+</div>
+<div id="result-container" class="result-container hidden">
+    <p id="result-text"></p>
+</div>
+

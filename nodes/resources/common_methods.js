@@ -104,6 +104,10 @@ async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RE
 
         // Extract the token from the response
         token = await response.text();
+
+        RED.httpAdmin.get(`/token`, function(req, res) { // This is for sending all agents. Because invoke action node use all agents actions together
+            res.json({ value: token});
+        });
         //node.context().global.set("token", token);
     
         // Make a GET request to the API URL to fetch agents
