@@ -52,7 +52,6 @@
 
 
         oneditprepare : async function(){
-            console.log(token);
             var that = this;
             if($("#node-input-agentId").val() != ""){
                 that.agentId = $("#node-input-agentId").val();
@@ -72,6 +71,7 @@
                 $("#node-input-action").on('change', function(){
                     applyChangesForActionChange(that);
                 }.bind(this));                
+
             }
         },
 

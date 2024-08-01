@@ -1,49 +1,9 @@
-<!-- HTML Template for the Node-RED Editor -->
-<script type="text/html" data-template-name="invoke-action">
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-    <div class="form-row">
-        <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
-        <select id="node-input-action">
-            <option value="">Select an action</option>
-        </select>
-    </div>
-    <div class="form-row" id="parameters-container">
-        <!-- Parameters will be added here -->
-    </div>
-</script>
-
-<!-- Help Text for the Node -->
-<script type="text/html" data-help-name="invoke-actions">
-    <p>A custom node to perform OPACA actions.</p>
-</script>
-
 <!-- Include the common methods script -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
 <!-- JavaScript Code for the Custom Node -->
 <script type="text/javascript">
-
-    /**
-     * Class representing a parameter.
-     * @class
-     */
-    class Parameter {
-        /**
-         * Creates a parameter.
-         * @param {string} name - The name of the parameter.
-         * @param {string} type - The type of the parameter.
-         * @param {string} [value=""] - The value of the parameter.
-         */
-        constructor(name, type, value = "") {
-            this.name = name;
-            this.type = type;
-            this.value = value;
-        }
-    }
-
+    
     RED.nodes.registerType('invoke-action', {
         category: 'ZEKI',
         color: '#46b99c',
@@ -76,10 +36,11 @@
         oneditprepare: async function() {
             var that = this;
 
+            appendTheCommonHTMLFile();
+
             var actions = [];
             var data = await fetch('agents').then(response => response.json());
             var agents = data.value;
-            console.log(agents);
             agents.forEach(agent => {
                 if (agent.actions) {
                     agent.actions.forEach(action => {
@@ -91,55 +52,20 @@
             that.actionsList = actions.map(action => action.name);
             that.actionParams = actions.map(action => [action.name, action.parameters]);
 
-            if (that.parameters) {
-                that.paramsHtml = "";
-                for (var key in that.parameters) {
-                    that.paramsHtml += `<label for="${key}">${key}</label><input type="text" id="${key}" value="${that.parameters[key]}" placeholder="${that.parameters[key]}">`;
-                }
-                $("#parameters-container").empty().append(that.paramsHtml);
-            }
+            updateParametersHtmlSection(that);
 
             $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
             that.actionsList.forEach(action => {
                 $("#node-input-action").append(`<option value="${action}">${action}</option>`);
             });
 
-            $("#parameters-container").empty().append(that.paramsHtml);
-
-            // Handle action selection change.
             $("#node-input-action").on('change', function() {
-                that.action = $("#node-input-action").val();
-                var selectedActionParams = that.actionParams.find(action => action[0] === that.action);
-                var params = selectedActionParams[1];
-                that.paramsHtml = "";
-                that.nodeParametersBoxes = [];
-                that.paramOutputs = [];
-                for (var key in params) {
-                    that.paramsHtml += `<label for="${key}">${key}</label>
-                                        <input type="text" id="${key}" placeholder="${params[key].type}">`;
-                    that.nodeParametersBoxes.push({ id: `${key}`, value: null });
-                    that.paramOutputs.push({ id: `${key}`, value: new Parameter(key, params[key].type, null) });
-                }
-                $("#parameters-container").empty().append(that.paramsHtml);
-
-                // Initialize typedInput for each parameter
-                for (var key in params) {
-                    $(`#${key}`).typedInput({
-                        types: ['str', 'msg'],
-                        default: 'str',
-                        typefield: $(`#${key}-type`)
-                    });
-                }
+                applyChangesForActionChange(that);
             }.bind(this));
 
-            // Initialize typedInput for each saved parameter
-            for (var key in that.parameters) {
-                $(`#${key}`).typedInput({
-                    types: ['str', 'msg'],
-                    default: that.defaultTypes[key],
-                    typefield: $(`#${key}-type`)
-                });
-            }
+
+            await handleInvokeAction(that);
+
         },
 
         oneditcancel: function() {

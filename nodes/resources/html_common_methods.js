@@ -1,3 +1,12 @@
+class Parameter {
+    constructor(name, type, value = "") {
+        this.name = name;
+        this.type = type;
+        this.value = value;
+    }
+}
+
+
 async function getParametersOfSelectedAgent(that){
     var data = await fetch(`${that.agentId}`).then(response => response.json());
     that.actions = data.value;
