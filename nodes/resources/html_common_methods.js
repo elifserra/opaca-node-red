@@ -107,29 +107,7 @@ async function saveParameters(node) {
     node.parameters = parameters;
 
     RED.nodes.dirty(true); 
-}
 
-
-async function commonOnEditPrepareFunction(agentId){
-    var that = this;
-    that.agentId = agentId;
-
-    await getThisAgentNodeActions(that);
-
-    updateParametersHtmlSection(that);
-
-    $("#node-input-agentId").on('change', async function() {
-        applyChangesForAgentChange(that);
-    }.bind(this));
-
-    $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
-    that.actionsList.forEach(action => {
-        $("#node-input-action").append(`<option value="${action}">${action}</option>`);
-    });
-
-    $("#node-input-action").on('change', function(){
-        applyChangesForActionChange(that);
-    }.bind(this)); 
 }
 
 function appendTheCommonHTMLFile(){
@@ -149,7 +127,7 @@ function appendTheCommonHTMLFile(){
     });
 }
 
-async function invokeActionn(endpoint, queryString,node) {
+async function invokeActionForHTMLSide(endpoint, queryString,node) {
 
     var data = await fetch('token').then(response=>response.json());
     const token = data.value;
@@ -178,7 +156,7 @@ async function invokeActionn(endpoint, queryString,node) {
     }
 }
 
-function toJsonStringgg(parameterArray) {
+function toJsonStringForHTMLSide(parameterArray) {
     var actualValue;
     var valueAsPassed;
     var jsonString = "{";
@@ -208,12 +186,38 @@ function toJsonStringgg(parameterArray) {
 async function handleInvokeAction(that){
     document.getElementById("invoke-action-button").addEventListener('click', async function(){
         saveParameters(that); // this is crucial
-        var query_string = toJsonStringgg(that.paramOutputs);
-        var result = await invokeActionn(that.action,query_string,that); // Invoke the action with parameters
+        var query_string = toJsonStringForHTMLSide(that.paramOutputs);
+        var result = await invokeActionForHTMLSide(that.action,query_string,that); // Invoke the action with parameters
         // Show the result in the result container
         const resultContainer = document.getElementById('result-container');
         const resultText = document.getElementById('result-text');
         resultText.textContent = result;
         resultContainer.classList.remove('hidden');
     })
+}
+
+async function commonOnEditPrepareFunction(node, agentId){
+
+    appendTheCommonHTMLFile();
+
+    node.agentId = agentId;
+
+    await getThisAgentNodeActions(node);
+
+    updateParametersHtmlSection(node);
+
+    $("#node-input-agentId").on('change', async function() {
+        applyChangesForAgentChange(node);
+    }.bind(this));
+
+    $("#node-input-action").empty().append(`<option value=${node.action}>${node.action}</option>`);
+    node.actionsList.forEach(action => {
+        $("#node-input-action").append(`<option value="${action}">${action}</option>`);
+    });
+
+    $("#node-input-action").on('change', function(){
+        applyChangesForActionChange(node);
+    }.bind(this)); 
+
+    handleInvokeAction(node);
 }

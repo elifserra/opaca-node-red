@@ -28,30 +28,7 @@
 
 
         oneditprepare : async function(){
-
-            appendTheCommonHTMLFile();
-
-            var that = this;
-            that.agentId = "home-assistant-agent";
-            await getThisAgentNodeActions(that);
-
-            updateParametersHtmlSection(that);
-
-            $("#node-input-agentId").on('change', async function() {
-                applyChangesForAgentChange(that);
-            }.bind(this));
-
-            $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
-            that.actionsList.forEach(action => {
-                $("#node-input-action").append(`<option value="${action}">${action}</option>`);
-            });
-
-            $("#node-input-action").on('change', function(){
-                applyChangesForActionChange(that);
-            }.bind(this));     
-
-            await handleInvokeAction(that);
-                
+            await commonOnEditPrepareFunction(this, "home-assistant-agent");    
         },
 
         oneditcancel : async function(){

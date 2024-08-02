@@ -3,16 +3,7 @@ const helper_methods = require(path);
 
 module.exports = function(RED){
     function RoomBookingAgentNode(config){
-        RED.nodes.createNode(this,config);  
-        var node = this;
-        node.paramOutputs = config.paramOutputs;
-        node.action = config.action;
-
-        node.on('input', async function(msg){   
-            await helper_methods.invokeAction(node.action, helper_methods.toJsonString(node.paramOutputs,msg), msg,node); // Invoke the action with parameters
-            node.send(msg); // Send the message to the next node
-        });
-
+        helper_methods.makeNodeConfiguration(RED, this, config);
     }
     RED.nodes.registerType("RoomBookingAgent",RoomBookingAgentNode);
 }

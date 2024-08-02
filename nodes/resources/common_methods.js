@@ -134,9 +134,21 @@ async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RE
 
 }
 
+function makeNodeConfiguration(RED, node, config){
+    RED.nodes.createNode(node,config);  
+    node.paramOutputs = config.paramOutputs;
+    node.action = config.action;
+
+    node.on('input', async function(msg){   
+        await invokeAction(node.action, toJsonString(node.paramOutputs,msg), msg,node);
+        node.send(msg);
+    });
+}
+
 // Export the functions as a module
 module.exports = {
     invokeAction,
     toJsonString,
-    fetchOpacaTokenAndAgents
+    fetchOpacaTokenAndAgents,
+    makeNodeConfiguration
 };
