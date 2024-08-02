@@ -5,20 +5,7 @@
     RED.nodes.registerType('HomeAssistantAgent', {
         category: 'ZEKI',
         color: '#ff7f0e',
-        defaults: {
-            name: { value: "" },
-            agentId: { value: "" },
-            actions: { value: null },
-            actionsList: { value: [] },
-            actionParams: { value: [] },
-            action: { value: "" },
-            paramsHtml: { value: "" },
-            paramOutputs: { value: [] },
-            nodeParametersBoxes: { value: [] },
-            parameters: { value: [] },
-            defaultTypes: { value: [] },
-            isAgentIDChanged: { value: false }
-        },
+        defaults: common_defaults,
         inputs: 1,
         outputs: 1,
         icon: 'public/zekı_logo.png',
@@ -26,20 +13,9 @@
             return this.name || 'HomeAssistantAgent';
         },
 
-
-        oneditprepare : async function(){
-            await commonOnEditPrepareFunction(this, "home-assistant-agent");    
-        },
-
-        oneditcancel : async function(){
-            saveParameters(this);        
-        },
-
-        oneditsave : async function(){
-            saveParameters(this);
-        },
-
-
+        oneditprepare : async function(){await commonOnEditPrepareFunction(this, "home-assistant-agent");},
+        oneditcancel : async function(){saveParameters(this);},
+        oneditsave : async function(){saveParameters(this);}
 
     });
 </script>

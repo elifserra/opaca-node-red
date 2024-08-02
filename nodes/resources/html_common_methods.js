@@ -6,6 +6,21 @@ class Parameter {
     }
 }
 
+common_defaults = {
+    name: { value: "" },
+    agentId: { value: "" },
+    actions: { value: null },
+    actionsList: { value: [] },
+    actionParams: { value: [] },
+    action: { value: "" },
+    paramsHtml: { value: "" },
+    paramOutputs: { value: [] },
+    nodeParametersBoxes: { value: [] },
+    parameters: { value: [] },
+    defaultTypes: { value: [] },
+    isAgentIDChanged: { value: false }
+}
+
 
 async function getParametersOfSelectedAgent(that){
     var data = await fetch(`${that.agentId}`).then(response => response.json());
