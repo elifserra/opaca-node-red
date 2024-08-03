@@ -2,10 +2,24 @@
 
 <script type="text/javascript">
 
+    var ShelfAgent = new Agent("ShelfAgent","label","shelf-agent","COLOR","ICON","ZEKI",1,1);
+
     RED.nodes.registerType('ShelfAgent', {
         category: 'ZEKI',
         color: '#d62728',
-        defaults: common_defaults,
+        defaults: {
+            name: { value: "" },
+            agentId: { value: "" },
+            actions: { value: null },
+            actionsList: { value: [] },
+            actionParams: { value: [] },
+            action: { value: "" },
+            paramsHtml: { value: "" },
+            paramOutputs: { value: [] },
+            nodeParametersBoxes: { value: [] },
+            parameters: { value: [] },
+            defaultTypes: { value: [] }
+        },
         inputs: 1,
         outputs: 1,
         icon: 'public/zekı_logo.png',
@@ -13,8 +27,38 @@
             return this.name || 'ShelfAgent';
         },
 
-        oneditprepare : async function(){await commonOnEditPrepareFunction(this, "shelf-agent");},
-        oneditcancel  : function()      {saveParameters(this);},
-        oneditsave    : function()      {saveParameters(this);}
+        oneditprepare : async function(){
+            
+            appendTheCommonHTMLFile();
+
+            await ShelfAgent.fetchAgentActions();
+
+            if(ShelfAgent.currentAction != null){
+                ShelfAgent.currentAction.saveParametersHtml();
+            }
+
+            $("#node-input-action").empty().append(`<option value=${""}>${ShelfAgent.currentAction === null ? "" : ShelfAgent.currentAction.actionName}</option>`);
+            ShelfAgent.actions.forEach(action => {
+                $("#node-input-action").append(`<option value="${action.actionName}">${action.actionName}</option>`);
+            });
+
+            $("#node-input-action").on('change', function(){
+                ShelfAgent.applyChangesForActionChange();
+            }.bind(this)); 
+
+
+            document.getElementById("invoke-action-button").addEventListener('click', async function(){
+                ShelfAgent.currentAction.handleInvokeAction();
+            })
+
+
+
+
+        
+        },
+        oneditcancel  : function()      { ShelfAgent.currentAction.saveParameters(); 
+        },
+        oneditsave    : function()      { ShelfAgent.currentAction.saveParameters();
+         }
     });
 </script>

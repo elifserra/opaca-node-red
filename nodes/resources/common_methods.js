@@ -1,10 +1,5 @@
-/*
-    The purpose of the common_methods.js file is to define and manage constants and utility functions that are used across the Node-RED custom nodes.
-    This file includes functions like invokeAction, which is used to asynchronously invoke actions on specified endpoints, handle responses, and manage errors.
-    The constants and functions in this file are intended to be reusable and provide a centralized location for common operations,
-    ensuring consistency and reducing code duplication across different parts of the Node-RED application.
-*/
 
+const Agent = require("C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/Agent.js");
 
 /** INVOKE ACTION METHOD
  * Asynchronously invokes an action on a specified endpoint, sending a query string and handling the response.
@@ -15,6 +10,8 @@
  * @param {object} node - The Node-RED node context, used for logging errors and accessing global context.
  */
 // This method is called by all agents {BaseAgent, FridgeAgent, HomeAssistantAgent, RoomBookingAgent, SensorAgent, ShelfAgent, WayFindingAgent}
+
+//const { Agent } = require("openai/_shims/node-types.mjs");
 
 var token = null;
 
@@ -136,11 +133,19 @@ async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RE
 
 function makeNodeConfiguration(RED, node, config){
     RED.nodes.createNode(node,config);  
-    node.paramOutputs = config.paramOutputs;
-    node.action = config.action;
 
     node.on('input', async function(msg){   
         await invokeAction(node.action, toJsonString(node.paramOutputs,msg), msg,node);
+        node.send(msg);
+    });
+}
+
+
+function makeConfiguration(RED, node,currentAction, config){
+    RED.nodes.createNode(node,config);  
+
+    node.on('input', async function(msg){   
+        await invokeAction(currentAction.actionName, currentAction.queryString, msg,node);
         node.send(msg);
     });
 }
@@ -150,5 +155,6 @@ module.exports = {
     invokeAction,
     toJsonString,
     fetchOpacaTokenAndAgents,
-    makeNodeConfiguration
+    makeNodeConfiguration,
+    makeConfiguration
 };
