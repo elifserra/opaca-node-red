@@ -2,19 +2,22 @@
 
 <script type="text/javascript">
 
-    RED.nodes.registerType('WayFindingAgent', {
-        category: 'ZEKI',
-        color: '#1f77b4',
-        defaults: common_defaults,
-        inputs: 1,
-        outputs: 1,
-        icon: 'public/zekı_logo.png',
-        label: function() {
-            return this.name || 'WayFindingAgent';
-        },
+    const WayFindingAgent = new Agent(wayFindingAgentName,wayFindingAgentLabel,wayFindingAgentID,wayFindingAgentColor,wayFindingAgentIcon,wayFindingAgentCategory,wayFindingAgentNumberOfInputs);
 
-        oneditprepare : async function(){await commonOnEditPrepareFunction(this, "wayfinding-agent");},
-        oneditcancel : function(){saveParameters(this);},
-        oneditsave : function(){saveParameters(this);}
+    RED.nodes.registerType('WayFindingAgent',{
+        category: WayFindingAgent.agentCategory,
+        color: WayFindingAgent.agentColor,
+        defaults: {
+            name: { value: WayFindingAgent.agentName },
+            agentId: { value: WayFindingAgent.agentId }
+        },
+        inputs: WayFindingAgent.agentNumberOfInputs,
+        outputs: WayFindingAgent.agentNumberOfOutputs,
+        icon: WayFindingAgent.agentIcon,
+        label: WayFindingAgent.agentLabel,
+
+        oneditprepare : async function(){ await WayFindingAgent.oneditPrepareFunction();},
+        oneditcancel  : function()      { WayFindingAgent.oneditCancelFunction();},
+        oneditsave    : function()      { WayFindingAgent.oneditSaveFunction();}
     });
 </script>

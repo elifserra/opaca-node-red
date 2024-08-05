@@ -2,20 +2,22 @@
 
 <script type="text/javascript">
     
-    RED.nodes.registerType('RoomBookingAgent', {
-        category: 'ZEKI',
-        color: '#2ca02c',
-        defaults: common_defaults,
-        inputs: 1,
-        outputs: 1,
-        icon: 'public/zekı_logo.png',
-        label: function() {
-            return this.name || 'RoomBookingAgent';
+    const RoomBookingAgent = new Agent(roomBookingAgentName,roomBookingAgentLabel,roomBookingAgentID,roomBookingAgentColor,roomBookingAgentIcon,roomBookingAgentCategory,roomBookingAgentNumberOfInputs,roomBookingAgentNumberOfOutputs);
+
+    RED.nodes.registerType('RoomBookingAgent',{
+        category: RoomBookingAgent.agentCategory,
+        color: RoomBookingAgent.agentColor,
+        defaults: {
+            name: { value: RoomBookingAgent.agentName },
+            agentId: { value: RoomBookingAgent.agentId }
         },
+        inputs: RoomBookingAgent.agentNumberOfInputs,
+        outputs: RoomBookingAgent.agentNumberOfOutputs,
+        icon: RoomBookingAgent.agentIcon,
+        label: RoomBookingAgent.agentLabel,
 
-        oneditprepare : async function(){ await commonOnEditPrepareFunction(this, "room-booking-agent");},
-        oneditcancel : function(){saveParameters(this);},
-        oneditsave : function(){saveParameters(this);}
-
+        oneditprepare : async function(){ await RoomBookingAgent.oneditPrepareFunction();},
+        oneditcancel  : function()      { RoomBookingAgent.oneditCancelFunction();},
+        oneditsave    : function()      { RoomBookingAgent.oneditSaveFunction();}
     });
 </script>
