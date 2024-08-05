@@ -2,23 +2,27 @@
 
 <script type="text/javascript">
 
-    const WayFindingAgent = new Agent(wayFindingAgentName,wayFindingAgentLabel,wayFindingAgentID,wayFindingAgentColor,wayFindingAgentIcon,wayFindingAgentCategory,wayFindingAgentNumberOfInputs);
-
     RED.nodes.registerType('WayFindingAgent',{
-        category: WayFindingAgent.agentCategory,
-        color: WayFindingAgent.agentColor,
+        category: wayFindingAgentCategory,
+        color: wayFindingAgentColor,
         defaults: {
-            name: { value: WayFindingAgent.agentName },
-            agentId: { value: WayFindingAgent.agentId },
+            name: { value: wayFindingAgentName },
+            agentId: { value: wayFindingAgentID },
             agentCurrentActionParametersInfo: { value: null },
         },
-        inputs: WayFindingAgent.agentNumberOfInputs,
-        outputs: WayFindingAgent.agentNumberOfOutputs,
-        icon: WayFindingAgent.agentIcon,
-        label: WayFindingAgent.agentLabel,
+        inputs: wayFindingAgentNumberOfInputs,
+        outputs: wayFindingAgentNumberOfOutputs,
+        icon: wayFindingAgentIcon,
+        label: wayFindingAgentLabel,
 
-        oneditprepare : async function(){ await WayFindingAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { WayFindingAgent.oneditCancelFunction();},
-        oneditsave    : function()      { WayFindingAgent.oneditSaveFunction();}
+        oneditprepare : async function(){ 
+            if(!this.WayFindingAgent){
+                this.WayFindingAgent = new Agent(wayFindingAgentName,wayFindingAgentID);
+            }
+            await this.WayFindingAgent.oneditPrepareFunction();
+        },
+
+        oneditcancel  : function()      { this.WayFindingAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { this.WayFindingAgent.oneditSaveFunction(this);}
     });
 </script>

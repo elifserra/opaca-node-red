@@ -1,13 +1,7 @@
 class Agent{
-    constructor(agentName,agentLabel,agentID,agentColor,agentIcon,agentCategory,agentNumberOfInputs,agentNumberOfOutputs){
+    constructor(agentName,agentID){
         this.agentName = agentName;
-        this.agentLabel = agentLabel;
         this.agentID = agentID;
-        this.agentColor = agentColor;
-        this.agentIcon = agentIcon;
-        this.agentCategory = agentCategory;
-        this.agentNumberOfInputs = agentNumberOfInputs;
-        this.agentNumberOfOutputs = agentNumberOfOutputs;
         this.currentAction = null;
         this.actions = null;
         this.token = null;
@@ -30,7 +24,7 @@ class Agent{
         this.currentAction.parameterHtml = "";
         
         for(var key in this.currentAction.actionParameters){
-            this.currentAction.parameterHtml += `<label for="${this.currentAction.actionParameters[key].name}">${this.currentAction.actionParameters[key].name}</label><input type="text" id="${this.currentAction.actionParameters[key].name}" value="${""}" placeholder="${""}">`;
+            this.currentAction.parameterHtml += `<label for="${this.currentAction.actionParameters[key].name}">${this.currentAction.actionParameters[key].name}</label><input type="text" id="${this.currentAction.actionParameters[key].name}" value="${""}" placeholder="${this.currentAction.actionParameters[key].type}">`;
         }
 
         $("#parameters-container").html(this.currentAction.parameterHtml);
@@ -67,7 +61,9 @@ class Agent{
 
         var agent = this;
 
-        this.appenTheSelectedAgentCommonHtml();
+        if(this.agentName != baseAgentName){
+            this.appenTheSelectedAgentCommonHtml();
+        }
 
         await this.fetchAgentActions();
 
@@ -120,7 +116,7 @@ class Action{
         if(this.actionParameters){
             this.parameterHtml = "";
             for(var key in this.actionParameters){
-                this.parameterHtml += `<label for="${this.actionParameters[key].name}">${this.actionParameters[key].name}</label><input type="text" id="${this.actionParameters[key].name}" value="${this.actionParameters[key].value}" placeholder="${""}">`;
+                this.parameterHtml += `<label for="${this.actionParameters[key].name}">${this.actionParameters[key].name}</label><input type="text" id="${this.actionParameters[key].name}" value="${this.actionParameters[key].value}" placeholder="${this.actionParameters[key].type}">`;
             }
         }
         $("#parameters-container").empty().append(this.parameterHtml);
@@ -139,17 +135,10 @@ class Action{
 
         const dataToSend = {
             actionName : this.actionName,
-            queryString : this.toJsonString()
+            actionParameters : this.actionParameters
         }
-        /*
-        $.ajax({
-            url: 'CurrentActionParametersInfo',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(dataToSend)
-        });*/
+    
         return dataToSend;
-        
     }
 
     saveParameters(sendFlag,node){
@@ -164,8 +153,6 @@ class Action{
 
         if(sendFlag === true){
             node.agentCurrentActionParametersInfo = this.sendJsSide();
-            console.log("node.agentCurrentActionParametersInfo");
-            console.log(node.agentCurrentActionParametersInfo);
         }
 
         RED.nodes.dirty(true); 
@@ -173,6 +160,11 @@ class Action{
     }
 
     toJsonString() {
+
+        if(this.actionParameters.length === 0){
+            return "{}";
+        }
+
         var actualValue;
         var valueAsPassed;
         var jsonString = "{";
@@ -217,6 +209,9 @@ class Action{
     async handleInvokeAction(){
         this.saveParameters(false);
         var query_string = this.toJsonString();
+        console.log("Parameters");
+        console.log(this.actionParameters);
+        console.log(query_string);
         var result = await this.invokeAction(query_string); // Invoke the action with parameters
         $("#result-text").text(result);
         $("#result-container").removeClass("hidden");
@@ -260,6 +255,15 @@ async function applyChangesForAgentChange(that){
 }
 
 
+const baseAgentName = "BaseAgent";
+const baseAgentLabel = "Base Agent";
+const baseAgentColor = "blue";
+const baseAgentIcon = "base-agent";
+const baseAgentCategory = "ZEKI";
+const baseAgentNumberOfInputs = 1;
+const baseAgentNumberOfOutputs = 1;
+
+
 const shelfAgentName = "ShelfAgent";
 const shelfAgentLabel = "Shelf Agent";
 const shelfAgentID = "shelf-agent";
@@ -280,14 +284,15 @@ const fridgeAgentNumberOfOutputs = 1;
 
 const wayFindingAgentName = "WayFindingAgent";
 const wayFindingAgentLabel = "Way Finding Agent";
-const wayFindingAgentID = "way-finding-agent";
+const wayFindingAgentID = "wayfinding-agent";
 const wayFindingAgentColor = "green";
-const wayFindingAgentIcon = "way-finding-agent";
+const wayFindingAgentIcon = "wayfinding-agent";
 const wayFindingAgentCategory = "ZEKI";
 const wayFindingAgentNumberOfInputs = 1;
+const wayFindingAgentNumberOfOutputs = 1;
 
-const sensorAgentName = "SensorAgent";
-const sensorAgentLabel = "Sensor Agent";
+const sensorAgentName = "ServletAgent";
+const sensorAgentLabel = "Servlet Agent";
 const sensorAgentID = "servlet-agent";
 const sensorAgentColor = "brown";
 const sensorAgentIcon = "servlet-agent";
@@ -297,7 +302,7 @@ const sensorAgentNumberOfOutputs = 1;
 
 const homeAssistantAgentName = "HomeAssistantAgent";
 const homeAssistantAgentLabel = "Home Assistant Agent";
-const homAssistantAgentID = "home-assistant-agent";
+const homeAssistantAgentID = "home-assistant-agent";
 const homeAssistantAgentColor = "orange";
 const homeAssistantAgentIcon = "home-assistant-agent";
 const homeAssistantAgentCategory = "ZEKI";

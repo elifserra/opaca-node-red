@@ -2,23 +2,25 @@
 
 <script type="text/javascript">
     
-    const RoomBookingAgent = new Agent(roomBookingAgentName,roomBookingAgentLabel,roomBookingAgentID,roomBookingAgentColor,roomBookingAgentIcon,roomBookingAgentCategory,roomBookingAgentNumberOfInputs,roomBookingAgentNumberOfOutputs);
-
     RED.nodes.registerType('RoomBookingAgent',{
-        category: RoomBookingAgent.agentCategory,
-        color: RoomBookingAgent.agentColor,
+        category: roomBookingAgentCategory,
+        color: roomBookingAgentColor,
         defaults: {
-            name: { value: RoomBookingAgent.agentName },
-            agentId: { value: RoomBookingAgent.agentId },
+            name: { value: roomBookingAgentName },
+            agentId: { value: roomBookingAgentID },
             agentCurrentActionParametersInfo: { value: null },
         },
-        inputs: RoomBookingAgent.agentNumberOfInputs,
-        outputs: RoomBookingAgent.agentNumberOfOutputs,
-        icon: RoomBookingAgent.agentIcon,
-        label: RoomBookingAgent.agentLabel,
+        inputs: roomBookingAgentNumberOfInputs,
+        outputs: roomBookingAgentNumberOfOutputs,
+        icon: roomBookingAgentIcon,
+        label: roomBookingAgentLabel,
 
-        oneditprepare : async function(){ await RoomBookingAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { RoomBookingAgent.oneditCancelFunction(this);},
-        oneditsave    : function()      { RoomBookingAgent.oneditSaveFunction(this);}
+        oneditprepare : async function(){ 
+            if(!this.RoomBookingAgent){
+                this.RoomBookingAgent = new Agent(roomBookingAgentName,roomBookingAgentID);
+            }
+            await this.RoomBookingAgent.oneditPrepareFunction();},
+        oneditcancel  : function()      { this.RoomBookingAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { this.RoomBookingAgent.oneditSaveFunction(this);}
     });
 </script>

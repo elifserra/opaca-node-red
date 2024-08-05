@@ -2,24 +2,26 @@
 
 <script type="text/javascript">
 
-    const FridgeAgent = new Agent(fridgeAgentName,fridgeAgentLabel,fridgeAgentID,fridgeAgentColor,fridgeAgentIcon,fridgeAgentCategory,fridgeAgentNumberOfInputs,fridgeAgentNumberOfOutputs);
-
     RED.nodes.registerType('FridgeAgent',{
-        category: FridgeAgent.agentCategory,
-        color: FridgeAgent.agentColor,
+        category: fridgeAgentCategory,
+        color: fridgeAgentColor,
         defaults: {
-            name: { value: FridgeAgent.agentName },
-            agentId: { value: FridgeAgent.agentId },
+            name: { value: fridgeAgentName },
+            agentId: { value: fridgeAgentID },
             agentCurrentActionParametersInfo: { value: null },
         },
-        inputs: FridgeAgent.agentNumberOfInputs,
-        outputs: FridgeAgent.agentNumberOfOutputs,
-        icon: FridgeAgent.agentIcon,
-        label: FridgeAgent.agentLabel,
+        inputs: fridgeAgentNumberOfInputs,
+        outputs: fridgeAgentNumberOfOutputs,
+        icon: fridgeAgentIcon,
+        label: fridgeAgentLabel,
 
-        oneditprepare : async function(){ await FridgeAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { FridgeAgent.oneditCancelFunction(this);},
-        oneditsave    : function()      { FridgeAgent.oneditSaveFunction(this);}
+        oneditprepare : async function(){ 
+            if(!this.FridgeAgent){
+                this.FridgeAgent = new Agent(fridgeAgentName,fridgeAgentID);
+            }
+            await this.FridgeAgent.oneditPrepareFunction();},
+        oneditcancel  : function()      { this.FridgeAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { this.FridgeAgent.oneditSaveFunction(this);}
     });
     
 </script>

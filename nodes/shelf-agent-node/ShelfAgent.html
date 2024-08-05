@@ -2,23 +2,26 @@
 
 <script type="text/javascript">
 
-    const ShelfAgent = new Agent(shelfAgentName,shelfAgentLabel,shelfAgentID,shelfAgentColor,shelfAgentIcon,shelfAgentCategory,shelfAgentNumberOfInputs,shelfAgentNumberOfOutputs);
-
     RED.nodes.registerType('ShelfAgent',{
-        category: ShelfAgent.agentCategory,
-        color: ShelfAgent.agentColor,
+        category: shelfAgentCategory,
+        color: shelfAgentColor,
         defaults: {
-            name: { value: ShelfAgent.agentName },
-            agentId: { value: ShelfAgent.agentId },
+            name: { value: shelfAgentName },
+            agentId: { value: shelfAgentID },
             agentCurrentActionParametersInfo: { value: null },
         },
-        inputs: ShelfAgent.agentNumberOfInputs,
-        outputs: ShelfAgent.agentNumberOfOutputs,
-        icon: ShelfAgent.agentIcon,
-        label: ShelfAgent.agentLabel,
+        inputs: shelfAgentNumberOfInputs,
+        outputs: shelfAgentNumberOfOutputs,
+        icon: shelfAgentIcon,
+        label: shelfAgentLabel,
 
-        oneditprepare : async function(){ await ShelfAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { ShelfAgent.oneditCancelFunction(this);},
-        oneditsave    : function()      { ShelfAgent.oneditSaveFunction(this);}
+        oneditprepare : async function(){ 
+            if(!this.ShelfAgent){
+                this.ShelfAgent = new Agent(shelfAgentName,shelfAgentID);
+            }
+            await this.ShelfAgent.oneditPrepareFunction();
+        },
+        oneditcancel  : function()      { this.ShelfAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { this.ShelfAgent.oneditSaveFunction(this);}
     });
 </script>

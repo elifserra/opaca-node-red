@@ -1,7 +1,10 @@
 var token = null;
 
-async function invokeAction(endpoint, queryString, msg, node) {
+async function invokeAction(endpoint, actionParameters, msg, node) {
     // Construct the URL for the API call
+
+    var queryString = toJsonString(actionParameters, msg); // Convert the action parameters to a JSON string
+
     var url = "http://10.42.6.107:8000/invoke/" + endpoint;
     try {
         // Make a POST request to the specified URL with the query string
@@ -19,6 +22,9 @@ async function invokeAction(endpoint, queryString, msg, node) {
             msg.payload = data; 
         });
 
+        console.log("INVOKEEE");
+        console.log(msg.payload);
+
     } catch (error) {
         // Log any errors that occur during the API call
         node.error("INVOKE ACTION ERROR : " + error);    // In case of any error, this is displayed on the debug screen of node-red website
@@ -35,26 +41,24 @@ async function invokeAction(endpoint, queryString, msg, node) {
 // This method is called by all agents {BaseAgent, FridgeAgent, HomeAssistantAgent, RoomBookingAgent, SensorAgent, ShelfAgent, WayFindingAgent}
 // Actually, this methods returns the value that is a parameter for invokeAction method
 function toJsonString(parameterArray, msg) {
+
+
+    if(parameterArray.length === 0){
+        return "{}";
+    }
+
     var actualValue;
     var valueAsPassed;
     var jsonString = "{";
     var count = 0;
     var length = parameterArray.length - 1;
 
-    // Loop through each element in the parameter array
-    parameterArray.forEach(element => {
-        // Add the parameter name to the JSON string
-        jsonString += "\"" + element.value.name + "\":"; 
-
-        // Determine the actual value based on the parameter type and value
-        element.value.value === "payload" ? actualValue = msg.payload : actualValue = element.value.value; 
-        element.value.type === "string" ? valueAsPassed = `"${actualValue}"` : valueAsPassed = actualValue;
-
-        // Add the value to the JSON string
-        jsonString += valueAsPassed;
-
-        // Add a comma if this is not the last element
-        count !== length ? jsonString += "," : jsonString += "}";
+    parameterArray.forEach(parameter => {
+        jsonString += "\"" + parameter.name + "\":"; // Add the parameter name to the JSON string
+        (parameter.value === "payload" && parameter.typedInputType === 'msg') ? actualValue = msg.payload : actualValue = parameter.value; // Determine the actual value based on the parameter type and value
+        parameter.type === "string" ? valueAsPassed = `"${actualValue}"` : valueAsPassed = actualValue; // Determine the value to pass based on the parameter type
+        jsonString += valueAsPassed; // Add the value to the JSON string
+        count !== length ? jsonString += "," : jsonString += "}"; // Add a comma if this is not the last element
         count++;
     });
 
@@ -122,7 +126,7 @@ function makeNodeConfiguration(RED, node, config){
     node.on('input', async function(msg){ 
         if(node.agentCurrentActionParametersInfo  != null){
             node.warn(node.agentCurrentActionParametersInfo);
-            await invokeAction(node.agentCurrentActionParametersInfo .actionName, node.agentCurrentActionParametersInfo.queryString, msg,node);
+            await invokeAction(node.agentCurrentActionParametersInfo .actionName, node.agentCurrentActionParametersInfo.actionParameters, msg,node);
             node.send(msg);
         }
     });
