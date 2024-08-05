@@ -9,7 +9,8 @@
         color: RoomBookingAgent.agentColor,
         defaults: {
             name: { value: RoomBookingAgent.agentName },
-            agentId: { value: RoomBookingAgent.agentId }
+            agentId: { value: RoomBookingAgent.agentId },
+            agentCurrentActionParametersInfo: { value: null },
         },
         inputs: RoomBookingAgent.agentNumberOfInputs,
         outputs: RoomBookingAgent.agentNumberOfOutputs,
@@ -17,7 +18,7 @@
         label: RoomBookingAgent.agentLabel,
 
         oneditprepare : async function(){ await RoomBookingAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { RoomBookingAgent.oneditCancelFunction();},
-        oneditsave    : function()      { RoomBookingAgent.oneditSaveFunction();}
+        oneditcancel  : function()      { RoomBookingAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { RoomBookingAgent.oneditSaveFunction(this);}
     });
 </script>

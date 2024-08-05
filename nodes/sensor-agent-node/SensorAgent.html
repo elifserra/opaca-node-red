@@ -9,7 +9,8 @@
         color: SensorAgent.agentColor,
         defaults: {
             name: { value: SensorAgent.agentName },
-            agentId: { value: SensorAgent.agentId }
+            agentId: { value: SensorAgent.agentId },
+            agentCurrentActionParametersInfo: { value: null },
         },
         inputs: SensorAgent.agentNumberOfInputs,
         outputs: SensorAgent.agentNumberOfOutputs,
@@ -17,7 +18,7 @@
         label: SensorAgent.agentLabel,
 
         oneditprepare : async function(){ await SensorAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { SensorAgent.oneditCancelFunction();},
-        oneditsave    : function()      { SensorAgent.oneditSaveFunction();}
+        oneditcancel  : function()      { SensorAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { SensorAgent.oneditSaveFunction(this);}
     });
 </script>

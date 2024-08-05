@@ -9,7 +9,8 @@
         color: HomeAssistantAgent.agentColor,
         defaults: {
             name: { value: HomeAssistantAgent.agentName },
-            agentId: { value: HomeAssistantAgent.agentId }
+            agentId: { value: HomeAssistantAgent.agentId },
+            agentCurrentActionParametersInfo: { value: null },
         },
         inputs: HomeAssistantAgent.agentNumberOfInputs,
         outputs: HomeAssistantAgent.agentNumberOfOutputs,
@@ -17,8 +18,8 @@
         label: HomeAssistantAgent.agentLabel,
 
         oneditprepare : async function(){ await HomeAssistantAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { HomeAssistantAgent.oneditCancelFunction();},
-        oneditsave    : function()      { HomeAssistantAgent.oneditSaveFunction();}
+        oneditcancel  : function()      { HomeAssistantAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { HomeAssistantAgent.oneditSaveFunction(this);}
     });
     
 </script>

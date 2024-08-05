@@ -9,7 +9,8 @@
         color: ShelfAgent.agentColor,
         defaults: {
             name: { value: ShelfAgent.agentName },
-            agentId: { value: ShelfAgent.agentId }
+            agentId: { value: ShelfAgent.agentId },
+            agentCurrentActionParametersInfo: { value: null },
         },
         inputs: ShelfAgent.agentNumberOfInputs,
         outputs: ShelfAgent.agentNumberOfOutputs,
@@ -17,7 +18,7 @@
         label: ShelfAgent.agentLabel,
 
         oneditprepare : async function(){ await ShelfAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { ShelfAgent.oneditCancelFunction();},
-        oneditsave    : function()      { ShelfAgent.oneditSaveFunction();}
+        oneditcancel  : function()      { ShelfAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { ShelfAgent.oneditSaveFunction(this);}
     });
 </script>

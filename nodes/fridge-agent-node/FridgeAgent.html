@@ -9,7 +9,8 @@
         color: FridgeAgent.agentColor,
         defaults: {
             name: { value: FridgeAgent.agentName },
-            agentId: { value: FridgeAgent.agentId }
+            agentId: { value: FridgeAgent.agentId },
+            agentCurrentActionParametersInfo: { value: null },
         },
         inputs: FridgeAgent.agentNumberOfInputs,
         outputs: FridgeAgent.agentNumberOfOutputs,
@@ -17,8 +18,8 @@
         label: FridgeAgent.agentLabel,
 
         oneditprepare : async function(){ await FridgeAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { FridgeAgent.oneditCancelFunction();},
-        oneditsave    : function()      { FridgeAgent.oneditSaveFunction();}
+        oneditcancel  : function()      { FridgeAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { FridgeAgent.oneditSaveFunction(this);}
     });
     
 </script>

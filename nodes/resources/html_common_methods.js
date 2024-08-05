@@ -17,8 +17,6 @@ class Agent{
         this.actions = [];
         this.token = await fetch('token').then(response=>response.json());
         this.token = this.token.value;
-        console.log("fetchAgentActions");
-        console.log(this.token);
         var fetchedAgent = await fetch(`${this.agentID}`).then(response => response.json());
         var fetchedActions = fetchedAgent.value;
         fetchedActions.forEach(action => {
@@ -48,8 +46,6 @@ class Agent{
 
     async appenTheSelectedAgentCommonHtml(){
 
-        console.log("appenTheSelectedAgentCommonHtml");
-
         await fetch('http://127.0.0.1:1880/common_html_template.html')
         .then(response => {
             if (!response.ok) {
@@ -58,7 +54,7 @@ class Agent{
             return response.text();
         })
         .then(data => {
-            $("#dialog-form").empty().append(data);
+            document.querySelector('#dialog-form').innerHTML += data;
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
@@ -71,9 +67,7 @@ class Agent{
 
         var agent = this;
 
-        console.log("oneditPrepareFunction");
-
-        await this.appenTheSelectedAgentCommonHtml();
+        this.appenTheSelectedAgentCommonHtml();
 
         await this.fetchAgentActions();
 
@@ -96,17 +90,15 @@ class Agent{
 
     }
 
-    oneditSaveFunction(){
-        console.log("oneditSaveFunction");
+    oneditSaveFunction(node){
         if(this.currentAction != null){
-            this.currentAction.saveParameters();
+            this.currentAction.saveParameters(true,node);
         }
     }
 
-    oneditCancelFunction(){
-        console.log("oneditCancelFunction");
+    oneditCancelFunction(node){
         if(this.currentAction != null){
-            this.currentAction.saveParameters();
+            this.currentAction.saveParameters(true,node);
         }
     }
 
@@ -116,7 +108,6 @@ class Agent{
 class Action{
     constructor(actionName,actionParameters,token){
         this.token = token;
-        console.log("Action " + this.token);
         this.actionName = actionName;
         this.actionParameters = [];
         for(var key in actionParameters){
@@ -145,20 +136,25 @@ class Action{
     }
 
     sendJsSide(){
+
         const dataToSend = {
             actionName : this.actionName,
             queryString : this.toJsonString()
-
         }
+        /*
         $.ajax({
-            url: 'currentAction',
+            url: 'CurrentActionParametersInfo',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dataToSend)
-        });
+        });*/
+        return dataToSend;
+        
     }
 
-    saveParameters(){
+    saveParameters(sendFlag,node){
+
+        console.log("saveParameters");
 
         this.actionParameters.forEach(parameter=>{
             var inputElement = $(`#${parameter.name}`);
@@ -166,7 +162,11 @@ class Action{
             parameter.typedInputType = inputElement.typedInput('type');
         })
 
-        this.sendJsSide();
+        if(sendFlag === true){
+            node.agentCurrentActionParametersInfo = this.sendJsSide();
+            console.log("node.agentCurrentActionParametersInfo");
+            console.log(node.agentCurrentActionParametersInfo);
+        }
 
         RED.nodes.dirty(true); 
 
@@ -192,8 +192,6 @@ class Action{
     }
 
     async invokeAction(queryString){
-        console.log("invokeAction");
-        console.log(this.token);
         var url = "http://10.42.6.107:8000/invoke/" + this.actionName;
         try {
             const response = await fetch(url, {
@@ -217,12 +215,9 @@ class Action{
 
 
     async handleInvokeAction(){
-        console.log("handleInvokeAction");
-        this.saveParameters();
+        this.saveParameters(false);
         var query_string = this.toJsonString();
-        console.log(query_string);
         var result = await this.invokeAction(query_string); // Invoke the action with parameters
-        console.log(result);
         $("#result-text").text(result);
         $("#result-container").removeClass("hidden");
     }

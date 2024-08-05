@@ -1,18 +1,3 @@
-
-const Agent = require("C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/Agent.js");
-
-/** INVOKE ACTION METHOD
- * Asynchronously invokes an action on a specified endpoint, sending a query string and handling the response.
- * 
- * @param {string} endpoint - The specific endpoint to call on the server.
- * @param {string} queryString - The query string to send in the body of the POST request.
- * @param {object} msg - The message object from Node-RED containing payload and other information.
- * @param {object} node - The Node-RED node context, used for logging errors and accessing global context.
- */
-// This method is called by all agents {BaseAgent, FridgeAgent, HomeAssistantAgent, RoomBookingAgent, SensorAgent, ShelfAgent, WayFindingAgent}
-
-//const { Agent } = require("openai/_shims/node-types.mjs");
-
 var token = null;
 
 async function invokeAction(endpoint, queryString, msg, node) {
@@ -133,22 +118,22 @@ async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RE
 
 function makeNodeConfiguration(RED, node, config){
     RED.nodes.createNode(node,config);  
-
-    node.on('input', async function(msg){   
-        await invokeAction(node.action, toJsonString(node.paramOutputs,msg), msg,node);
-        node.send(msg);
+    node.agentCurrentActionParametersInfo = config.agentCurrentActionParametersInfo;
+    node.on('input', async function(msg){ 
+        if(node.agentCurrentActionParametersInfo  != null){
+            node.warn(node.agentCurrentActionParametersInfo);
+            await invokeAction(node.agentCurrentActionParametersInfo .actionName, node.agentCurrentActionParametersInfo.queryString, msg,node);
+            node.send(msg);
+        }
     });
 }
 
 
-function makeConfiguration(RED, node,currentAction, config){
-    RED.nodes.createNode(node,config);  
+function makeConfiguration(RED, node, config){
 
-    node.on('input', async function(msg){   
-        await invokeAction(currentAction.actionName, currentAction.queryString, msg,node);
-        node.send(msg);
-    });
 }
+
+
 
 // Export the functions as a module
 module.exports = {
