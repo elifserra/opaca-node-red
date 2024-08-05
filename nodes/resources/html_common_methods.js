@@ -10,14 +10,19 @@ class Agent{
         this.agentNumberOfOutputs = agentNumberOfOutputs;
         this.currentAction = null;
         this.actions = null;
+        this.token = null;
     }
 
     async fetchAgentActions() {
         this.actions = [];
+        this.token = await fetch('token').then(response=>response.json());
+        this.token = this.token.value;
+        console.log("fetchAgentActions");
+        console.log(this.token);
         var fetchedAgent = await fetch(`${this.agentID}`).then(response => response.json());
         var fetchedActions = fetchedAgent.value;
         fetchedActions.forEach(action => {
-            this.actions.push(new Action(action.name,action.parameters));
+            this.actions.push(new Action(action.name,action.parameters,this.token));
         });
     }
 
@@ -41,9 +46,11 @@ class Agent{
         }   
     }
 
-    appenTheSelectedAgentCommonHtml(){
+    async appenTheSelectedAgentCommonHtml(){
 
-        fetch('http://127.0.0.1:1880/common_html_template.html')
+        console.log("appenTheSelectedAgentCommonHtml");
+
+        await fetch('http://127.0.0.1:1880/common_html_template.html')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -63,11 +70,10 @@ class Agent{
     async oneditPrepareFunction(){
 
         var agent = this;
-        console.log(this);
 
         console.log("oneditPrepareFunction");
 
-        this.appenTheSelectedAgentCommonHtml();
+        await this.appenTheSelectedAgentCommonHtml();
 
         await this.fetchAgentActions();
 
@@ -85,7 +91,7 @@ class Agent{
         }.bind(this)); 
 
         $("#invoke-action-button").on('click', async function(){
-            await agent.currentAction.handleInvokeAction();
+            agent.currentAction.handleInvokeAction();
         });
 
     }
@@ -108,7 +114,9 @@ class Agent{
 
 
 class Action{
-    constructor(actionName,actionParameters){
+    constructor(actionName,actionParameters,token){
+        this.token = token;
+        console.log("Action " + this.token);
         this.actionName = actionName;
         this.actionParameters = [];
         for(var key in actionParameters){
@@ -184,15 +192,15 @@ class Action{
     }
 
     async invokeAction(queryString){
-        var data = await fetch('token').then(response=>response.json());
-        const token = data.value;
+        console.log("invokeAction");
+        console.log(this.token);
         var url = "http://10.42.6.107:8000/invoke/" + this.actionName;
         try {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',  
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${this.token}`
                 },
                 body: queryString
             });
