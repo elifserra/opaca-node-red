@@ -148,11 +148,13 @@
     <!-- Parameters will be added dynamically depending on the selected action. Below code segment inside of the oneditPrepareFunction(node) provide dynamic adding -->
     <!--
         /*
-            here currentAction is the action that is selected by the user.
-            $("#node-input-action").empty().append(`<option value=${""}>${this.currentAction === null ? "" : this.currentAction.actionName}</option>`);
-                this.actions.forEach(action => {
-                $("#node-input-action").append(`<option value="${action.actionName}">${action.actionName}</option>`);
-            });
+            These actionParameters are the parameters of the selected action and they are added dynamically in the oneditPrepareFunction(node) method of the agent nodes.
+            if(this.actionParameters){
+                this.parameterHtml = "";
+                for(var key in this.actionParameters){
+                    this.parameterHtml += `<label for="${this.actionParameters[key].name}">${this.actionParameters[key].name}</label><input type="text" id="${this.actionParameters[key].name}" value="${this.actionParameters[key].value}" placeholder="${this.actionParameters[key].type}">`;
+                }
+            }
         */
     -->
 </div>
