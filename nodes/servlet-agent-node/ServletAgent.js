@@ -1,4 +1,4 @@
-const imports = require('../resources/imports.js');
+const imports = require('../resources/imports.js'); 
 const js_common_methods = imports.js_common_methods_import;
 
 module.exports = function(RED){
