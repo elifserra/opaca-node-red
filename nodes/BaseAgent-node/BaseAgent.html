@@ -1,4 +1,7 @@
-<style>
+<!-- This file is used to create the UI for the BaseAgent node. -->
+<!-- The BaseAgent node is the node that is configurable for all the agent nodes depending on the agentID property -->
+
+<style>    
 .invoke-action-button {
     display: flex;
     justify-content: center;
@@ -51,6 +54,8 @@
     color: #333;
 }
 </style>
+
+<!-- The following script is not common to all the nodes. It is specific to the BaseAgent node. Beacuse baseAgent Node includes agentID propert -->
 <script type="text/html" data-template-name="BaseAgent">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -79,59 +84,96 @@
 </script>
 
 
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
-
+<!-- The following script tag is responsible for registering the BaseAgent node in the Node-RED editor. -->
 <script type="text/javascript">
 
-    RED.nodes.registerType('BaseAgent', {
-        category: baseAgentCategory,
-        color: baseAgentColor,
-        defaults: {
-            name: { value: baseAgentName },
-            agentId: { value: null },
-            prevAgentId: { value: null },
-            agentCurrentActionParametersInfo: { value: null },
+    RED.nodes.registerType('BaseAgent', {                                     // Registering the BaseAgent node in the Node-RED editor.
+        category: baseAgentCategory,                                          // The category of the node.
+        color: baseAgentColor,                                                // The color of the node.
+        defaults: {                                                           // The default properties of the node. 
+            name: { value: baseAgentName },                                   // The name of the node.
+            agentId: { value: null },                                         // The agentId of the node.
+            prevAgentId: { value: null },                                     // The prevAgentId of the node.
+            agentCurrentActionParametersInfo: { value: null },                // The agentCurrentActionParametersInfo of the node.
         },
-        inputs: baseAgentNumberOfInputs,
-        outputs: baseAgentNumberOfOutputs,
-        icon: baseAgentIcon,
-        label: baseAgentLabel,
+        inputs: baseAgentNumberOfInputs,                                      // The number of inputs of the node.
+        outputs: baseAgentNumberOfOutputs,                                    // The number of outputs of the node.
+        icon: baseAgentIcon,                                                  // The icon of the node.
+        label: baseAgentLabel,                                                // The label of the node.
 
+        // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare : async function(){
 
+            // var that = this assigmnet is used to access the BaseAgent node properties inside the functions and the event listeners. 
+            // Because inside the functions and the event listeners, the this keyword refers to the function or the event listener itself.
             var that = this;
+            // If the allAgentIds does not exist, fetch the agents from the server and assign the agentIds to the allAgentIds property.
             if(!this.allAgentIds){
                 this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
                 that.agentId = that.agentId === null ? that.allAgentIds[0] : that.agentId;
             }
 
+            // Empty the agentId select element and append the agentIds to the select element.
             $("#node-input-agentId").empty().append(`<option value=${that.agentId}>${that.agentId}</option>`);
                 that.allAgentIds.forEach(agentId => {
                 $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
             });
 
+            // If the Agent does not exist, create a new Agent. 
+            // Here is important beacuse whenever a new node dragged to the editor, new agent object should be created. Otherwise every node will use the same agent object.
+            // In this way, each node will have its own agent object.
             if(!this.Agent){
                 this.Agent = new Agent(baseAgentName,$("#node-input-agentId").val());
             }
-
+            
+            // Listen for the change event of the agentId select element.
             $("#node-input-agentId").on('change', async function(){
+                /* 
+                    The following code is used to check if the agentId is changed. If the agentId is changed, the agentId property of the BaseAgent node is updated with the new agentId.
+                    The applyChangesForAgentChange function is called to apply the changes for the agentId change. The oneditPrepareFunction of the Agent is called to prepare the agent for editing.
+                */
+                /* 
+                   The reason why the prevAgentId property is used is because whenever the edit screen is opened, the agentId property of the BaseAgent node is updated with the agentId of the agentId select element. 
+                   So even if the agentId is not changed, the agentId property of the BaseAgent node is updated with the agentId of the agentId select element. 
+                   Therefore, the prevAgentId property is used to store the previous agentId of the BaseAgent node to controling in a robust way.
+                   if the agentId is changed, assign the new agentId to the agentId property of the BaseAgent node.
+                */
+               // Store the previous agentId of the BaseAgent node.
                 that.prevAgentId = that.agentId;
+                // If the agentId is changed, assign the new agentId to the agentId property of the BaseAgent node.
                 that.agentId = $("#node-input-agentId").val();
+                // If the agentId is changed, apply the changes for the agentId change.
                 if(that.prevAgentId != that.agentId){
-                    $("#node-input-agentId").val(that.agentId);
-                    that.Agent.applyChangesForAgentChange(that.agentId);
+                    $("#node-input-agentId").val(that.agentId);                // Fills the agentId select element with the new agentId.
+                    // Apply the changes for the agentId change by calling the applyChangesForAgentChange function.
+                    that.Agent.applyChangesForAgentChange(that.agentId);       
+                    /*
+                      Calling oneditPrepareFunction of the Agent here is can be seen as confusing. However whenever agentID is changed we need to update agent actions and actions paramaters immediately.
+                      Important to call this function inside of the change event listener because we need to update the agent actions and actions paramaters immediately when the agentID is changed.
+                      Otherwise the update would be done after opening edit screen again.             
+                    */
                     await that.Agent.oneditPrepareFunction();
                 }  
             });
 
+            // Call the oneditPrepareFunction of the Agent. When the agentID is not changed, this behaves as default oneditPrepareFunction.
             await that.Agent.oneditPrepareFunction();
 
         },
 
-        oneditcancel : function(){ this.Agent.oneditCancelFunction(this); },
-
-        oneditsave : function() {  this.Agent.oneditSaveFunction(this); },
+        // The oneditcancel function is called when the node editing is cancelled.
+        oneditcancel : function(){
+            // Call the oneditCancelFunction of the Agent.
+            this.Agent.oneditCancelFunction(this);
+        },
+        // The oneditsave function is called when the node editing is saved.
+        oneditsave : function() {
+            // Call the oneditSaveFunction of the Agent.
+            this.Agent.oneditSaveFunction(this);
+        },
 
     });
 </script>
