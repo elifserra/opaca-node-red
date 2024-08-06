@@ -100,7 +100,7 @@ class Agent{
         }.bind(this)); 
 
         $("#invoke-action-button").on('click', async function(){
-            agent.currentAction.handleInvokeAction();
+            agent.currentAction.handleInvokeAction(node);
         });
 
         document.getElementById('node-input-name').value = node.name;
@@ -227,8 +227,8 @@ class Action{
     }
 
 
-    async handleInvokeAction(){
-        this.saveParameters(false);
+    async handleInvokeAction(node){
+        this.saveParameters(false,node);
         var query_string = this.toJsonString();
         console.log("Parameters");
         console.log(this.actionParameters);
