@@ -1,28 +1,43 @@
+<!-- This file is the HTML file for the WayFindingAgent node. It is responsible for the visual representation of the node in the Node-RED editor. -->
+
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
+<!-- The following script tag is responsible for registering the WayFindingAgent node in the Node-RED editor. -->
 <script type="text/javascript">
 
-    RED.nodes.registerType('WayFindingAgent',{
-        category: wayFindingAgentCategory,
-        color: wayFindingAgentColor,
-        defaults: {
-            name: { value: wayFindingAgentName },
-            agentId: { value: wayFindingAgentID },
-            agentCurrentActionParametersInfo: { value: null },
-        },
-        inputs: wayFindingAgentNumberOfInputs,
-        outputs: wayFindingAgentNumberOfOutputs,
-        icon: wayFindingAgentIcon,
-        label: wayFindingAgentLabel,
+    RED.nodes.registerType('WayFindingAgent',{                                                               // Registering the WayFindingAgent node in the Node-RED editor.
+        category: wayFindingAgentCategory,                                                                   // The category of the node.
+        color: wayFindingAgentColor,                                                                         // The color of the node.
+        defaults: {                                                                                          // The default properties of the node.
+            name: { value: wayFindingAgentName },                                                            // The name of the node.
+            agentId: { value: wayFindingAgentID },                                                           // The agentId of the node.
+            agentCurrentActionParametersInfo: { value: null },                                               // The agentCurrentActionParametersInfo of the node.
+        }, 
+        inputs: wayFindingAgentNumberOfInputs,                                                               // The number of inputs of the node.
+        outputs: wayFindingAgentNumberOfOutputs,                                                             // The number of outputs of the node.
+        icon: wayFindingAgentIcon,                                                                           // The icon of the node.
+        label: wayFindingAgentLabel,                                                                         // The label of the node.
 
-        oneditprepare : async function(){ 
-            if(!this.WayFindingAgent){
-                this.WayFindingAgent = new Agent(wayFindingAgentName,wayFindingAgentID);
+        // The oneditprepare function is called when the node is being prepared for editing.
+        oneditprepare : async function(){         
+            // If the WayFindingAgent does not exist, create a new WayFindingAgent.                                                         
+            if(!this.WayFindingAgent){                                                                       
+                this.WayFindingAgent = new Agent(wayFindingAgentName,wayFindingAgentID); 
             }
+            // Call the oneditPrepareFunction of the WayFindingAgent.
             await this.WayFindingAgent.oneditPrepareFunction();
         },
 
-        oneditcancel  : function()      { this.WayFindingAgent.oneditCancelFunction(this);},
-        oneditsave    : function()      { this.WayFindingAgent.oneditSaveFunction(this);}
+        // The oneditcancel function is called when the node editing is cancelled.
+        oneditcancel  : function()      { 
+            // Call the oneditCancelFunction of the WayFindingAgent.
+            this.WayFindingAgent.oneditCancelFunction(this);
+        },
+        // The oneditsave function is called when the node editing is saved.
+        oneditsave    : function()      { 
+            // Call the oneditSaveFunction of the WayFindingAgent.
+            this.WayFindingAgent.oneditSaveFunction(this);
+        }
     });
 </script>
