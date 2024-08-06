@@ -1,26 +1,42 @@
+<!-- This file is the HTML file for the RoomBookingAgent node. It is responsible for the visual representation of the node in the Node-RED editor. --> 
+
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
+<!-- The following script tag is responsible for registering the RoomBookingAgent node in the Node-RED editor. -->
 <script type="text/javascript">
     
-    RED.nodes.registerType('RoomBookingAgent',{
-        category: roomBookingAgentCategory,
-        color: roomBookingAgentColor,
-        defaults: {
-            name: { value: roomBookingAgentName },
-            agentId: { value: roomBookingAgentID },
-            agentCurrentActionParametersInfo: { value: null },
+    RED.nodes.registerType('RoomBookingAgent',{                            // Registering the RoomBookingAgent node in the Node-RED editor.
+        category: roomBookingAgentCategory,                                // The category of the node.
+        color: roomBookingAgentColor,                                      // The color of the node.
+        defaults: {                                                        // The default properties of the node.
+            name: { value: roomBookingAgentName },                         // The name of the node.
+            agentId: { value: roomBookingAgentID },                        // The agentId of the node.
+            agentCurrentActionParametersInfo: { value: null },             // The agentCurrentActionParametersInfo of the node.
         },
-        inputs: roomBookingAgentNumberOfInputs,
-        outputs: roomBookingAgentNumberOfOutputs,
-        icon: roomBookingAgentIcon,
-        label: roomBookingAgentLabel,
+        inputs: roomBookingAgentNumberOfInputs,                            // The number of inputs of the node. 
+        outputs: roomBookingAgentNumberOfOutputs,                          // The number of outputs of the node.
+        icon: roomBookingAgentIcon,                                        // The icon of the node.
+        label: roomBookingAgentLabel,                                      // The label of the node. 
 
+        // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare : async function(){ 
+            // If the RoomBookingAgent does not exist, create a new RoomBookingAgent.
             if(!this.RoomBookingAgent){
                 this.RoomBookingAgent = new Agent(roomBookingAgentName,roomBookingAgentID);
             }
-            await this.RoomBookingAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { this.RoomBookingAgent.oneditCancelFunction(this);},
-        oneditsave    : function()      { this.RoomBookingAgent.oneditSaveFunction(this);}
+            // Call the oneditPrepareFunction of the RoomBookingAgent.    
+            await this.RoomBookingAgent.oneditPrepareFunction();
+        },
+        // The oneditcancel function is called when the node editing is cancelled.
+        oneditcancel  : function()      {
+            // Call the oneditCancelFunction of the RoomBookingAgent.
+            this.RoomBookingAgent.oneditCancelFunction(this);
+        },
+        // The oneditsave function is called when the node editing is saved.
+        oneditsave    : function()      {
+            // Call the oneditSaveFunction of the RoomBookingAgent.
+            this.RoomBookingAgent.oneditSaveFunction(this);
+        }
     });
 </script>
