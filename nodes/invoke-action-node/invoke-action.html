@@ -1,29 +1,43 @@
+<!-- This file is the HTML file for the InvokeAction node. It is responsible for the visual representation of the node in the Node-RED editor. -->
+
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
+<!-- The following script tag is responsible for registering the InvokeAction node in the Node-RED editor. -->
 <script type="text/javascript">
     
-    RED.nodes.registerType('invoke-action', {
-        category: invokeActionAgentCategory,
-        color: invokeActionAgentColor,
-        defaults: {
-            name: { value: invokeActionAgentName },
-            agentCurrentActionParametersInfo: { value: null },
+    RED.nodes.registerType('invoke-action', {                             // Registering the InvokeAction node in the Node-RED editor.
+        category: invokeActionAgentCategory,                              // The category of the node.
+        color: invokeActionAgentColor,                                    // The color of the node.
+        defaults: {                                                       // The default properties of the node.
+            name: { value: invokeActionAgentName },                       // The name of the node.
+            agentCurrentActionParametersInfo: { value: null },            // The agentCurrentActionParametersInfo of the node.
         },
-        inputs: invokeActionAgentNumberOfInputs,
-        outputs: invokeActionAgentNumberOfOutputs,
-        icon: invokeActionAgentIcon,
-        label: invokeActionAgentLabel,
+        inputs: invokeActionAgentNumberOfInputs,                          // The number of inputs of the node.
+        outputs: invokeActionAgentNumberOfOutputs,                        // The number of outputs of the node.
+        icon: invokeActionAgentIcon,                                      // The icon of the node.
+        label: invokeActionAgentLabel,                                    // The label of the node.
         
+        // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare: async function() {
+            // If the InvokeAction does not exist, create a new InvokeAction.
             if(!this.Agent){
                 this.Agent = new Agent(invokeActionAgentName, null);
             }
+            // Call the oneditPrepareFunction of the InvokeAction.
             await this.Agent.oneditPrepareFunction();
         },
 
-        oneditcancel: function() { this.Agent.oneditCancelFunction(this); },
+        // The oneditcancel function is called when the node editing is cancelled.
+        oneditcancel: function() {
+            // Call the oneditCancelFunction of the InvokeAction.
+            this.Agent.oneditCancelFunction(this);
+        },
         
-        oneditsave  : function() {  this.Agent.oneditSaveFunction(this)   },
+        // The oneditsave function is called when the node editing is saved.
+        oneditsave  : function() { 
+            this.Agent.oneditSaveFunction(this);
+        },
 
     });
 
