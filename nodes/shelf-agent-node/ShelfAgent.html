@@ -17,7 +17,9 @@
         inputs: shelfAgentNumberOfInputs,                                                   // The number of inputs of the node.
         outputs: shelfAgentNumberOfOutputs,                                                 // The number of outputs of the node.
         icon: shelfAgentIcon,                                                               // The icon of the node.
-        label: shelfAgentLabel,                                                             // The label of the node.
+        label: function(){                                                                  // The label of the node.
+            return this.name || shelfAgentLabel;                                            // Return the name of the node or the default name.
+        },
 
         // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare : async function(){ 
@@ -26,7 +28,7 @@
                 this.ShelfAgent = new Agent(shelfAgentName,shelfAgentID);
             }
             // Call the oneditPrepareFunction of the ShelfAgent.
-            await this.ShelfAgent.oneditPrepareFunction();
+            await this.ShelfAgent.oneditPrepareFunction(this);
         },
         // The oneditcancel function is called when the node editing is cancelled.
         oneditcancel  : function()      {

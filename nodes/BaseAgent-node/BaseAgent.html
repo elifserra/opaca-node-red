@@ -102,7 +102,9 @@
         inputs: baseAgentNumberOfInputs,                                      // The number of inputs of the node.
         outputs: baseAgentNumberOfOutputs,                                    // The number of outputs of the node.
         icon: baseAgentIcon,                                                  // The icon of the node.
-        label: baseAgentLabel,                                                // The label of the node.
+        label: function(){                                                    // The label of the node.
+            return this.name || baseAgentLabel;                               // Return the name of the node or the default name.
+        },
 
         // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare : async function(){
@@ -156,12 +158,12 @@
                       Important to call this function inside of the change event listener because we need to update the agent actions and actions paramaters immediately when the agentID is changed.
                       Otherwise the update would be done after opening edit screen again.             
                     */
-                    await that.Agent.oneditPrepareFunction();
+                    await that.Agent.oneditPrepareFunction(that);
                 }  
             });
 
             // Call the oneditPrepareFunction of the Agent. When the agentID is not changed, this behaves as default oneditPrepareFunction.
-            await that.Agent.oneditPrepareFunction();
+            await that.Agent.oneditPrepareFunction(that);
 
         },
 

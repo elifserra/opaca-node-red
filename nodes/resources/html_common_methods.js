@@ -76,7 +76,7 @@ class Agent{
     }
 
 
-    async oneditPrepareFunction(){
+    async oneditPrepareFunction(node){
 
         var agent = this;
 
@@ -102,6 +102,8 @@ class Agent{
         $("#invoke-action-button").on('click', async function(){
             agent.currentAction.handleInvokeAction();
         });
+
+        document.getElementById('node-input-name').value = node.name;
 
     }
 
@@ -173,6 +175,8 @@ class Action{
         }
 
         RED.nodes.dirty(true); 
+
+        node.name = document.getElementById('node-input-name').value;
 
     }
 

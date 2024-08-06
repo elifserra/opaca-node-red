@@ -17,7 +17,9 @@
         inputs: servletAgentNumberOfInputs,                                                   // The number of inputs of the node.
         outputs: servletAgentNumberOfOutputs,                                                 // The number of outputs of the node.
         icon: servletAgentIcon,                                                               // The icon of the node.
-        label: servletAgentLabel,                                                             // The label of the node.
+        label: function(){                                                                    // The label of the node.
+            return this.name || servletAgentLabel;                                            // Return the name of the node or the default name.
+        },
 
         // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare : async function(){ 
@@ -26,7 +28,7 @@
                 this.ServletAgent = new Agent(servletAgentName,servletAgentID);
             }
             // Call the oneditPrepareFunction of the ServletAgent.
-            await this.ServletAgent.oneditPrepareFunction();},
+            await this.ServletAgent.oneditPrepareFunction(this);},
         // The oneditcancel function is called when the node editing is cancelled.
         oneditcancel  : function()      { 
             // Call the oneditCancelFunction of the ServletAgent.

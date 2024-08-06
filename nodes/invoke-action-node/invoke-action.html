@@ -16,7 +16,9 @@
         inputs: invokeActionAgentNumberOfInputs,                          // The number of inputs of the node.
         outputs: invokeActionAgentNumberOfOutputs,                        // The number of outputs of the node.
         icon: invokeActionAgentIcon,                                      // The icon of the node.
-        label: invokeActionAgentLabel,                                    // The label of the node.
+        label: function(){                                                // The label of the node.
+            return this.name || invokeActionAgentLabel;                   // Return the name of the node or the default name.
+        },
         
         // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare: async function() {
@@ -25,7 +27,7 @@
                 this.Agent = new Agent(invokeActionAgentName, null);
             }
             // Call the oneditPrepareFunction of the InvokeAction.
-            await this.Agent.oneditPrepareFunction();
+            await this.Agent.oneditPrepareFunction(this);
         },
 
         // The oneditcancel function is called when the node editing is cancelled.

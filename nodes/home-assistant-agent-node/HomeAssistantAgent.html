@@ -17,7 +17,9 @@
         inputs : homeAssistantAgentNumberOfInputs,                              // The number of inputs of the node.  
         outputs: homeAssistantAgentNumberOfOutputs,                             // The number of outputs of the node.
         icon   : homeAssistantAgentIcon,                                        // The icon of the node.
-        labe   : homeAssistantAgentLabel,                                       // The label of the node.
+        labe   : function(){                                                    // The label of the node.
+            return this.name || homeAssistantAgentLabel;                        // Return the name of the node or the default name.
+        },
 
         // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare : async function(){ 
@@ -26,7 +28,7 @@
                 this.HomeAssistantAgent = new Agent(homeAssistantAgentName,homeAssistantAgentID);
             }
             // Call the oneditPrepareFunction of the HomeAssistantAgent.
-            await this.HomeAssistantAgent.oneditPrepareFunction();
+            await this.HomeAssistantAgent.oneditPrepareFunction(this);
         },
         //  The oneditcancel function is called when the node editing is cancelled.
         oneditcancel  : function()      {
