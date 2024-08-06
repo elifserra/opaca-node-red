@@ -1,30 +1,43 @@
+<!-- This file is the HTML file for the HomeAssistantAgent node. It is responsible for the visual representation of the node in the Node-RED editor. -->
+
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
+<!-- The following script tag is responsible for registering the HomeAssistantAgent node in the Node-RED editor. -->
 <script type="text/javascript">
 
-    RED.nodes.registerType('HomeAssistantAgent',{
-        category: homeAssistantAgentCategory,
-        color   : homeAssistantAgentColor,
-        defaults: {
-            name: { value: homeAssistantAgentName },
-            agentId: { value: homeAssistantAgentID },
-            agentCurrentActionParametersInfo: { value: null },
-        },
-        inputs : homeAssistantAgentNumberOfInputs,
-        outputs: homeAssistantAgentNumberOfOutputs,
-        icon   : homeAssistantAgentIcon,
-        labe   : homeAssistantAgentLabel,
+    RED.nodes.registerType('HomeAssistantAgent',{                               // Registering the HomeAssistantAgent node in the Node-RED editor.
+        category: homeAssistantAgentCategory,                                   // The category of the node.
+        color   : homeAssistantAgentColor,                                      // The color of the node. 
+        defaults: {                                                             // The default properties of the node.
+            name: { value: homeAssistantAgentName },                            // The name of the node.
+            agentId: { value: homeAssistantAgentID },                           // The agentId of the node.
+            agentCurrentActionParametersInfo: { value: null },                  // The agentCurrentActionParametersInfo of the node.  
+        },                                          
+        inputs : homeAssistantAgentNumberOfInputs,                              // The number of inputs of the node.  
+        outputs: homeAssistantAgentNumberOfOutputs,                             // The number of outputs of the node.
+        icon   : homeAssistantAgentIcon,                                        // The icon of the node.
+        labe   : homeAssistantAgentLabel,                                       // The label of the node.
 
+        // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare : async function(){ 
+            // If the HomeAssistantAgent does not exist, create a new HomeAssistantAgent.
             if(!this.HomeAssistantAgent){
                 this.HomeAssistantAgent = new Agent(homeAssistantAgentName,homeAssistantAgentID);
             }
+            // Call the oneditPrepareFunction of the HomeAssistantAgent.
             await this.HomeAssistantAgent.oneditPrepareFunction();
         },
-
-        oneditcancel  : function()      { this.HomeAssistantAgent.oneditCancelFunction(this); },
-
-        oneditsave    : function()      { this.HomeAssistantAgent.oneditSaveFunction(this);   }
+        //  The oneditcancel function is called when the node editing is cancelled.
+        oneditcancel  : function()      {
+            // Call the oneditCancelFunction of the HomeAssistantAgent.
+            this.HomeAssistantAgent.oneditCancelFunction(this);
+        },
+        // The oneditsave function is called when the node editing is saved.
+        oneditsave    : function()      {
+            // Call the oneditSaveFunction of the HomeAssistantAgent.
+            this.HomeAssistantAgent.oneditSaveFunction(this);
+        }
     });
     
 </script>
