@@ -140,8 +140,9 @@
                    So even if the agentId is not changed, the agentId property of the BaseAgent node is updated with the agentId of the agentId select element. 
                    Therefore, the prevAgentId property is used to store the previous agentId of the BaseAgent node to controling in a robust way.
                    if the agentId is changed, assign the new agentId to the agentId property of the BaseAgent node.
+                   In this way baseAgent node can be configured for different agents with just one input field which is agentId.
                 */
-               // Store the previous agentId of the BaseAgent node.
+                // Store the previous agentId of the BaseAgent node.
                 that.prevAgentId = that.agentId;
                 // If the agentId is changed, assign the new agentId to the agentId property of the BaseAgent node.
                 that.agentId = $("#node-input-agentId").val();
