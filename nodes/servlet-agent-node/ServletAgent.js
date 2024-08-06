@@ -1,9 +1,9 @@
-const imports = require('../../nodes/resources/imports.js');
+const imports = require('../resources/imports.js');
 const js_common_methods = imports.js_common_methods_import;
 
 module.exports = function(RED){
-    function BaseAgent(config){
+    function ServletAgentNode(config){
         js_common_methods.makeNodeConfiguration(RED, this, config);
     }
-    RED.nodes.registerType("BaseAgent",BaseAgent);
+    RED.nodes.registerType("ServletAgent",ServletAgentNode);
 }

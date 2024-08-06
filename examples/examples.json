@@ -9,7 +9,7 @@
     },
     {
         "id": "2fc2a32c6566408c",
-        "type": "opaca-actions",
+        "type": "opaca-access",
         "z": "9c44dcf820830aeb",
         "username": "admin",
         "password": "12345",
@@ -892,7 +892,7 @@
     },
     {
         "id": "4bcf24714015f627",
-        "type": "SensorAgent",
+        "type": "ServletAgent",
         "z": "9c44dcf820830aeb",
         "name": "Show Warning",
         "agentId": "servlet-agent",

@@ -1,4 +1,56 @@
-<!-- HTML Template for the Node-RED Editor -->
+<style>
+.invoke-action-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.invoke-action-button button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background: linear-gradient(45deg, #007BFF, #00C6FF);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.invoke-action-button button:hover {
+    background: linear-gradient(45deg, #d11151, #0099cc); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.invoke-action-button button:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.result-container {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #e9f7ef;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.result-container p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+</style>
 <script type="text/html" data-template-name="BaseAgent">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -6,7 +58,9 @@
     </div>
     <div class="form-row">
         <label for="node-input-agentId"><i class="fa fa-tag"></i> Agent ID</label>
-        <input type="text" id="node-input-agentId" value="shelf-agent" placeholder="Agent ID">
+        <select id="node-input-agentId">
+            <option value="">Select an action</option>
+        </select>
     </div>
     <div class="form-row">
         <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
@@ -15,73 +69,69 @@
         </select>
     </div>
     <div class="form-row" id="parameters-container">
-        <!-- Parameters will be added here -->
+    </div>
+    <div class="invoke-action-button">
+        <button id="invoke-action-button">Invoke Action</button>
+    </div>
+    <div id="result-container" class="result-container hidden">
+        <p id="result-text"></p>
     </div>
 </script>
 
 
-<!-- Include the common methods script -->
 <script type="text/javascript" src="html_common_methods.js"></script>
-
 
 
 <script type="text/javascript">
 
     RED.nodes.registerType('BaseAgent', {
-        category: 'ZEKI',
-        color: '#a6bbcf',
+        category: baseAgentCategory,
+        color: baseAgentColor,
         defaults: {
-            name: { value: "" },
-            agentId: { value: "" },
-            actions: { value: null },
-            actionsList: { value: [] },
-            actionParams: { value: [] },
-            action: { value: "" },
-            paramsHtml: { value: "" },
-            paramOutputs: { value: [] },
-            nodeParametersBoxes: { value: [] },
-            parameters: { value: [] },
-            defaultTypes: { value: [] }
+            name: { value: baseAgentName },
+            agentId: { value: null },
+            prevAgentId: { value: null },
+            agentCurrentActionParametersInfo: { value: null },
         },
-        inputs: 1,
-        outputs: 1,
-        icon: 'public/zekı_logo.png',
-        label: function() {
-            return this.name || 'BaseAgent';
-        },
-
+        inputs: baseAgentNumberOfInputs,
+        outputs: baseAgentNumberOfOutputs,
+        icon: baseAgentIcon,
+        label: baseAgentLabel,
 
         oneditprepare : async function(){
+
             var that = this;
-            if($("#node-input-agentId").val() != ""){
-                that.agentId = $("#node-input-agentId").val();
-                await getThisAgentNodeActions(that);
-
-                updateParametersHtmlSection(that);
-
-                $("#node-input-agentId").on('change', async function() {
-                    applyChangesForAgentChange(that);
-                }.bind(this));
-
-                $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
-                that.actionsList.forEach(action => {
-                    $("#node-input-action").append(`<option value="${action}">${action}</option>`);
-                });
-
-                $("#node-input-action").on('change', function(){
-                    applyChangesForActionChange(that);
-                }.bind(this));                
-
+            if(!this.allAgentIds){
+                this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
+                that.agentId = that.agentId === null ? that.allAgentIds[0] : that.agentId;
             }
+
+            $("#node-input-agentId").empty().append(`<option value=${that.agentId}>${that.agentId}</option>`);
+                that.allAgentIds.forEach(agentId => {
+                $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
+            });
+
+            if(!this.Agent){
+                this.Agent = new Agent(baseAgentName,$("#node-input-agentId").val());
+            }
+
+            $("#node-input-agentId").on('change', async function(){
+                that.prevAgentId = that.agentId;
+                that.agentId = $("#node-input-agentId").val();
+                if(that.prevAgentId != that.agentId){
+                    $("#node-input-agentId").val(that.agentId);
+                    that.Agent.applyChangesForAgentChange(that.agentId);
+                    await that.Agent.oneditPrepareFunction();
+                }  
+            });
+
+            await that.Agent.oneditPrepareFunction();
+
         },
 
-        oneditcancel : function(){
-            saveParameters(this);            
-        },
+        oneditcancel : function(){ this.Agent.oneditCancelFunction(this); },
 
-        oneditsave : function(){
-            saveParameters(this);
-        },
+        oneditsave : function() {  this.Agent.oneditSaveFunction(this); },
 
     });
 </script>

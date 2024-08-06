@@ -18,7 +18,7 @@
       "ShelfAgent": "/nodes/shelf-agent-node/ShelfAgent.js",
       "HomeAssistantAgent": "/nodes/home-assistant-agent-node/HomeAssistantAgent.js",
       "WayFindingAgent": "/nodes/wayfinding-agent-node/WayFindingAgent.js",
-      "SensorAgent": "/nodes/sensor-agent-node/SensorAgent.js",
+      "ServletAgent": "/nodes/servlet-agent-node/ServletAgent.js",
       "RoomBookingAgent": "/nodes/room-booking-agent-node/RoomBookingAgent.js",
       "ChatBot": "/nodes/ChatBot-node/ChatBot.js"
     }
@@ -27,6 +27,7 @@
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "opaca-node": "file:",
     "openai": "^4.52.5"
   }
 }

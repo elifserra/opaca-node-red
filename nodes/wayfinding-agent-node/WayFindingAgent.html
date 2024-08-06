@@ -1,46 +1,28 @@
-<!-- Include the common methods script -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
 <script type="text/javascript">
 
-    RED.nodes.registerType('WayFindingAgent', {
-        category: 'ZEKI',
-        color: '#1f77b4',
+    RED.nodes.registerType('WayFindingAgent',{
+        category: wayFindingAgentCategory,
+        color: wayFindingAgentColor,
         defaults: {
-            name: { value: "" },
-            agentId: { value: "" },
-            actions: { value: null },
-            actionsList: { value: [] },
-            actionParams: { value: [] },
-            action: { value: "" },
-            paramsHtml: { value: "" },
-            paramOutputs: { value: [] },
-            nodeParametersBoxes: { value: [] },
-            parameters: { value: [] },
-            defaultTypes: { value: [] },
-            isAgentIDChanged: { value: false }
+            name: { value: wayFindingAgentName },
+            agentId: { value: wayFindingAgentID },
+            agentCurrentActionParametersInfo: { value: null },
         },
-        inputs: 1,
-        outputs: 1,
-        icon: 'public/zekı_logo.png',
-        label: function() {
-            return this.name || 'WayFindingAgent';
+        inputs: wayFindingAgentNumberOfInputs,
+        outputs: wayFindingAgentNumberOfOutputs,
+        icon: wayFindingAgentIcon,
+        label: wayFindingAgentLabel,
+
+        oneditprepare : async function(){ 
+            if(!this.WayFindingAgent){
+                this.WayFindingAgent = new Agent(wayFindingAgentName,wayFindingAgentID);
+            }
+            await this.WayFindingAgent.oneditPrepareFunction();
         },
 
-
-        oneditprepare : async function(){
-            await commonOnEditPrepareFunction(this, "wayfinding-agent");
-        },
-
-        oneditcancel : function(){
-            saveParameters(this);            
-        },
-
-        oneditsave : function(){
-            saveParameters(this);
-        },
-
-
-
+        oneditcancel  : function()      { this.WayFindingAgent.oneditCancelFunction(this);},
+        oneditsave    : function()      { this.WayFindingAgent.oneditSaveFunction(this);}
     });
 </script>

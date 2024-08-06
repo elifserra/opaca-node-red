@@ -1,9 +1,10 @@
-var path = 'C:/Users/orucc/Desktop/Coding_Projects/opaca-node-red/nodes/resources/common_methods.js';
-const helper_methods = require(path);
+const imports = require('../../nodes/resources/imports.js');
+const js_common_methods = imports.js_common_methods_import;
 
 module.exports = function(RED){
+
     function HomeAssistantAgentNode(config){
-        helper_methods.makeNodeConfiguration(RED, this, config);
+        js_common_methods.makeNodeConfiguration(RED, this, config);
     }
     RED.nodes.registerType("HomeAssistantAgent",HomeAssistantAgentNode);
 }

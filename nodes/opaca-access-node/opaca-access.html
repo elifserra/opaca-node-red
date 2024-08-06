@@ -1,4 +1,3 @@
-<!-- Template for the Opaca Access node configuration in the Node-RED editor -->
 <script type="text/html" data-template-name="opaca-access">
     <style>
         .form-container {
@@ -86,12 +85,11 @@
     <div id="message-box" class="message-box"></div>
 </script>
 
-<!-- Help text for the Opaca Access node -->
 <script type="text/html" data-help-name="opaca-access">
     <p>A custom node to load OPACA actions.</p>
 </script>
 
-<!-- JavaScript to register the Opaca Access node in Node-RED -->
+
 <script type="text/javascript">
     RED.nodes.registerType('opaca-access', {
         category: 'ZEKI',
@@ -113,7 +111,7 @@
             document.getElementById('authorize-button').addEventListener('click', function() {
                 var username = document.getElementById('node-input-username').value;
                 var password = document.getElementById('node-input-password').value;
-                // Send the username and password to the backend for authorization
+                
                 $.ajax({
                     url: 'opaca-access/authorize',
                     type: 'POST',
@@ -139,5 +137,8 @@
                 });
             });
         }
+
+        
+
     });
 </script>

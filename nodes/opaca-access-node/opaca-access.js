@@ -1,14 +1,11 @@
-const path = require('path');
-const fs = require('fs');
-var currentDir = path.join(__dirname);
-const twoLevelsUp = path.resolve(currentDir, '..', '..');
-var common_methods_path = twoLevelsUp + '/nodes/resources/common_methods.js';
-var html_common_methods_path = twoLevelsUp + '/nodes/resources/html_common_methods.js';
-var common_html_template_path = twoLevelsUp + '/nodes/resources/common_html_template.html';
-const apiUrl = "http://10.42.6.107:8000/agents";                                                    
-const loginUrl = "http://10.42.6.107:8000/login";                                                      
+const imports = require('../../nodes/resources/imports.js');
+const js_commond_methods = imports.js_common_methods_import;
+const apiUrl = imports.apiUrl_import;
+const loginUrl = imports.loginUrl_import;
+const html_common_methods_path = imports.html_common_methods_path_import;
+const common_html_template_path = imports.common_html_template_path_import;
+const fs = imports.file_system_import;
 
-const helper_methods = require(common_methods_path);
 
 module.exports = function(RED) {
 
@@ -19,7 +16,7 @@ module.exports = function(RED) {
         node.password = config.password;
 
         node.on('input', async function() {
-            await helper_methods.fetchOpacaTokenAndAgents(node.username, node.password, apiUrl, loginUrl, RED);
+            await js_commond_methods.fetchOpacaTokenAndAgents(node.username, node.password, apiUrl, loginUrl, RED);
             console.log(twoLevelsUp);
         });
     }
@@ -28,7 +25,7 @@ module.exports = function(RED) {
 
     RED.httpAdmin.post('/opaca-access/authorize', function(req, res) {
         const { username, password} = req.body;
-        helper_methods.fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RED)
+        js_commond_methods.fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RED)
             .then(() => res.json({ success: true }))
             .catch(err => res.json({ success: false, error: err.message }));
     });
