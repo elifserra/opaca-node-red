@@ -11,11 +11,23 @@ class Agent{
         this.actions = [];
         this.token = await fetch('token').then(response=>response.json());
         this.token = this.token.value;
-        var fetchedAgent = await fetch(`${this.agentID}`).then(response => response.json());
-        var fetchedActions = fetchedAgent.value;
-        fetchedActions.forEach(action => {
-            this.actions.push(new Action(action.name,action.parameters,this.token));
-        });
+
+        if(this.agentName != invokeActionAgentName){
+            var fetchedAgent = await fetch(`${this.agentID}`).then(response => response.json());
+            var fetchedActions = fetchedAgent.value;
+            fetchedActions.forEach(action => {
+                this.actions.push(new Action(action.name,action.parameters,this.token));
+            });
+        }else{
+            var allAgents = await fetch('agents').then(response => response.json()).then(data => data.value);
+            allAgents.forEach(agent => {
+                console.log(agent);
+                var agentActions = agent.actions;
+                agentActions.forEach(action => {
+                    this.actions.push(new Action(action.name,action.parameters,this.token));
+                });
+            });
+        }
     }
 
     applyChangesForActionChange(){ 
@@ -237,30 +249,13 @@ class Parameter {
 }
 
 
-async function getParametersOfSelectedAgent(that){
-    var data = await fetch(`${that.agentId}`).then(response => response.json());
-    that.actions = data.value;
-    that.actionsList = that.actions.map(action => action.name);
-    that.actionParams = that.actions.map(action => [action.name, action.parameters]);
-    $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
-        that.actionsList.forEach(action => {
-            $("#node-input-action").append(`<option value="${action}">${action}</option>`);
-    });
-}
-
-
-async function applyChangesForAgentChange(that){
-    that.agentId = $("#node-input-agentId").val();
-    $("#node-input-name").val(that.agentId);
-    that.paramsHtml = "";
-    that.nodeParametersBoxes = [];
-    that.paramOutputs = [];
-    that.action = "";
-    that.parameters = {};
-    $("#parameters-container").empty().append(that.paramsHtml);
-    getParametersOfSelectedAgent(that);
-    $("#node-input-action").empty();
-}
+const invokeActionAgentName = "InvokeActionAgent";
+const invokeActionAgentLabel = "Invoke Action Agent";
+const invokeActionAgentColor = "yellow";
+const invokeActionAgentIcon = "invoke-action-agent";
+const invokeActionAgentCategory = "ZEKI";
+const invokeActionAgentNumberOfInputs = 1;
+const invokeActionAgentNumberOfOutputs = 1;
 
 
 const baseAgentName = "BaseAgent";

@@ -5,75 +5,31 @@
 <script type="text/javascript">
     
     RED.nodes.registerType('invoke-action', {
-        category: 'ZEKI',
-        color: '#46b99c',
+        category: invokeActionAgentCategory,
+        color: invokeActionAgentColor,
         defaults: {
-            name: { value: "" },
-            action: { value: "" },
-            actionsList: { value: [""] },
-            actionParams: { value: [] },
-            nodeNameBox: { value: null },
-            nodeActionBox: { value: null },
-            nodeParametersBoxes: { value: null },
-            nodeParametersBoxesMap: { value: [] },
-            parametersContainer: { value: null },
-            parameters: { value: [] },
-            paramsHtml: { value: "" },
-            paramOutputs: { value: [] },
-            defaultTypes: { value: []},
-            token : { value: "" }
+            name: { value: invokeActionAgentName },
+            agentCurrentActionParametersInfo: { value: null },
         },
-        inputs: 1,
-        outputs: 1,
-        icon: "file.svg",
-        label: function() {
-            return this.name || "invoke actions";
-        },
+        inputs: invokeActionAgentNumberOfInputs,
+        outputs: invokeActionAgentNumberOfOutputs,
+        icon: invokeActionAgentIcon,
+        label: invokeActionAgentLabel,
         
-        /**
-         * Prepare the edit dialog.
-         */
         oneditprepare: async function() {
-            var that = this;
-
-            appendTheCommonHTMLFile();
-
-            var actions = [];
-            var data = await fetch('agents').then(response => response.json());
-            var agents = data.value;
-            agents.forEach(agent => {
-                if (agent.actions) {
-                    agent.actions.forEach(action => {
-                        actions.push(action);
-                    });
-                }
-            });
-
-            that.actionsList = actions.map(action => action.name);
-            that.actionParams = actions.map(action => [action.name, action.parameters]);
-
-            updateParametersHtmlSection(that);
-
-            $("#node-input-action").empty().append(`<option value=${that.action}>${that.action}</option>`);
-            that.actionsList.forEach(action => {
-                $("#node-input-action").append(`<option value="${action}">${action}</option>`);
-            });
-
-            $("#node-input-action").on('change', function() {
-                applyChangesForActionChange(that);
-            }.bind(this));
-
-
-            await handleInvokeAction(that);
-
+            
+            if(!this.Agent){
+                this.Agent = new Agent(invokeActionAgentName, null);
+            }
+            await this.Agent.oneditPrepareFunction();
         },
 
         oneditcancel: function() {
-            saveParameters(this);
+            this.Agent.oneditCancelFunction(this);
         },
         
         oneditsave: function() {
-            saveParameters(this);
+            this.Agent.oneditSaveFunction(this);
         },
 
     });
