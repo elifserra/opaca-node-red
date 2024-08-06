@@ -38,6 +38,14 @@ class Agent{
         }   
     }
 
+    applyChangesForAgentChange(changedAgentId){
+        this.agentID = changedAgentId;
+        this.actionParameters = {};
+        $("#parameters-container").empty(); 
+        $("#result-text").text("");
+        this.currentAction = null;
+    }
+
     async appenTheSelectedAgentCommonHtml(){
 
         await fetch('http://127.0.0.1:1880/common_html_template.html')
@@ -257,7 +265,7 @@ async function applyChangesForAgentChange(that){
 
 const baseAgentName = "BaseAgent";
 const baseAgentLabel = "Base Agent";
-const baseAgentColor = "blue";
+const baseAgentColor = "gray";
 const baseAgentIcon = "base-agent";
 const baseAgentCategory = "ZEKI";
 const baseAgentNumberOfInputs = 1;

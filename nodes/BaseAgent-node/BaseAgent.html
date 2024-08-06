@@ -11,20 +11,26 @@
     padding: 10px 20px;
     font-size: 16px;
     color: white;
-    background: linear-gradient(45deg, #007BFF, #00C6FF);
+    background: linear-gradient(45deg, #007BFF, #00C6FF); /* Blue gradient */
     border: none;
     border-radius: 25px;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
 }
+
 .invoke-action-button button:hover {
-    background: linear-gradient(45deg, #d11151, #0099cc);
+    background: linear-gradient(45deg, #d11151, #0099cc); /* Hover blue gradient */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
+
 .invoke-action-button button:active {
     transform: scale(0.98);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+    display: none;
 }
 
 .hidden {
@@ -53,7 +59,9 @@
     </div>
     <div class="form-row">
         <label for="node-input-agentId"><i class="fa fa-tag"></i> Agent ID</label>
-        <input type="text" id="node-input-agentId" value="shelf-agent" placeholder="Agent ID">
+        <select id="node-input-agentId">
+            <option value="">Select an action</option>
+        </select>
     </div>
     <div class="form-row">
         <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
@@ -77,44 +85,47 @@
 <script type="text/javascript" src="html_common_methods.js"></script>
 
 
-
 <script type="text/javascript">
 
     RED.nodes.registerType('BaseAgent', {
-        category: 'ZEKI',
-        color: '#a6bbcf',
+        category: baseAgentCategory,
+        color: baseAgentColor,
         defaults: {
             name: { value: baseAgentName },
             agentId: { value: null },
+            prevAgentId: { value: null },
             agentCurrentActionParametersInfo: { value: null },
         },
-        inputs: 1,
-        outputs: 1,
-        icon: 'public/zekı_logo.png',
-        label: function() {
-            return this.name || 'BaseAgent';
-        },
-
+        inputs: baseAgentNumberOfInputs,
+        outputs: baseAgentNumberOfOutputs,
+        icon: baseAgentIcon,
+        label: baseAgentLabel,
 
         oneditprepare : async function(){
-
             var that = this;
-
-            if(!this.Agent){
-                this.Agent = new Agent(baseAgentName,"shelf-agent");
+            if(!this.allAgentIds){
+                this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
+                that.agentId = that.agentId === null ? that.allAgentIds[0] : that.agentId;
             }
-
-        
-            $("#node-input-agentId").on('change', async function(){
-                console.log("Agent ID changed");
-                that.Agent.agentID = $("#node-input-agentId").val();
-                that.agentId = $("#node-input-agentId").val();
-                //that.Agent.currentAction.actionParameters = [];
-                await that.Agent.oneditPrepareFunction();
+            $("#node-input-agentId").empty().append(`<option value=${that.agentId}>${that.agentId}</option>`);
+                that.allAgentIds.forEach(agentId => {
+                $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
             });
 
-            //await this.Agent.oneditPrepareFunction();
+            if(!this.Agent){
+                this.Agent = new Agent(baseAgentName,$("#node-input-agentId").val());
+            }
 
+            $("#node-input-agentId").on('change', async function(){
+                that.prevAgentId = that.agentId;
+                that.agentId = $("#node-input-agentId").val();
+                if(that.prevAgentId != that.agentId){
+                    $("#node-input-agentId").val(that.agentId);
+                    that.Agent.applyChangesForAgentChange(that.agentId);
+                    await that.Agent.oneditPrepareFunction();
+                }  
+            });
+            await that.Agent.oneditPrepareFunction();
         },
 
         oneditcancel : function(){
