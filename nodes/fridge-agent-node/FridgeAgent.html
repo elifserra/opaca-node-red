@@ -1,27 +1,43 @@
+<!-- This file is the HTML file for the FridgeAgent node. It is responsible for the visual representation of the node in the Node-RED editor. -->
+
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
+<!-- The following script tag is responsible for registering the FridgeAgent node in the Node-RED editor. -->
 <script type="text/javascript">
 
-    RED.nodes.registerType('FridgeAgent',{
-        category: fridgeAgentCategory,
-        color: fridgeAgentColor,
-        defaults: {
-            name: { value: fridgeAgentName },
-            agentId: { value: fridgeAgentID },
-            agentCurrentActionParametersInfo: { value: null },
-        },
-        inputs: fridgeAgentNumberOfInputs,
-        outputs: fridgeAgentNumberOfOutputs,
-        icon: fridgeAgentIcon,
-        label: fridgeAgentLabel,
+    RED.nodes.registerType('FridgeAgent',{                                           // Registering the FridgeAgent node in the Node-RED editor.
+        category: fridgeAgentCategory,                                               // The category of the node.
+        color: fridgeAgentColor,                                                     // The color of the node.
+        defaults: {                                                                  // The default properties of the node.   
+            name: { value: fridgeAgentName },                                        // The name of the node.
+            agentId: { value: fridgeAgentID },                                       // The agentId of the node.
+            agentCurrentActionParametersInfo: { value: null },                       // The agentCurrentActionParametersInfo of the node.
+        }, 
+        inputs: fridgeAgentNumberOfInputs,                                           // The number of inputs of the node.
+        outputs: fridgeAgentNumberOfOutputs,                                         // The number of outputs of the node.
+        icon: fridgeAgentIcon,                                                       // The icon of the node.
+        label: fridgeAgentLabel,                                                     // The label of the node.
 
+        // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare : async function(){ 
+            // If the FridgeAgent does not exist, create a new FridgeAgent.
             if(!this.FridgeAgent){
                 this.FridgeAgent = new Agent(fridgeAgentName,fridgeAgentID);
             }
-            await this.FridgeAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { this.FridgeAgent.oneditCancelFunction(this);},
-        oneditsave    : function()      { this.FridgeAgent.oneditSaveFunction(this);}
+            // Call the oneditPrepareFunction of the FridgeAgent.
+            await this.FridgeAgent.oneditPrepareFunction();
+        },
+        // The oneditcancel function is called when the node editing is cancelled.
+        oneditcancel  : function()      {
+            // Call the oneditCancelFunction of the FridgeAgent.
+            this.FridgeAgent.oneditCancelFunction(this);
+        },
+        // The oneditsave function is called when the node editing is saved.
+        oneditsave    : function()      {
+            // Call the oneditSaveFunction of the FridgeAgent.
+            this.FridgeAgent.oneditSaveFunction(this);
+        }
     });
     
 </script>
