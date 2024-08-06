@@ -1,26 +1,41 @@
+<!-- This file is the html representation of the node. It is responsible for the visual representation of the node. -->
+
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
+<!-- The following script tag is responsible for registering the ServletAgent node in the Node-RED editor. -->
 <script type="text/javascript">
 
-    RED.nodes.registerType('ServletAgent',{
-        category: sensorAgentCategory,
-        color: sensorAgentColor,
-        defaults: {
-            name: { value: sensorAgentName },
-            agentId: { value: sensorAgentID },
-            agentCurrentActionParametersInfo: { value: null },
+    RED.nodes.registerType('ServletAgent',{                                                   // Registering the ServletAgent node in the Node-RED editor.
+        category: servletAgentCategory,                                                       // The category of the node. 
+        color: servletAgentColor,                                                             // The color of the node.
+        defaults: {                                                                           // The default properties of the node.
+            name: { value: servletAgentName },                                                // The name of the node.
+            agentId: { value: servletAgentID },                                               // The agentId of the node.
+            agentCurrentActionParametersInfo: { value: null },                                // The agentCurrentActionParametersInfo of the node.
         },
-        inputs: sensorAgentNumberOfInputs,
-        outputs: sensorAgentNumberOfOutputs,
-        icon: sensorAgentIcon,
-        label: sensorAgentLabel,
+        inputs: servletAgentNumberOfInputs,                                                   // The number of inputs of the node.
+        outputs: servletAgentNumberOfOutputs,                                                 // The number of outputs of the node.
+        icon: servletAgentIcon,                                                               // The icon of the node.
+        label: servletAgentLabel,                                                             // The label of the node.
 
+        // The oneditprepare function is called when the node is being prepared for editing.
         oneditprepare : async function(){ 
-            if(!this.SensorAgent){
-                this.SensorAgent = new Agent(sensorAgentName,sensorAgentID);
+            // If the ServletAgent does not exist, create a new ServletAgent.
+            if(!this.ServletAgent){
+                this.ServletAgent = new Agent(servletAgentName,servletAgentID);
             }
-            await this.SensorAgent.oneditPrepareFunction();},
-        oneditcancel  : function()      { this.SensorAgent.oneditCancelFunction(this);},
-        oneditsave    : function()      { this.SensorAgent.oneditSaveFunction(this);}
+            // Call the oneditPrepareFunction of the ServletAgent.
+            await this.ServletAgent.oneditPrepareFunction();},
+        // The oneditcancel function is called when the node editing is cancelled.
+        oneditcancel  : function()      { 
+            // Call the oneditCancelFunction of the ServletAgent.
+            this.ServletAgent.oneditCancelFunction(this);
+        },
+        // The oneditsave function is called when the node editing is saved.
+        oneditsave    : function()      { 
+            // Call the oneditSaveFunction of the ServletAgent.
+            this.ServletAgent.oneditSaveFunction(this);
+        }
     });
 </script>

@@ -291,14 +291,14 @@ const wayFindingAgentCategory = "ZEKI";
 const wayFindingAgentNumberOfInputs = 1;
 const wayFindingAgentNumberOfOutputs = 1;
 
-const sensorAgentName = "ServletAgent";
-const sensorAgentLabel = "Servlet Agent";
-const sensorAgentID = "servlet-agent";
-const sensorAgentColor = "brown";
-const sensorAgentIcon = "servlet-agent";
-const sensorAgentCategory = "ZEKI";
-const sensorAgentNumberOfInputs = 1;
-const sensorAgentNumberOfOutputs = 1;
+const servletAgentName = "ServletAgent";
+const servletAgentLabel = "Servlet Agent";
+const servletAgentID = "servlet-agent";
+const servletAgentColor = "brown";
+const servletAgentIcon = "servlet-agent";
+const servletAgentCategory = "ZEKI";
+const servletAgentNumberOfInputs = 1;
+const servletAgentNumberOfOutputs = 1;
 
 const homeAssistantAgentName = "HomeAssistantAgent";
 const homeAssistantAgentLabel = "Home Assistant Agent";
