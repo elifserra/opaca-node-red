@@ -21,7 +21,6 @@ class Agent{
         }else{
             var allAgents = await fetch('agents').then(response => response.json()).then(data => data.value);
             allAgents.forEach(agent => {
-                console.log(agent);
                 var agentActions = agent.actions;
                 agentActions.forEach(action => {
                     this.actions.push(new Action(action.name,action.parameters,this.token));
@@ -162,8 +161,6 @@ class Action{
     }
 
     saveParameters(sendFlag,node){
-
-        console.log("saveParameters");
 
         this.actionParameters.forEach(parameter=>{
             var inputElement = $(`#${parameter.name}`);
