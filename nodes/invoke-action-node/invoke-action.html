@@ -1,7 +1,5 @@
-<!-- Include the common methods script -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
-<!-- JavaScript Code for the Custom Node -->
 <script type="text/javascript">
     
     RED.nodes.registerType('invoke-action', {
@@ -17,20 +15,15 @@
         label: invokeActionAgentLabel,
         
         oneditprepare: async function() {
-            
             if(!this.Agent){
                 this.Agent = new Agent(invokeActionAgentName, null);
             }
             await this.Agent.oneditPrepareFunction();
         },
 
-        oneditcancel: function() {
-            this.Agent.oneditCancelFunction(this);
-        },
+        oneditcancel: function() { this.Agent.oneditCancelFunction(this); },
         
-        oneditsave: function() {
-            this.Agent.oneditSaveFunction(this);
-        },
+        oneditsave  : function() {  this.Agent.oneditSaveFunction(this)   },
 
     });
 

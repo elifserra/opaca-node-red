@@ -229,7 +229,7 @@ class Action{
         console.log("Parameters");
         console.log(this.actionParameters);
         console.log(query_string);
-        var result = await this.invokeAction(query_string); // Invoke the action with parameters
+        var result = await this.invokeAction(query_string);
         $("#result-text").text(result);
         $("#result-container").removeClass("hidden");
     }

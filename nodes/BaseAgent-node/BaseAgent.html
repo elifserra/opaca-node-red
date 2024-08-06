@@ -1,4 +1,3 @@
-<!-- HTML Template for the Node-RED Editor -->
 <style>
 .invoke-action-button {
     display: flex;
@@ -11,7 +10,7 @@
     padding: 10px 20px;
     font-size: 16px;
     color: white;
-    background: linear-gradient(45deg, #007BFF, #00C6FF); /* Blue gradient */
+    background: linear-gradient(45deg, #007BFF, #00C6FF);
     border: none;
     border-radius: 25px;
     cursor: pointer;
@@ -20,7 +19,7 @@
 }
 
 .invoke-action-button button:hover {
-    background: linear-gradient(45deg, #d11151, #0099cc); /* Hover blue gradient */
+    background: linear-gradient(45deg, #d11151, #0099cc); 
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -70,7 +69,6 @@
         </select>
     </div>
     <div class="form-row" id="parameters-container">
-        <!-- Parameters will be added here -->
     </div>
     <div class="invoke-action-button">
         <button id="invoke-action-button">Invoke Action</button>
@@ -81,7 +79,6 @@
 </script>
 
 
-<!-- Include the common methods script -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
 
@@ -102,11 +99,13 @@
         label: baseAgentLabel,
 
         oneditprepare : async function(){
+
             var that = this;
             if(!this.allAgentIds){
                 this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
                 that.agentId = that.agentId === null ? that.allAgentIds[0] : that.agentId;
             }
+
             $("#node-input-agentId").empty().append(`<option value=${that.agentId}>${that.agentId}</option>`);
                 that.allAgentIds.forEach(agentId => {
                 $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
@@ -125,16 +124,14 @@
                     await that.Agent.oneditPrepareFunction();
                 }  
             });
+
             await that.Agent.oneditPrepareFunction();
+
         },
 
-        oneditcancel : function(){
-            this.Agent.oneditCancelFunction(this);           
-        },
+        oneditcancel : function(){ this.Agent.oneditCancelFunction(this); },
 
-        oneditsave : function(){
-            this.Agent.oneditSaveFunction(this);
-        },
+        oneditsave : function() {  this.Agent.oneditSaveFunction(this); },
 
     });
 </script>
