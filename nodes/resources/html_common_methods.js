@@ -54,7 +54,7 @@ class Agent{
         this.agentID = changedAgentId;
         this.actionParameters = {};
         $("#parameters-container").empty(); 
-        $("#result-text").text("");
+        $("#result-container").addClass("hidden");
         this.currentAction = null;
     }
 
