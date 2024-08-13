@@ -36,6 +36,10 @@ class Agent{
         this.token = null;           // assign the token as null, in fetchAgentActions method, it will be assigned to the fetched token
     }
 
+
+
+
+
     /**
      * @description Fetch the agent actions from the opaca server
      */
@@ -65,6 +69,11 @@ class Agent{
             });
         }
     }
+
+
+
+
+
 
     /**
      * @description Apply the changes for the action change
@@ -101,6 +110,11 @@ class Agent{
         }   
     }
 
+
+
+
+
+
     /**
      * @description Apply the changes for the agent change
      * @param {string} changedAgentId 
@@ -119,6 +133,11 @@ class Agent{
         */
         this.currentAction = null;                                                                            // assign the current action as null
     }
+
+
+
+
+
 
     /**
      *  @description Append the selected agent common html to the dialog form
@@ -142,6 +161,11 @@ class Agent{
         });
         
     }
+
+
+
+
+
 
     /**
      * @description Prepare the agent node for the edit
@@ -187,6 +211,11 @@ class Agent{
 
     }
 
+
+
+
+
+
     /**
      * @description Save the agent node
      * @param {object} node
@@ -199,6 +228,11 @@ class Agent{
         }
     }
 
+
+
+
+
+
     // This method is used to save the selected acition parameters when the edit dialog is cancelled. When the cancel button is clicked, this method is called.
     oneditCancelFunction(node){
         // if the current action is not null, save the parameters of the current action
@@ -208,6 +242,16 @@ class Agent{
     }
 
 }
+
+
+
+
+
+
+
+
+
+
 
 // Action class is used to create action objects
 class Action{
@@ -227,6 +271,11 @@ class Action{
         }
         this.parameterHtml = "";                                                       // assign the parameter html as an empty string
     }
+
+
+
+
+
 
     /**
      * @description Save the parameters html
@@ -253,6 +302,12 @@ class Action{
 
     }
 
+
+
+
+
+
+
     /**
      * @description Send the js side
      * @returns actionName and actionParameters
@@ -272,6 +327,11 @@ class Action{
     
         return dataToSend;        // return the dataToSend object
     }
+
+
+
+
+
 
     /**
      * @param {boolean} sendFlag
@@ -309,6 +369,11 @@ class Action{
 
     }
 
+
+
+
+
+
     /**
      * @description Convert the action parameters to json string
      * @returns jsonString {string}
@@ -339,6 +404,11 @@ class Action{
      
         return jsonString;                                                                                   // return the json string
     }
+
+
+
+
+
 
     /**
      * @description Invoke the action
@@ -372,6 +442,11 @@ class Action{
 
     }
 
+
+
+
+
+
     /**
      * @description Handle the invoke action
      * @param {object} node
@@ -396,6 +471,15 @@ class Action{
 }
 
 
+
+
+
+
+
+
+
+
+
 // Parameter class is used to create parameter objects
 class Parameter {
     /**
@@ -416,6 +500,8 @@ class Parameter {
         */
     }
 }
+
+
 
 
 /*
@@ -501,7 +587,8 @@ const roomBookingAgentNumberOfInputs = 1;
 const roomBookingAgentNumberOfOutputs = 1;
 
 // Actually during the development process new agent added to the system. The agent is exchange agent.
-// This shows the usability of this approach. Because we can add a new agent without changing the html files of the nodes.
+// This shows the usability of this approach. Because we can add a new agent by a fwe change the html and js files of the nodes.
+// Even the one who does not know the code can add a new agent by changing the properties below and adding the agent to the html and js files of the nodes.
 const exchangeAgentName = "ExchangeAgent";
 const exchangeAgentLabel = "Exchange Agent";
 const exchangeAgentID = "exchange-agent";
