@@ -501,29 +501,82 @@ class Parameter {
     }
 }
 
+/**
+ * @description Make the node registration
+ * @param {string} agentNodeName
+ */
+// Make the node registration. This method is used to make the node registration for the agent nodes.
+// And it is used to create the agent nodes in the node-red editor.
+async function makeNodeRegistration(agentNodeName){
+    // fetch the node config from the server. Because all node configurations are stored in the config file.
+    /*
+        Here is important because the node configuration is stored in the config file.
+        Therefore, to get the node configuration, fetch the config file from the server.
+        If the user wants to add a new agent node, the user should add the agent node configuration to the config file and just calling this method with the agent node name.
+        It will create the agent node in the node-red editor. This enables the user to add new agent nodes easily and automatize the process.
+        This is actually suitable for the flow based programming and no code programming.
+    */
+    // fetch the node config from the server
+    const response = await fetch('node_config.json');
+    // get the node config
+    const config = await response.json();
+    // get the node configuration of the agent node
+    const nodeConfig = config[agentNodeName];
+
+    // get the invoke action agent name from the config file. Here is important because the invoke action agent name is used in the agent class.
+    // And if the user change the invoke action name not to update the agent class, the invoke action agent name should be taken from the config file.
+    // This enables the user to change the invoke action agent name easily without changing the agent class.
+    invokeActionAgentName = config["invoke-action"].name;  // this line is specific for the invoke action agent name
+    // All nodes call the makeNodeRegistration method to create the agent nodes in the node-red editor. This line is worked multiple times as much as the number of the agent nodes.
+
+    // register the agent node in the node-red editor
+    RED.nodes.registerType(agentNodeName,  {
+        category : nodeConfig.category,
+        color : nodeConfig.color,
+        defaults : {
+            name : {value: nodeConfig.name},
+            agentId : {value: nodeConfig.agentId},
+            agentCurrentActionParametersInfo : {value: null}
+        },
+        inputs : nodeConfig.numberOfInputs,
+        outputs : nodeConfig.numberOfOutputs,
+        icon : nodeConfig.icon,
+        label : function() {
+            return this.name || nodeConfig.label;
+        },
+
+        // On edit prepare function is used to prepare the agent node for the edit. This method is called whenever the edit dialog is opened.
+        oneditprepare: async function(){
+            if(!this.agent){
+                this.agent = new Agent(nodeConfig.name, nodeConfig.agentId);
+            }
+            await this.agent.oneditPrepareFunction(this);
+        },
+
+        // On edit save function is used to save the agent node. This method is called whenever the edit dialog is closed.
+        oneditsave: function(){
+            this.agent.oneditSaveFunction(this);
+        },
+
+        // On edit cancel function is used to cancel the agent node. This method is called whenever the edit dialog is cancelled.
+        oneditcancel: function(){
+            this.agent.oneditCancelFunction(this);
+        }
+
+    });
+    
+}
+
+// This variable is used to store the invoke action agent name. This is important because the invoke action agent name is used in the agent class to fetch the all actions.
+// To be able to understand the created agent is the invoke action agent or not, the invoke action agent name should be stored in this variable.
+var invokeActionAgentName;
 
 
-
-/*
-    Below are the agent names, labels, colors, icons, categories, number of inputs and outputs of the agents.
-    These are used to create agent objects and to display the agents in the node-red editor.
-    Here we can change the properties without directing to the html files of the nodes.
-    It is important because it makes the code more organized and clean and avoid redundancy.
-    And it is useful to change the properties of the agents without changing the html files of the nodes.
-*/
-
-// if you add another agent you can first add the agent properties here and then add the agent to the html files of the nodes.
-
-const invokeActionAgentName = "InvokeActionAgent";
-const invokeActionAgentLabel = "Invoke Action Agent";
-const invokeActionAgentColor = "yellow";
-const invokeActionAgentIcon = "invoke-action-agent";
-const invokeActionAgentCategory = "ZEKI";
-const invokeActionAgentNumberOfInputs = 1;
-const invokeActionAgentNumberOfOutputs = 1;
-
-
-const baseAgentName = "BaseAgent";
+// Below code is used to make the node registration for the base agent node.
+// We do not use makeNodeRegistration method because the base agent node has its own registration and different from the other agent nodes.
+// Therefore, the base agent node is registered separately.
+const baseAgentName = "BaseAgent";   // This variable is used in agent class to understand the agent is the base agent or not.
+// baseAgentName is used not to add common html template to the dialog form of the base agent node. Because the base agent node has its own common html template.
 const baseAgentLabel = "Base Agent";
 const baseAgentColor = "gray";
 const baseAgentIcon = "base-agent";
@@ -532,71 +585,6 @@ const baseAgentNumberOfInputs = 1;
 const baseAgentNumberOfOutputs = 1;
 
 
-const shelfAgentName = "ShelfAgent";
-const shelfAgentLabel = "Shelf Agent";
-const shelfAgentID = "shelf-agent";
-const shelfAgentColor = "red";
-const shelfAgentIcon = "shelf-agent";
-const shelfAgentCategory = "ZEKI";
-const shelfAgentNumberOfInputs = 1;
-const shelfAgentNumberOfOutputs = 1;
-
-const fridgeAgentName = "FridgeAgent";
-const fridgeAgentLabel = "Fridge Agent";
-const fridgeAgentID = "fridge-agent";
-const fridgeAgentColor = "gray";
-const fridgeAgentIcon = "fridge-agent";
-const fridgeAgentCategory = "ZEKI";
-const fridgeAgentNumberOfInputs = 1;
-const fridgeAgentNumberOfOutputs = 1;
-
-const wayFindingAgentName = "WayFindingAgent";
-const wayFindingAgentLabel = "Way Finding Agent";
-const wayFindingAgentID = "wayfinding-agent";
-const wayFindingAgentColor = "green";
-const wayFindingAgentIcon = "wayfinding-agent";
-const wayFindingAgentCategory = "ZEKI";
-const wayFindingAgentNumberOfInputs = 1;
-const wayFindingAgentNumberOfOutputs = 1;
-
-const servletAgentName = "ServletAgent";
-const servletAgentLabel = "Servlet Agent";
-const servletAgentID = "servlet-agent";
-const servletAgentColor = "brown";
-const servletAgentIcon = "servlet-agent";
-const servletAgentCategory = "ZEKI";
-const servletAgentNumberOfInputs = 1;
-const servletAgentNumberOfOutputs = 1;
-
-const homeAssistantAgentName = "HomeAssistantAgent";
-const homeAssistantAgentLabel = "Home Assistant Agent";
-const homeAssistantAgentID = "home-assistant-agent";
-const homeAssistantAgentColor = "orange";
-const homeAssistantAgentIcon = "home-assistant-agent";
-const homeAssistantAgentCategory = "ZEKI";
-const homeAssistantAgentNumberOfInputs = 1;
-const homeAssistantAgentNumberOfOutputs = 1;
-
-const roomBookingAgentName = "RoomBookingAgent";
-const roomBookingAgentLabel = "Room Booking Agent";
-const roomBookingAgentID = "room-booking-agent";
-const roomBookingAgentColor = "white";
-const roomBookingAgentIcon = "room-booking-agent";
-const roomBookingAgentCategory = "ZEKI";
-const roomBookingAgentNumberOfInputs = 1;
-const roomBookingAgentNumberOfOutputs = 1;
-
-// Actually during the development process new agent added to the system. The agent is exchange agent.
-// This shows the usability of this approach. Because we can add a new agent by a fwe change the html and js files of the nodes.
-// Even the one who does not know the code can add a new agent by changing the properties below and adding the agent to the html and js files of the nodes.
-const exchangeAgentName = "ExchangeAgent";
-const exchangeAgentLabel = "Exchange Agent";
-const exchangeAgentID = "exchange-agent";
-const exchangeAgentColor = "lightblue";
-const exchangeAgentIcon = "exchange-agent";
-const exchangeAgentCategory = "ZEKI";
-const exchangeAgentNumberOfInputs = 1;
-const exchangeAgentNumberOfOutputs = 1;
 
 
 

@@ -5,39 +5,5 @@
 
 <!-- The following script tag is responsible for registering the ServletAgent node in the Node-RED editor. -->
 <script type="text/javascript">
-
-    RED.nodes.registerType('ServletAgent',{                                                   // Registering the ServletAgent node in the Node-RED editor.
-        category: servletAgentCategory,                                                       // The category of the node. 
-        color: servletAgentColor,                                                             // The color of the node.
-        defaults: {                                                                           // The default properties of the node.
-            name: { value: servletAgentName },                                                // The name of the node.
-            agentId: { value: servletAgentID },                                               // The agentId of the node.
-            agentCurrentActionParametersInfo: { value: null },                                // The agentCurrentActionParametersInfo of the node.
-        },
-        inputs: servletAgentNumberOfInputs,                                                   // The number of inputs of the node.
-        outputs: servletAgentNumberOfOutputs,                                                 // The number of outputs of the node.
-        icon: servletAgentIcon,                                                               // The icon of the node.
-        label: function(){                                                                    // The label of the node.
-            return this.name || servletAgentLabel;                                            // Return the name of the node or the default name.
-        },
-
-        // The oneditprepare function is called when the node is being prepared for editing.
-        oneditprepare : async function(){ 
-            // If the ServletAgent does not exist, create a new ServletAgent.
-            if(!this.ServletAgent){
-                this.ServletAgent = new Agent(servletAgentName,servletAgentID);
-            }
-            // Call the oneditPrepareFunction of the ServletAgent.
-            await this.ServletAgent.oneditPrepareFunction(this);},
-        // The oneditcancel function is called when the node editing is cancelled.
-        oneditcancel  : function()      { 
-            // Call the oneditCancelFunction of the ServletAgent.
-            this.ServletAgent.oneditCancelFunction(this);
-        },
-        // The oneditsave function is called when the node editing is saved.
-        oneditsave    : function()      { 
-            // Call the oneditSaveFunction of the ServletAgent.
-            this.ServletAgent.oneditSaveFunction(this);
-        }
-    });
+    makeNodeRegistration("ServletAgent");  // Make the servlet agent node available in the Node-RED editor
 </script>

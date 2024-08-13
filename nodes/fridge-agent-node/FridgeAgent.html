@@ -5,41 +5,5 @@
 
 <!-- The following script tag is responsible for registering the FridgeAgent node in the Node-RED editor. -->
 <script type="text/javascript">
-
-    RED.nodes.registerType('FridgeAgent',{                                           // Registering the FridgeAgent node in the Node-RED editor.
-        category: fridgeAgentCategory,                                               // The category of the node.
-        color: fridgeAgentColor,                                                     // The color of the node.
-        defaults: {                                                                  // The default properties of the node.   
-            name: { value: fridgeAgentName },                                        // The name of the node.
-            agentId: { value: fridgeAgentID },                                       // The agentId of the node.
-            agentCurrentActionParametersInfo: { value: null },                       // The agentCurrentActionParametersInfo of the node.
-        }, 
-        inputs: fridgeAgentNumberOfInputs,                                           // The number of inputs of the node.
-        outputs: fridgeAgentNumberOfOutputs,                                         // The number of outputs of the node.
-        icon: fridgeAgentIcon,                                                       // The icon of the node.
-        label: function(){                                                           // The label of the node.
-            return this.name || fridgeAgentLabel;                                    // Return the name of the node or the default name.
-        },
-
-        // The oneditprepare function is called when the node is being prepared for editing.
-        oneditprepare : async function(){ 
-            // If the FridgeAgent does not exist, create a new FridgeAgent.
-            if(!this.FridgeAgent){
-                this.FridgeAgent = new Agent(fridgeAgentName,fridgeAgentID);
-            }
-            // Call the oneditPrepareFunction of the FridgeAgent.
-            await this.FridgeAgent.oneditPrepareFunction(this);
-        },
-        // The oneditcancel function is called when the node editing is cancelled.
-        oneditcancel  : function()      {
-            // Call the oneditCancelFunction of the FridgeAgent.
-            this.FridgeAgent.oneditCancelFunction(this);
-        },
-        // The oneditsave function is called when the node editing is saved.
-        oneditsave    : function()      {
-            // Call the oneditSaveFunction of the FridgeAgent.
-            this.FridgeAgent.oneditSaveFunction(this);
-        }
-    });
-    
+    makeNodeRegistration("FridgeAgent");   // Make the FridgeAgent node available in the Node-RED editor
 </script>

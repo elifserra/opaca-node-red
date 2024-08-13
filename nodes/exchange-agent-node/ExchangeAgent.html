@@ -5,41 +5,5 @@
 
 <!-- The following script tag is responsible for registering the ExchangeAgent node in the Node-RED editor. -->
 <script type="text/javascript">
-
-    RED.nodes.registerType('ExchangeAgent',{                                           // Registering the ExchangeAgent node in the Node-RED editor.
-        category: exchangeAgentCategory,                                               // The category of the node.
-        color: exchangeAgentColor,                                                     // The color of the node.
-        defaults: {                                                                    // The default properties of the node.   
-            name: { value: exchangeAgentName },                                        // The name of the node.
-            agentId: { value: exchangeAgentID },                                       // The agentId of the node.
-            agentCurrentActionParametersInfo: { value: null },                         // The agentCurrentActionParametersInfo of the node.
-        }, 
-        inputs: exchangeAgentNumberOfInputs,                                           // The number of inputs of the node.
-        outputs: exchangeAgentNumberOfOutputs,                                         // The number of outputs of the node.
-        icon: exchangeAgentIcon,                                                       // The icon of the node.
-        label: function(){                                                             // The label of the node.
-            return this.name || exchangeAgentLabel;                                    // Return the name of the node or the default name.
-        },
-
-        // The oneditprepare function is called when the node is being prepared for editing.
-        oneditprepare : async function(){ 
-            // If the FridgeAgent does not exist, create a new FridgeAgent.
-            if(!this.ExchangeAgent){
-                this.ExchangeAgent = new Agent(exchangeAgentName,exchangeAgentID);
-            }
-            // Call the oneditPrepareFunction of the FridgeAgent.
-            await this.ExchangeAgent.oneditPrepareFunction(this);
-        },
-        // The oneditcancel function is called when the node editing is cancelled.
-        oneditcancel  : function()      {
-            // Call the oneditCancelFunction of the FridgeAgent.
-            this.ExchangeAgent.oneditCancelFunction(this);
-        },
-        // The oneditsave function is called when the node editing is saved.
-        oneditsave    : function()      {
-            // Call the oneditSaveFunction of the FridgeAgent.
-            this.ExchangeAgent.oneditSaveFunction(this);
-        }
-    });
-    
+   makeNodeRegistration("ExchangeAgent");  // Make the ExchangeAgent node available in the Node-RED editor
 </script>

@@ -5,41 +5,5 @@
 
 <!-- The following script tag is responsible for registering the WayFindingAgent node in the Node-RED editor. -->
 <script type="text/javascript">
-
-    RED.nodes.registerType('WayFindingAgent',{                                                               // Registering the WayFindingAgent node in the Node-RED editor.
-        category: wayFindingAgentCategory,                                                                   // The category of the node.
-        color: wayFindingAgentColor,                                                                         // The color of the node.
-        defaults: {                                                                                          // The default properties of the node.
-            name: { value: wayFindingAgentName },                                                            // The name of the node.
-            agentId: { value: wayFindingAgentID },                                                           // The agentId of the node.
-            agentCurrentActionParametersInfo: { value: null },                                               // The agentCurrentActionParametersInfo of the node.
-        }, 
-        inputs: wayFindingAgentNumberOfInputs,                                                               // The number of inputs of the node.
-        outputs: wayFindingAgentNumberOfOutputs,                                                             // The number of outputs of the node.
-        icon: wayFindingAgentIcon,                                                                           // The icon of the node.
-        label: function(){                                                                                   // The label of the node.
-            return this.name || wayFindingAgentLabel;                                                        // Return the name of the node or the default name.
-        },                                                                        
-
-        // The oneditprepare function is called when the node is being prepared for editing.
-        oneditprepare : async function(){         
-            // If the WayFindingAgent does not exist, create a new WayFindingAgent.                                                         
-            if(!this.WayFindingAgent){                                                                       
-                this.WayFindingAgent = new Agent(wayFindingAgentName,wayFindingAgentID); 
-            }
-            // Call the oneditPrepareFunction of the WayFindingAgent.
-            await this.WayFindingAgent.oneditPrepareFunction(this);
-        },
-
-        // The oneditcancel function is called when the node editing is cancelled.
-        oneditcancel  : function()      { 
-            // Call the oneditCancelFunction of the WayFindingAgent.
-            this.WayFindingAgent.oneditCancelFunction(this);
-        },
-        // The oneditsave function is called when the node editing is saved.
-        oneditsave    : function()      { 
-            // Call the oneditSaveFunction of the WayFindingAgent.
-            this.WayFindingAgent.oneditSaveFunction(this);
-        }
-    });
+   makeNodeRegistration("WayFindingAgent");   // Make the WayFinding node available in the Node-RED editor
 </script>

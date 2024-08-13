@@ -4,6 +4,7 @@ const apiUrl = imports.apiUrl_import;
 const loginUrl = imports.loginUrl_import;
 const html_common_methods_path = imports.html_common_methods_path_import;
 const common_html_template_path = imports.common_html_template_path_import;
+const node_config_path          = imports.node_config_file_path_import;
 const fs = imports.file_system_import;
 
 
@@ -49,6 +50,18 @@ module.exports = function(RED) {
                 res.status(500).send(err);
             } else {
                 res.type('text/html').send(data);
+            }
+        });
+    });
+
+
+    RED.httpAdmin.get('/node_config.json', function(req, res) {
+        const filePath = node_config_path;
+        fs.readFile(filePath, 'utf8', function(err, data) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.type('application/json').send(data);
             }
         });
     });

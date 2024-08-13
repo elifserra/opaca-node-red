@@ -5,41 +5,5 @@
 
 <!-- The following script tag is responsible for registering the HomeAssistantAgent node in the Node-RED editor. -->
 <script type="text/javascript">
-
-    RED.nodes.registerType('HomeAssistantAgent',{                               // Registering the HomeAssistantAgent node in the Node-RED editor.
-        category: homeAssistantAgentCategory,                                   // The category of the node.
-        color   : homeAssistantAgentColor,                                      // The color of the node. 
-        defaults: {                                                             // The default properties of the node.
-            name: { value: homeAssistantAgentName },                            // The name of the node.
-            agentId: { value: homeAssistantAgentID },                           // The agentId of the node.
-            agentCurrentActionParametersInfo: { value: null },                  // The agentCurrentActionParametersInfo of the node.  
-        },                                          
-        inputs : homeAssistantAgentNumberOfInputs,                              // The number of inputs of the node.  
-        outputs: homeAssistantAgentNumberOfOutputs,                             // The number of outputs of the node.
-        icon   : homeAssistantAgentIcon,                                        // The icon of the node.
-        labe   : function(){                                                    // The label of the node.
-            return this.name || homeAssistantAgentLabel;                        // Return the name of the node or the default name.
-        },
-
-        // The oneditprepare function is called when the node is being prepared for editing.
-        oneditprepare : async function(){ 
-            // If the HomeAssistantAgent does not exist, create a new HomeAssistantAgent.
-            if(!this.HomeAssistantAgent){
-                this.HomeAssistantAgent = new Agent(homeAssistantAgentName,homeAssistantAgentID);
-            }
-            // Call the oneditPrepareFunction of the HomeAssistantAgent.
-            await this.HomeAssistantAgent.oneditPrepareFunction(this);
-        },
-        //  The oneditcancel function is called when the node editing is cancelled.
-        oneditcancel  : function()      {
-            // Call the oneditCancelFunction of the HomeAssistantAgent.
-            this.HomeAssistantAgent.oneditCancelFunction(this);
-        },
-        // The oneditsave function is called when the node editing is saved.
-        oneditsave    : function()      {
-            // Call the oneditSaveFunction of the HomeAssistantAgent.
-            this.HomeAssistantAgent.oneditSaveFunction(this);
-        }
-    });
-    
+    makeNodeRegistration("HomeAssistantAgent");  // Make the HomeAssistantAgent node available in the Node-RED editor
 </script>

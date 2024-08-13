@@ -5,40 +5,5 @@
 
 <!-- The following script tag is responsible for registering the RoomBookingAgent node in the Node-RED editor. -->
 <script type="text/javascript">
-    
-    RED.nodes.registerType('RoomBookingAgent',{                            // Registering the RoomBookingAgent node in the Node-RED editor.
-        category: roomBookingAgentCategory,                                // The category of the node.
-        color: roomBookingAgentColor,                                      // The color of the node.
-        defaults: {                                                        // The default properties of the node.
-            name: { value: roomBookingAgentName },                         // The name of the node.
-            agentId: { value: roomBookingAgentID },                        // The agentId of the node.
-            agentCurrentActionParametersInfo: { value: null },             // The agentCurrentActionParametersInfo of the node.
-        },
-        inputs: roomBookingAgentNumberOfInputs,                            // The number of inputs of the node. 
-        outputs: roomBookingAgentNumberOfOutputs,                          // The number of outputs of the node.
-        icon: roomBookingAgentIcon,                                        // The icon of the node.
-        label: function(){                                                 // The label of the node.
-            return this.name || roomBookingAgentLabel;                     // Return the name of the node or the default name.
-        },                                      
-
-        // The oneditprepare function is called when the node is being prepared for editing.
-        oneditprepare : async function(){ 
-            // If the RoomBookingAgent does not exist, create a new RoomBookingAgent.
-            if(!this.RoomBookingAgent){
-                this.RoomBookingAgent = new Agent(roomBookingAgentName,roomBookingAgentID);
-            }
-            // Call the oneditPrepareFunction of the RoomBookingAgent.    
-            await this.RoomBookingAgent.oneditPrepareFunction(this);
-        },
-        // The oneditcancel function is called when the node editing is cancelled.
-        oneditcancel  : function()      {
-            // Call the oneditCancelFunction of the RoomBookingAgent.
-            this.RoomBookingAgent.oneditCancelFunction(this);
-        },
-        // The oneditsave function is called when the node editing is saved.
-        oneditsave    : function()      {
-            // Call the oneditSaveFunction of the RoomBookingAgent.
-            this.RoomBookingAgent.oneditSaveFunction(this);
-        }
-    });
+    makeNodeRegistration("RoomBookingAgent");  // Make the RoomBookingAgent node available in the Node-RED editor
 </script>
