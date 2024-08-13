@@ -396,7 +396,9 @@ class Action{
         this.actionParameters.forEach(parameter => {
             jsonString += "\"" + parameter.name + "\":";                                                     // add the parameter name to the json string
             actualValue = parameter.value;                                                                   // get the parameter value
-            parameter.type === "string" ? valueAsPassed = `"${actualValue}"` : valueAsPassed = actualValue;  // if the parameter type is string, add the value as a string, otherwise add the value as it is
+            parameter.type === "string" ? valueAsPassed = `"${actualValue}"` :                               // // if the parameter type is string, add the value as a string,
+            parameter.type === "array" ? valueAsPassed = "[" + JSON.stringify(actualValue)+"]":              // if the parameter type is array, add the value as a json string,
+            valueAsPassed = actualValue;                                                                     // otherwise add the value as it is
             jsonString += valueAsPassed;                                                                     // add the value to the json string
             count !== length ? jsonString += "," : jsonString += "}";                                        // if the parameter is not the last parameter, add a comma, otherwise add a closing curly brace
             count++;                                                                                         // increase the count

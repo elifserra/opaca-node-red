@@ -33,6 +33,8 @@ async function invokeAction(endpoint, actionParameters, msg) {
         });
 
 
+        console.log('Response:', response);    // Log the response from the server.
+
         /*
             Below code is very important to implement flow of the data from one node to another node.
             The response from the server is stored in the msg.payload to send the invoke actual result output as input to the next node.
@@ -75,12 +77,16 @@ function toJsonString(parameterArray, msg) {
     // Loop through the parameters and convert them to json string depending on the type of the parameter.
     parameterArray.forEach(parameter => {
         jsonString += "\"" + parameter.name + "\":"; 
-        (parameter.value === "payload" && parameter.typedInputType === 'msg') ? actualValue = msg.payload : actualValue = parameter.value; 
+        actualValue = parameter.value;
+        (parameter.value === "payload" && parameter.typedInputType === 'msg') ? actualValue = msg.payload : 
+        parameter.type === "array" ? valueAsPassed = "[" + JSON.stringify(actualValue)+"]":  
         parameter.type === "string" ? valueAsPassed = `"${actualValue}"` : valueAsPassed = actualValue; 
         jsonString += valueAsPassed; 
         count !== length ? jsonString += "," : jsonString += "}"; 
         count++;
     });
+
+
 
     return jsonString;        // Return the json string.
 }
