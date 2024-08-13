@@ -567,22 +567,105 @@ async function makeNodeRegistration(agentNodeName){
     
 }
 
+
 // This variable is used to store the invoke action agent name. This is important because the invoke action agent name is used in the agent class to fetch the all actions.
 // To be able to understand the created agent is the invoke action agent or not, the invoke action agent name should be stored in this variable.
 var invokeActionAgentName;
+// This variable is used in agent class to understand the agent is the base agent or not. If the agent is the base agent, the common html template is not used for the base agent node. Because it has a different html template.
+var baseAgentName;  
 
+async function makeBaseNodeRegistration(baseAgentNodeName){
+    const response = await fetch('node_config.json');
+    const config = await response.json();
+    const nodeConfig = config[baseAgentNodeName];
 
-// Below code is used to make the node registration for the base agent node.
-// We do not use makeNodeRegistration method because the base agent node has its own registration and different from the other agent nodes.
-// Therefore, the base agent node is registered separately.
-const baseAgentName = "BaseAgent";   // This variable is used in agent class to understand the agent is the base agent or not.
-// baseAgentName is used not to add common html template to the dialog form of the base agent node. Because the base agent node has its own common html template.
-const baseAgentLabel = "Base Agent";
-const baseAgentColor = "gray";
-const baseAgentIcon = "base-agent";
-const baseAgentCategory = "ZEKI";
-const baseAgentNumberOfInputs = 1;
-const baseAgentNumberOfOutputs = 1;
+    baseAgentName = nodeConfig.name;  // get the base agent name from the config file. This is important because the base agent name is used in the agent class.
+
+    RED.nodes.registerType(baseAgentNodeName,  {
+        category : nodeConfig.category,
+        color : nodeConfig.color,
+        defaults : {
+            name : {value: nodeConfig.name},
+            agentId : {value: nodeConfig.agentId},
+            agentCurrentActionParametersInfo : {value: null}
+        },
+        inputs : nodeConfig.numberOfInputs,
+        outputs : nodeConfig.numberOfOutputs,
+        icon : nodeConfig.icon,
+        label : function() {
+            return this.name || nodeConfig.label;
+        },
+
+        // The oneditprepare function is called when the node is being prepared for editing.
+        oneditprepare : async function(){
+
+            // var that = this assigmnet is used to access the BaseAgent node properties inside the functions and the event listeners. 
+            // Because inside the functions and the event listeners, the this keyword refers to the function or the event listener itself.
+            var that = this;
+            // If the allAgentIds does not exist, fetch the agents from the server and assign the agentIds to the allAgentIds property.
+            if(!this.allAgentIds){
+                this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
+                that.agentId = that.agentId === null ? that.allAgentIds[0] : that.agentId;
+            }
+
+            // Empty the agentId select element and append the agentIds to the select element.
+            $("#node-input-agentId").empty().append(`<option value=${that.agentId}>${that.agentId}</option>`);
+                that.allAgentIds.forEach(agentId => {
+                $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
+            });
+
+            // If the Agent does not exist, create a new Agent. 
+            // Here is important beacuse whenever a new node dragged to the editor, new agent object should be created. Otherwise every node will use the same agent object.
+            // In this way, each node will have its own agent object.
+            if(!this.Agent){
+                this.Agent = new Agent(baseAgentName,$("#node-input-agentId").val());
+            }
+            
+            // Listen for the change event of the agentId select element.
+            $("#node-input-agentId").on('change', async function(){
+                /* 
+                    The following code is used to check if the agentId is changed. If the agentId is changed, the agentId property of the BaseAgent node is updated with the new agentId.
+                    The applyChangesForAgentChange function is called to apply the changes for the agentId change. The oneditPrepareFunction of the Agent is called to prepare the agent for editing.
+                */
+                /* 
+                   The reason why the prevAgentId property is used is because whenever the edit screen is opened, the agentId property of the BaseAgent node is updated with the agentId of the agentId select element. 
+                   So even if the agentId is not changed, the agentId property of the BaseAgent node is updated with the agentId of the agentId select element. 
+                   Therefore, the prevAgentId property is used to store the previous agentId of the BaseAgent node to controling in a robust way.
+                   if the agentId is changed, assign the new agentId to the agentId property of the BaseAgent node.
+                   In this way baseAgent node can be configured for different agents with just one input field which is agentId.
+                */
+                // Store the previous agentId of the BaseAgent node.
+                that.prevAgentId = that.agentId;
+                // If the agentId is changed, assign the new agentId to the agentId property of the BaseAgent node.
+                that.agentId = $("#node-input-agentId").val();
+                // If the agentId is changed, apply the changes for the agentId change.
+                if(that.prevAgentId != that.agentId){
+                    $("#node-input-agentId").val(that.agentId);                // Fills the agentId select element with the new agentId.
+                    // Apply the changes for the agentId change by calling the applyChangesForAgentChange function.
+                    that.Agent.applyChangesForAgentChange(that.agentId);       
+                    /*
+                      Calling oneditPrepareFunction of the Agent here is can be seen as confusing. However whenever agentID is changed we need to update agent actions and actions paramaters immediately.
+                      Important to call this function inside of the change event listener because we need to update the agent actions and actions paramaters immediately when the agentID is changed.
+                      Otherwise the update would be done after opening edit screen again.             
+                    */
+                    await that.Agent.oneditPrepareFunction(that);
+                }  
+            });
+
+            // Call the oneditPrepareFunction of the Agent. When the agentID is not changed, this behaves as default oneditPrepareFunction.
+            await that.Agent.oneditPrepareFunction(that);
+        },
+
+        oneditsave: function(){
+            this.agent.oneditSaveFunction(this);
+        },
+
+        oneditcancel: function(){
+            this.agent.oneditCancelFunction(this);
+        }
+    });
+}
+
 
 
 

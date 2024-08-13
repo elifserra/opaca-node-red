@@ -81,6 +81,16 @@
         "agentId": "invoke-action-agent",
         "numberOfInputs": 1,
         "numberOfOutputs": 1
+    },
+    "BaseAgent":{
+        "category": "ZEKI",
+        "color": "purple",
+        "name": "BaseAgent",
+        "label": "Base Agent",
+        "icon": "base-agent",
+        "agentId": "base-agent",
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1
     }
 }
 
