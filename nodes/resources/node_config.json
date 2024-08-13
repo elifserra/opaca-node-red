@@ -84,7 +84,7 @@
     },
     "BaseAgent":{
         "category": "ZEKI",
-        "color": "purple",
+        "color": "gray",
         "name": "BaseAgent",
         "label": "Base Agent",
         "icon": "base-agent",
