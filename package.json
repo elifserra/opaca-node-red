@@ -20,7 +20,8 @@
       "WayFindingAgent": "/nodes/wayfinding-agent-node/WayFindingAgent.js",
       "ServletAgent": "/nodes/servlet-agent-node/ServletAgent.js",
       "RoomBookingAgent": "/nodes/room-booking-agent-node/RoomBookingAgent.js",
-      "ChatBot": "/nodes/ChatBot-node/ChatBot.js"
+      "ChatBot": "/nodes/ChatBot-node/ChatBot.js",
+      "ExchangeAgent": "/nodes/exchange-agent-node/ExchangeAgent.js"
     }
   },
   "dependencies": {

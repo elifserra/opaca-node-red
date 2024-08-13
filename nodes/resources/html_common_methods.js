@@ -500,6 +500,16 @@ const roomBookingAgentCategory = "ZEKI";
 const roomBookingAgentNumberOfInputs = 1;
 const roomBookingAgentNumberOfOutputs = 1;
 
+// Actually during the development process new agent added to the system. The agent is exchange agent.
+// This shows the usability of this approach. Because we can add a new agent without changing the html files of the nodes.
+const exchangeAgentName = "ExchangeAgent";
+const exchangeAgentLabel = "Exchange Agent";
+const exchangeAgentID = "exchange-agent";
+const exchangeAgentColor = "lightblue";
+const exchangeAgentIcon = "exchange-agent";
+const exchangeAgentCategory = "ZEKI";
+const exchangeAgentNumberOfInputs = 1;
+const exchangeAgentNumberOfOutputs = 1;
 
 
 
