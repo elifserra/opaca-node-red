@@ -5,7 +5,7 @@
 const path= require('path');                                                                             // Importing path module to work with file and directory paths
 const current_directory = path.join(__dirname);                                                          // Getting the current directory path                                                                     
 const two_levels_up = path.resolve(current_directory, '..', '..');                                       // Getting the path of the parent directory of the current directory 
-const common_methods_path = two_levels_up + '/nodes/resources/common_methods.js';                        // Getting the path of the common_methods.js file   
+const common_methods_path = two_levels_up + '/nodes/resources/js_common_methods.js';                        // Getting the path of the common_methods.js file   
 const html_common_methods_path_import = two_levels_up + '/nodes/resources/html_common_methods.js';       // Getting the path of the html_common_methods.js file
 const common_html_template_path_import = two_levels_up + '/nodes/resources/common_html_template.html';   // Getting the path of the common_html_template.html file
 const apiUrl_import = "http://10.42.6.107:8000/agents";                                                  // Defining the API URL
