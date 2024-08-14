@@ -3,12 +3,14 @@
 // Main purpose is to make repository more organized and clean and to be used in other computer without any changes in the code
 
 const path= require('path');                                                                             // Importing path module to work with file and directory paths
+const repository_path_import = path.resolve(__dirname, '..');                                            // Getting the path of the repository
 const current_directory = path.join(__dirname);                                                          // Getting the current directory path                                                                     
 const two_levels_up = path.resolve(current_directory, '..', '..');                                       // Getting the path of the parent directory of the current directory 
-const common_methods_path = two_levels_up + '/nodes/resources/js_common_methods.js';                        // Getting the path of the common_methods.js file   
+const common_methods_path = two_levels_up + '/nodes/resources/js_common_methods.js';                     // Getting the path of the common_methods.js file   
 const html_common_methods_path_import = two_levels_up + '/nodes/resources/html_common_methods.js';       // Getting the path of the html_common_methods.js file
 const common_html_template_path_import = two_levels_up + '/nodes/resources/common_html_template.html';   // Getting the path of the common_html_template.html file
 const node_config_file_path_import = two_levels_up + '/nodes/resources/node_config.json';                // Getting the path of the node_config.json file
+const package_json_file_path_import = two_levels_up + '/package.json';                                   // Getting the path of the package.json file
 const apiUrl_import = "http://10.42.6.107:8000/agents";                                                  // Defining the API URL
 const loginUrl_import = "http://10.42.6.107:8000/login";                                                 // Defining the login URL
 
@@ -24,5 +26,7 @@ module.exports = {
     file_system_import,
     loginUrl_import,
     apiUrl_import,
-    node_config_file_path_import
+    node_config_file_path_import,
+    repository_path_import,
+    package_json_file_path_import
 }

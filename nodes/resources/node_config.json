@@ -1,96 +1,92 @@
 {
-    "ExchangeAgent":{
-        "category": "ZEKI",
-        "color": "lightblue",
-        "name": "ExchangeAgent",
-        "label": "Exchange Agent",
-        "icon": "exchange-agent",
-        "agentId": "exchange-agent",
-        "numberOfInputs": 1,
-        "numberOfOutputs": 1
-    },
-    "ShelfAgent":{
-        "category": "ZEKI",
-        "color": "red",
-        "name": "ShelfAgent",
-        "label": "Shelf Agent",
-        "icon": "shelf-agent",
-        "agentId": "shelf-agent",
-        "numberOfInputs": 1,
-        "numberOfOutputs": 1
-    },
-    "FridgeAgent":{
-        "category": "ZEKI",
-        "color": "gray",
-        "name": "FridgeAgent",
-        "label": "Fridge Agent",
-        "icon": "fridge-agent",
-        "agentId": "fridge-agent",
-        "numberOfInputs": 1,
-        "numberOfOutputs": 1
-
-    },
-    "HomeAssistantAgent":{
-        "category": "ZEKI",
-        "color": "orange",
-        "name": "HomeAssistantAgent",
-        "label": "Home Assistant Agent",
-        "icon": "home-assistant-agent",
-        "agentId":"home-assistant-agent",
-        "numberOfInputs": 1,
-        "numberOfOutputs": 1
-
-    },
-    "ServletAgent":{
-        "category": "ZEKI",
-        "color": "brown",
-        "name": "ServletAgent",
-        "label": "Servlet Agent",
-        "icon": "servlet-agent",
-        "agentId": "servlet-agent",
-        "numberOfInputs": 1,
-        "numberOfOutputs": 1
-    },
-    "WayFindingAgent":{
-        "category": "ZEKI",
-        "color": "green",
-        "name": "WayFindingAgent",
-        "label": "Way Finding Agent",
-        "icon": "wayfinding-agent",
-        "agentId": "wayfinding-agent",
-        "numberOfInputs": 1,
-        "numberOfOutputs": 1
-
-    },
-    "RoomBookingAgent":{
-        "category": "ZEKI",
-        "color": "white",
-        "name": "RoomBookingAgent",
-        "label": "Room Booking Agent",
-        "icon": "room-booking-agent",
-        "agentId": "room-booking-agent",
-        "numberOfInputs": 1,
-        "numberOfOutputs": 1
-    },
-    "invoke-action":{
-        "category": "ZEKI",
-        "color": "yellow",
-        "name": "invoke-action",
-        "label": "Invoke Action Agent",
-        "icon": "invoke-action-agent",
-        "agentId": "invoke-action-agent",
-        "numberOfInputs": 1,
-        "numberOfOutputs": 1
-    },
-    "BaseAgent":{
-        "category": "ZEKI",
-        "color": "gray",
-        "name": "BaseAgent",
-        "label": "Base Agent",
-        "icon": "base-agent",
-        "agentId": "base-agent",
-        "numberOfInputs": 1,
-        "numberOfOutputs": 1
-    }
+  "ExchangeAgent": {
+    "category": "ZEKI",
+    "color": "lightblue",
+    "name": "ExchangeAgent",
+    "label": "Exchange Agent",
+    "icon": "exchange-agent",
+    "agentId": "exchange-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
+  },
+  "ShelfAgent": {
+    "category": "ZEKI",
+    "color": "red",
+    "name": "ShelfAgent",
+    "label": "Shelf Agent",
+    "icon": "shelf-agent",
+    "agentId": "shelf-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
+  },
+  "FridgeAgent": {
+    "category": "ZEKI",
+    "color": "gray",
+    "name": "FridgeAgent",
+    "label": "Fridge Agent",
+    "icon": "fridge-agent",
+    "agentId": "fridge-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
+  },
+  "HomeAssistantAgent": {
+    "category": "ZEKI",
+    "color": "orange",
+    "name": "HomeAssistantAgent",
+    "label": "Home Assistant Agent",
+    "icon": "home-assistant-agent",
+    "agentId": "home-assistant-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
+  },
+  "ServletAgent": {
+    "category": "ZEKI",
+    "color": "brown",
+    "name": "ServletAgent",
+    "label": "Servlet Agent",
+    "icon": "servlet-agent",
+    "agentId": "servlet-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
+  },
+  "WayFindingAgent": {
+    "category": "ZEKI",
+    "color": "green",
+    "name": "WayFindingAgent",
+    "label": "Way Finding Agent",
+    "icon": "wayfinding-agent",
+    "agentId": "wayfinding-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
+  },
+  "RoomBookingAgent": {
+    "category": "ZEKI",
+    "color": "white",
+    "name": "RoomBookingAgent",
+    "label": "Room Booking Agent",
+    "icon": "room-booking-agent",
+    "agentId": "room-booking-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
+  },
+  "invoke-action": {
+    "category": "ZEKI",
+    "color": "yellow",
+    "name": "invoke-action",
+    "label": "Invoke Action Agent",
+    "icon": "invoke-action-agent",
+    "agentId": "invoke-action-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
+  },
+  "BaseAgent": {
+    "category": "ZEKI",
+    "color": "gray",
+    "name": "BaseAgent",
+    "label": "Base Agent",
+    "icon": "base-agent",
+    "agentId": "base-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
+  }
 }
-
