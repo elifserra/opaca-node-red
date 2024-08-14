@@ -659,11 +659,11 @@ async function makeBaseNodeRegistration(baseAgentNodeName){
         },
 
         oneditsave: function(){
-            this.agent.oneditSaveFunction(this);
+            this.Agent.oneditSaveFunction(this);
         },
 
         oneditcancel: function(){
-            this.agent.oneditCancelFunction(this);
+            this.Agent.oneditCancelFunction(this);
         }
     });
 }
