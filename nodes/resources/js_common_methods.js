@@ -7,7 +7,6 @@
 */
 var token = null; 
 
-
 /**
  * 
  * @param {*} endpoint 
@@ -32,15 +31,14 @@ async function invokeAction(endpoint, actionParameters, msg) {
             body: queryString
         });
 
-
-        console.log('Response:', response);    // Log the response from the server.
-
         /*
             Below code is very important to implement flow of the data from one node to another node.
             The response from the server is stored in the msg.payload to send the invoke actual result output as input to the next node.
         */
+       
         await response.json().then(data => {
-            msg.payload = data;                                    // Store the response from the server in the msg.payload.
+            msg.payload = data;                                 // Store the response from the server in the msg.payload.
+            console.log("Response from the server: ", data);    // Log the response from the server.
         });
 
     } catch (error) {
@@ -68,7 +66,6 @@ function toJsonString(parameterArray, msg) {
         return "{}";
     }
 
-    var actualValue;
     var valueAsPassed;
     var jsonString = "{";
     var count = 0;
@@ -77,16 +74,32 @@ function toJsonString(parameterArray, msg) {
     // Loop through the parameters and convert them to json string depending on the type of the parameter.
     parameterArray.forEach(parameter => {
         jsonString += "\"" + parameter.name + "\":"; 
-        actualValue = parameter.value;
-        (parameter.value === "payload" && parameter.typedInputType === 'msg') ? actualValue = msg.payload : 
-        parameter.type === "array" ? valueAsPassed = "[" + JSON.stringify(actualValue)+"]":  
-        parameter.type === "string" ? valueAsPassed = `"${actualValue}"` : valueAsPassed = actualValue; 
+        // here is the condition to check if the parameter is payload and the typedInputType is msg then the value of the parameter is the payload of the msg.
+        if(parameter.value === "payload" && parameter.typedInputType === 'msg') {
+            // But we need to again make sure control of the parameter type. If the parameter type is array then the value of the parameter is the array of the payload of the msg.
+            parameter.type === "array" ? valueAsPassed = "[" + JSON.stringify(msg.payload)+"]":
+            // If the parameter type is string then the value of the parameter is the string of the payload of the msg.
+            parameter.type === "string" ? valueAsPassed = `"${msg.payload}"` :
+            // If the parameter type is not array and string then the value of the parameter is the payload of the msg.
+            valueAsPassed = msg.payload;
+        }
+        else{
+            // If the parameter is not payload then the value of the parameter is the value of the parameter.
+            // But we need to again make sure control of the parameter type. If the parameter type is array then the value of the parameter is the array of the value of the parameter.
+            parameter.type === "array" ? valueAsPassed = "[" + JSON.stringify(parameter.value)+"]":  
+            // If the parameter type is string then the value of the parameter is the string of the value of the parameter.
+            parameter.type === "string" ? valueAsPassed = `"${parameter.value}"` : 
+            // If the parameter type is not array and string then the value of the parameter is the value of the parameter.
+            valueAsPassed = parameter.value; 
+        }
+
         jsonString += valueAsPassed; 
         count !== length ? jsonString += "," : jsonString += "}"; 
         count++;
     });
 
 
+    console.log("Json String: ", jsonString);    // Log the json string.
 
     return jsonString;        // Return the json string.
 }
