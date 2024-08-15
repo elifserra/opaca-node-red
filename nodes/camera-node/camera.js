@@ -1,20 +1,26 @@
 module.exports = function(RED) {
-    const { exec } = require('child_process');
-    const path = require('path');
+
+    var detectedObjects = [];
 
     function CustomWebcamNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
-
-        const scriptPath = path.join(__dirname, 'camera.py');
-        const pythonCommand = process.platform === 'win32' ? 'python' : 'python3';
-        const command = `${pythonCommand} "${scriptPath}"`;
-
-        
-
-        node.on('input', function(msg) {
-            exec(command);
+        node.detectedObjects = config.detectedObjects;
+        var openaiAPIKey = process.env.OPENAI_API_KEY;
+        RED.httpAdmin.get('/openAIKey', function(req, res) {
+            res.json({ value: openaiAPIKey });
         });
+
+        RED.httpAdmin.post('/detectedObjects', function(req, res) {
+            detectedObjects = req.body;
+            detectedObjects = detectedObjects["detectedObjects"];
+            let msg =  {
+              payload: detectedObjects    
+            };
+            node.send(msg);
+        });
+
     }
     RED.nodes.registerType("camera", CustomWebcamNode);
+    
 }
