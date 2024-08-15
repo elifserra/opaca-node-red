@@ -25,7 +25,6 @@ module.exports = function(RED) {
             var msg = {
                 payload: detectedObjects[0]
             }
-            node.warn("input");
             node.send(msg);
         });
 

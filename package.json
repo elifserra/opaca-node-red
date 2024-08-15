@@ -13,7 +13,6 @@
       "invoke-action": "/nodes/invoke-action-node/invoke-action.js",
       "camera": "/nodes/camera-node/camera.js",
       "BaseAgent": "/nodes/BaseAgent-node/BaseAgent.js",
-      "voice": "/nodes/voice-node/voice.js",
       "FridgeAgent": "/nodes/fridge-agent-node/FridgeAgent.js",
       "ShelfAgent": "/nodes/shelf-agent-node/ShelfAgent.js",
       "HomeAssistantAgent": "/nodes/home-assistant-agent-node/HomeAssistantAgent.js",
