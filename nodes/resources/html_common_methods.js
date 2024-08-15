@@ -459,9 +459,6 @@ class Action{
         this.saveParameters(false,node);
         // convert the action parameters to json string
         var query_string = this.toJsonString();
-        console.log("Parameters");
-        console.log(this.actionParameters);
-        console.log(query_string);
         // invoke the action
         var result = await this.invokeAction(query_string);
         // display the result
