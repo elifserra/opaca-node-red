@@ -107,7 +107,7 @@
         oneditprepare : async function () {
 
             var that = this;
-/*
+
             if(!this.allAgentIds){
                 this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
             }
@@ -116,7 +116,7 @@
                 that.allAgentIds.forEach(agentId => {
                 $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
             });
-*/
+
 
             document.getElementById('node-create-button').addEventListener('click', async function() {
                 // Collect data from the form fields
