@@ -119,17 +119,19 @@
             if(!this.camera){
                 this.camera = new Camera(this.video);
                 await this.camera.openCamera();
-            }
-            // open the camera
-            await this.camera.openCamera();
+            };
             // add event listeners foe open camera
             document.getElementById('open-camera-button').addEventListener('click', async () => {
+                this.video = document.getElementById('webcam'); 
+                this.camera = new Camera(this.video);
                 await this.camera.openCamera();
             });
 
             // add event listeners for close camera
             document.getElementById('close-camera-button').addEventListener('click', async () => {
                 await this.camera.closeCamera();
+                this.camera = undefined;
+                this.video = undefined;
                 messageBox.style.display = 'none';
             });
 
