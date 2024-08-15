@@ -1,3 +1,5 @@
+<!-- This file is html side of the NodeCreator node. It gets necessary parameter to create a new agent node  and send this parameters when the button is clicked to create a new agent node -->
+
 <style>    
     .node-create-button {
         display: flex;
@@ -29,7 +31,7 @@
     }
 </style>
 
-<!-- The following script is not common to all the nodes. It is specific to the BaseAgent node. Beacuse baseAgent Node includes agentID propert -->
+<!-- The following script tag contains the HTML template for the NodeCreator node. -->
 <script type="text/html" data-template-name="NodeCreator">
     <div class="form-row">
         <label for="node-input-config_name"><i class="fa fa-tag"></i> Config Name</label>
@@ -88,35 +90,40 @@
     </div>
 </script>
 
-<!-- The following script tag is responsible for registering the BaseAgent node in the Node-RED editor. -->
+<!-- The following script tag is responsible for registering the NodeCreator node in the Node-RED editor. -->
 <script type="text/javascript">
     
-    RED.nodes.registerType('NodeCreator', {
-        category: 'ZEKI',
-        color: '#a6bbcf',
-        defaults: {
-            name: { value: "" }
-        },
-        inputs: 0,
-        outputs: 0,
-        icon: "file.png",
+    RED.nodes.registerType('NodeCreator', {                            // Register the node
+        category: 'ZEKI',                                              // Define the category of the node
+        color: '#a6bbcf',                                              // Define the color of the node
+        defaults: {                                                    // Define the default properties of the node
+            name: { value: "" }                                        // Define the default value of the name property
+        },               
+        inputs: 0,                                                     // Define the number of inputs of the node which is 0
+        outputs: 0,                                                    // Define the number of outputs of the node which is 0
+        icon: "file.png",                                              // Define the icon of the node
         label: function () {
-            return this.name || "NodeCreator";
+            return this.name || "NodeCreator";                         // Define the label of the node
         },
 
+        // This function is called when the node is being prepared for editing
         oneditprepare : async function () {
 
+            // Get the reference to the node
             var that = this;
 
+            // Fetch the list of all agent IDs
             if(!this.allAgentIds){
                 this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
             }
 
+            // Populate the agent ID dropdown
             $("#node-input-agentId").empty().append(`<option value=${""}>${""}</option>`);
                 that.allAgentIds.forEach(agentId => {
                 $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
             });
 
+            // Add an event listener to the create node button. When the button is clicked, the following function is executed
             document.getElementById('node-create-button').addEventListener('click', async function() {
                 // Collect data from the form fields
                 const configName = document.getElementById('node-input-config_name').value;
@@ -147,8 +154,10 @@
                         numberOfOutputs: outputs || 1
                     };
 
+                    // Add the new config to the existing config
                     config[configName] = newConfig;
 
+                    // Prepare the data to save
                     const dataToSave = {
                         config: config,
                         configName: configName

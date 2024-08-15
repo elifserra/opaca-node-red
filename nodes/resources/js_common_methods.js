@@ -38,7 +38,6 @@ async function invokeAction(endpoint, actionParameters, msg) {
        
         await response.json().then(data => {
             msg.payload = data;                                 // Store the response from the server in the msg.payload.
-            console.log("Response from the server: ", data);    // Log the response from the server.
         });
 
     } catch (error) {
@@ -99,8 +98,6 @@ function toJsonString(parameterArray, msg) {
     });
 
 
-    console.log("Json String: ", jsonString);    // Log the json string.
-
     return jsonString;        // Return the json string.
 }
 
@@ -157,6 +154,7 @@ async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RE
 
         // get the agents from the response.
         const agents = await response.json();
+        
 
         // Send the agents to the html side. This is actully used by BaseAgent node because it needs to serve as all agents to the html side.
         RED.httpAdmin.get(`/agents`, function(req, res) { 
