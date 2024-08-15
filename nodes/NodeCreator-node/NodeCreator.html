@@ -72,7 +72,7 @@
     <div class="form-row">
         <label for="node-input-agentId"><i class="fa fa-tag"></i> Agent ID</label>
         <select id="node-input-agentId">
-            <option value="">Select an action</option>
+            <option value="">Select an Agent to Create as a Node</option>
         </select>
     </div>
     <div class="form-row">
@@ -112,11 +112,10 @@
                 this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
             }
 
-            $("#node-input-agentId").empty().append(`<option value=${that.agentId}>${that.agentId}</option>`);
+            $("#node-input-agentId").empty().append(`<option value=${""}>${""}</option>`);
                 that.allAgentIds.forEach(agentId => {
                 $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
             });
-
 
             document.getElementById('node-create-button').addEventListener('click', async function() {
                 // Collect data from the form fields
