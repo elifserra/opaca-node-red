@@ -11,12 +11,21 @@ module.exports = function(RED) {
             res.json({ value: openaiAPIKey });
         });
 
+        
+
         RED.httpAdmin.post('/detectedObjects', function(req, res) {
             detectedObjects = req.body;
             detectedObjects = detectedObjects["detectedObjects"];
-            let msg =  {
-              payload: detectedObjects    
-            };
+            
+            node.warn(detectedObjects);
+
+        });
+
+        node.on('input', function() {
+            var msg = {
+                payload: detectedObjects[0]
+            }
+            node.warn("input");
             node.send(msg);
         });
 

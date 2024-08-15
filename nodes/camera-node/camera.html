@@ -85,7 +85,7 @@
             detectedObjects: { value: null },
             parsedResponse: { value: null }
         },
-        inputs: 0,
+        inputs: 1,
         outputs: 1,
         icon: 'icons/logo.png',
         label: function() {
@@ -124,7 +124,6 @@
                 const response = await sendMessageWithImage("Make Detection on this image",base64Image,that.apiKey);
                 that.parsedResponse = parseGPTResponse(response);
                 that.detectedObjects = that.parsedResponse["DetectedObjects"];
-                console.log(that.detectedObjects);
 
                 $.ajax({
                     url: 'detectedObjects',
