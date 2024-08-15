@@ -57,6 +57,7 @@
     
 </style>
 
+<!-- The following script tag contains the HTML template for the camera node. -->
 <script type="text/html" data-template-name="camera">
 <div class="form-row" id="camera-container">
     <video id="webcam" autoplay playsinline width="800" height="640"></video>
@@ -75,7 +76,7 @@
 </script>
 
 
-
+<!-- The following script tag contains the JavaScript code for the camera node. -->
 <script type="text/javascript">
     RED.nodes.registerType('camera', {
         category: 'ZEKI',
@@ -92,59 +93,82 @@
             return this.name || 'camera';
         },
 
-        oneditprepare: async function () {
 
+        /*
+          Here is important becuas Camera class, captureImageFromCanvas , sendMessageWithImage and parseGPTResponse functions are defined  already in ChatBot node.
+          Therefore we can use same functions in this node.
+          This is node red property. Enables to use same functions in different nodes.
+        */
+        
+        oneditprepare: async function () {
+            // assign this to that to use this in the inner functions
             const that = this;
+            // get the openAI key from the server
             var data = await fetch('openAIKey').then(response => response.json());
             that.apiKey = data.value;
 
+            // get the message box element
             var messageBox = document.getElementById('message-box');
 
+            // get the video element
             if(!this.video){
                 this.video = document.getElementById('webcam');
             }
             
+            // create a new camera object
             if(!this.camera){
                 this.camera = new Camera(this.video);
                 await this.camera.openCamera();
             }
+            // open the camera
             await this.camera.openCamera();
-
+            // add event listeners foe open camera
             document.getElementById('open-camera-button').addEventListener('click', async () => {
                 await this.camera.openCamera();
             });
 
+            // add event listeners for close camera
             document.getElementById('close-camera-button').addEventListener('click', async () => {
                 await this.camera.closeCamera();
                 messageBox.style.display = 'none';
             });
 
+            // add event listeners for make detection
             document.getElementById('make-detection-button').addEventListener('click', async () => {
+                // capture image from the canvas
                 const base64Image = await captureImageFromCanvas(that.camera.video,document.getElementById('canvas'));
+                // send the image to the openAI
                 const response = await sendMessageWithImage("Make Detection on this image",base64Image,that.apiKey);
+                // parse the response
                 that.parsedResponse = parseGPTResponse(response);
+                // get the detected objects
                 that.detectedObjects = that.parsedResponse["DetectedObjects"];
-
+                // send the detected objects to the server
                 $.ajax({
                     url: 'detectedObjects',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ detectedObjects: that.detectedObjects}),
                 });
+                // show the response in the message box
                 messageBox.textContent = `${that.parsedResponse["Answer"]}`;
                 messageBox.className = "message-box success";
+                // show the message box
                 messageBox.style.display = 'block';
             });
 
 
         },
 
+        // This function is called when the node is deployed
         oneditsave: async function() {
+            // These lines important because to be able to open the camera again after exiting the edit dialog we need to close the camera and delete the camera object.
             this.camera = undefined;
             this.video = undefined;
         },
 
         oneditcancel: async  function() {
+            // These lines important because to be able to open the camera again after exiting the edit dialog we need to close the camera and delete the camera object.
             this.camera = undefined;
             this.video = undefined;
         },
