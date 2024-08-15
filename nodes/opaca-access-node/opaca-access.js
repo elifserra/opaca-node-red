@@ -1,31 +1,44 @@
-const imports = require('../../nodes/resources/imports.js');
-const js_commond_methods = imports.js_common_methods_import;
-const apiUrl = imports.apiUrl_import;
-const loginUrl = imports.loginUrl_import;
-const html_common_methods_path = imports.html_common_methods_path_import;
-const common_html_template_path = imports.common_html_template_path_import;
-const node_config_path          = imports.node_config_file_path_import;
-const packageJsonPath = imports.package_json_file_path_import;
-const repositoryPath = imports.repository_path_import;
-const fs = imports.file_system_import;
+const imports = require('../../nodes/resources/imports.js');                        // This is the import statement for the imports.js file. This file is used to import all the necessary dependencies required for the agent node to work properly.
+const js_commond_methods = imports.js_common_methods_import;                        // This is the import statement for the js_common_methods object. This object contains all the common methods that are used by the agent node.
+const apiUrl = imports.apiUrl_import;                                               // This is the import statement for the apiUrl variable. This variable contains the URL of the API that the agent node will interact with.
+const loginUrl = imports.loginUrl_import;                                           // This is the import statement for the loginUrl variable. This variable contains the URL of the login API that the agent node will interact with.
+const html_common_methods_path = imports.html_common_methods_path_import;           // This is the import statement for the html_common_methods_path variable. This variable contains the path to the HTML common methods file.
+const common_html_template_path = imports.common_html_template_path_import;         // This is the import statement for the common_html_template_path variable. This variable contains the path to the common HTML template file.
+const node_config_path          = imports.node_config_file_path_import;             // This is the import statement for the node_config_path variable. This variable contains the path to the node config file.
+const packageJsonPath = imports.package_json_file_path_import;                      // This is the import statement for the packageJsonPath variable. This variable contains the path to the package.json file.
+const repositoryPath = imports.repository_path_import;                              // This is the import statement for the repositoryPath variable. This variable contains the path to the repository where the custom nodes are stored.
+const fs = imports.file_system_import;                                              // This is the import statement for the fs object. This object is used to interact with the file system.
 
-
+// This function is the definition of the Opaca Access node. It takes a config object as a parameter.
 module.exports = function(RED) {
 
+    // This function is the definition of the Opaca Access node. It takes a config object as a parameter.
     function OpacaAccesNode(config) {
+        // Create a new instance of the Opaca Access node
         RED.nodes.createNode(this, config);
         var node = this;
         node.username = config.username;
         node.password = config.password;
 
+        // This function is called when a new message is received by the node.
+        /*
+          We can make authentication in two ways: First is to clik on the Authorize button in the html side on node red editor and the second way is to inject the opaca-access node with the username and password.
+          Below code enables us to use the second way of authentication.
+        */
         node.on('input', async function() {
+            // Fetch the Opaca token and agents
             await js_commond_methods.fetchOpacaTokenAndAgents(node.username, node.password, apiUrl, loginUrl, RED);
-            console.log(twoLevelsUp);
         });
     }
 
+    // Register the Opaca Access node with the Node-RED editor
     RED.nodes.registerType("opaca-access", OpacaAccesNode);
-
+    
+    // This function is called when the user clicks on the Authorize button in the node configuration dialog.
+    // It fetches the Opaca token and agents using the provided username and password.
+    // The username and password are sent as a POST request to the /opaca-access/authorize endpoint.
+    // If the request is successful, we can use ZEKI agents in a way that we want.
+    // If the request fails, an error message is displayed in the Node-RED editor.
     RED.httpAdmin.post('/opaca-access/authorize', function(req, res) {
         const { username, password} = req.body;
         js_commond_methods.fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RED)
@@ -33,7 +46,15 @@ module.exports = function(RED) {
             .catch(err => res.json({ success: false, error: err.message }));
     });
 
-
+    // This function is used to send html_common_methods.js file to the Node-RED editor.
+    // This file contains the common methods that are used in the HTML files of the nodes.
+    // The file is sent as a response to the request made by the Node-RED editor.
+    // The html files of the nodes can include this file using the following script tag:
+    // <script type="text/javascript" src="html_common_methods.js"></script>
+    /*
+        Without sending this info, if you try to use the methods in the html file, you will get an error. Because html side does not know local files.
+        So, we need to send the file to the html side  as a http response.
+    */
     RED.httpAdmin.get('/html_common_methods.js', function(req, res) {
         const filePath = html_common_methods_path;
         fs.readFile(filePath, 'utf8', function(err, data) {
@@ -45,6 +66,12 @@ module.exports = function(RED) {
         });
     });
 
+    
+    // This function is used to send common_html_template.html file to the Node-RED editor.
+    // This file contains the common HTML template that is used in the HTML files of the nodes.
+    // The file is sent as a response to the request made by the Node-RED editor.
+    // If the html files use this template, they need to fetch this file from the server and append it to the body of the html file.
+    // In the html_common_methods.js file there is a method called as appenTheSelectedAgentCommonHtml (member method od Agent Class) which is used to append the common html template to the body of the html file.
     RED.httpAdmin.get('/common_html_template.html', function(req, res) {
         const filePath = common_html_template_path;
         fs.readFile(filePath, 'utf8', function(err, data) {
@@ -57,6 +84,16 @@ module.exports = function(RED) {
     });
 
 
+    // This function is used to send the node_config.json file to the Node-RED editor.
+    // This file contains the configuration of the agent nodes that are available in the Node-RED editor.
+    // The file is sent as a response to the request made by the Node-RED editor.
+    // We have NodeCreator node to create a new node. When we create a new node, we need to update the node_config.json file.
+    // This file is used to store the configuration of the agent nodes that are available in the Node-RED editor.
+    /*
+        If the opaca framework has a new agent, initially it is not available in the node-red editor.
+        However, we can create a new agent node by using the NodeCreator node. When we create a new agent node, we need to update the node_config.json file.
+        To update the node_config.json file, we need to send the updated config to the server. This is done by sending a POST request to the /update_node_config endpoint.
+    */
     RED.httpAdmin.get('/node_config.json', function(req, res) {
         const filePath = node_config_path;
         fs.readFile(filePath, 'utf8', function(err, data) {
@@ -68,12 +105,26 @@ module.exports = function(RED) {
         });
     });
 
+    // When the config of the agent node is updated, it means it is time to create the new agent node html and js files.
+    // More importantly, we need to update the package.json file to make the new agent node available in the Node-RED editor.
+    // For a new node to be seen in the Node-RED editor, we need to update the package.json file.
+    // When the create agent button is clicked, the NodeCreator node sends a POST request to the /update_node_config endpoint.
     RED.httpAdmin.post('/update_node_config', function(req, res) {
+        // Get the updated config and the name of the config from the request body
         const fetchedData = req.body;
         const updatedConfig = fetchedData.config;  // Get the updated config from the request body
         const configName = fetchedData.configName; // Get the name of the config from the request body
         
-
+        /*
+            As you see7 in the all agent nodes, we have a js file and an html file.
+            To be more moduler, we have agent, action and parameter classes.It enable us to create a new agent node easily.
+            As you see, creating new node it is not a hard job. Because I made it easy.
+            Even if you do not know how to create a new agent node, you can create a new node by using the NodeCreator node.
+            You do not need to worry about the details of the node creation. You just need to fill the required fields in the NodeCreator node.
+            The NodeCreator node will create the new node for you.
+        */
+       
+        // Create the JS file content. It is common for all agent nodes. But we need to change the name of the agent node.
         const jsContent = ` const imports = require('../../nodes/resources/imports.js');                     // This is the import statement for the imports.js file. This file is used to import all the necessary dependencies required for the agent node to work properly.
 const js_common_methods = imports.js_common_methods_import;                      // This is the import statement for the js_common_methods object. This object contains all the common methods that are used by the agent node.
 
@@ -84,6 +135,7 @@ module.exports = function(RED){                                                 
     RED.nodes.registerType("${configName}",${configName}Node);                   // This line of code registers the agent node with the name "${configName}".
 }`;
 
+        // Create the HTML file content. It is common for all agent nodes. But we need to change the name of the agent node.
         const htmlContent = `<!-- This file is the HTML file for the ${configName} node. It is responsible for the visual representation of the node in the Node-RED editor. -->
 
 <!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
@@ -94,9 +146,12 @@ module.exports = function(RED){                                                 
     makeNodeRegistration("${configName}");  // Make the ${configName} node available in the Node-RED editor
 </script>`;
         
+        // Create the directory path, pay attention this is the path of the agent node directory. It should be inside of the nodes directory.
         const dirPath = `${repositoryPath}/${configName}-node`;
-        const jsFilePath = `${repositoryPath}/${configName}-node/${configName}.js`;
-        const htmlFilePath = `${repositoryPath}/${configName}-node/${configName}.html`;
+        // Create the file paths for js file
+        const jsFilePath = `${dirPath}/${configName}.js`;
+        // Create the file paths for html file
+        const htmlFilePath = `${dirPath}/${configName}.html`;
 
         // Create directory if it doesn't exist
         fs.mkdir(dirPath, { recursive: true }, (err) => {
@@ -119,7 +174,7 @@ module.exports = function(RED){                                                 
                         return res.status(500).send('Failed to create HTML file');
                     }
 
-
+                    // First read the package.json file
                     fs.readFile(packageJsonPath, 'utf8', (err, data) => {
                         if (err) {
                             console.error('Error reading package.json:', err);
@@ -127,8 +182,10 @@ module.exports = function(RED){                                                 
                         }
     
                         let packageJson = JSON.parse(data);
+                        // Add the new node to the package.json file
                         packageJson['node-red']['nodes'][configName] = `/nodes/${configName}-node/${configName}.js`;
-    
+
+                        // Write the updated package.json back to the file
                         fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2), 'utf8', (err) => {
                             if (err) {
                                 console.error('Error writing package.json:', err);
@@ -147,30 +204,10 @@ module.exports = function(RED){                                                 
                         });
                     });
 
-
-
                 });
             });
         });
         
-
-        /*
-        // Write the updated config back to the node_config.json file
-        fs.writeFile(node_config_path, JSON.stringify(updatedConfig, null, 2), 'utf8', function(err) {
-            if (err) {
-                console.error('Error writing config file:', err);
-                res.status(500).send('Failed to save config');
-            } else {
-                res.send('Config saved successfully');
-            }
-        });
-        */
     });
-
-    RED.httpAdmin.post('/create_custom_node_file', function(req, res) {
-        console.log("Data Came");
-        console.log(req.body);  
-    });
-
 
 };

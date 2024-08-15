@@ -1,3 +1,8 @@
+<!-- This is the HTML file for the custom node. It contains the HTML template for the node's edit dialog. -->
+
+<!-- The template is defined in a <script> tag with the type attribute set to text/html and the data-template-name attribute set to the name of the template. -->
+
+<!-- This node is a special node. Because this nodes make firs thing need to be done such as : making authorization, fetching agents and actions, sending common files as http request -->
 <script type="text/html" data-template-name="opaca-access">
     <style>
         .form-container {
@@ -89,46 +94,57 @@
     <p>A custom node to load OPACA actions.</p>
 </script>
 
-
+<!-- The following script is for Opaca Access node to register the opaca acces node -->
 <script type="text/javascript">
-    RED.nodes.registerType('opaca-access', {
-        category: 'ZEKI',
-        color: '#46b99c',
-        defaults: {
-            username: { value: "" },
-            password: { value: "" },
-            url: { value: "" }
+    RED.nodes.registerType('opaca-access', {                                          // Register the node
+        category: 'ZEKI',                                                             // Define the category of the node 
+        color: '#46b99c',                                                             // Define the color of the node 
+        defaults: {                                                                   // Define the default properties of the node 
+            username: { value: "" },                                                  // Define the default value of the username property
+            password: { value: "" },                                                  // Define the default value of the password property
+            url: { value: "" }                                                        // Define the default value of the url property        
         },
-        inputs: 1,
-        outputs: 0,
-        icon: "file.svg",
-        label: function() {
-            return this.name || "Opaca Access";
+        inputs: 1,                                                                    // Define the number of inputs of the node
+        outputs: 0,                                                                   // Define the number of outputs of the node
+        icon: "file.svg",                                                             // Define the icon of the node
+        label: function() {                                                           // Define the label of the node
+            return this.name || "Opaca Access";                                       // Return the name of the node or "Opaca Access"
         },
 
+        // Define the oneditprepare function of the node. This function is called when the edit dialog is opened.   
         oneditprepare : async function(){
-            var that = this;
-            document.getElementById('authorize-button').addEventListener('click', function() {
-                var username = document.getElementById('node-input-username').value;
-                var password = document.getElementById('node-input-password').value;
+            var that = this;                                                                    // Store the reference to the node object in a variable
+            /*
+                We can make authentication in two ways: First is to clik on the Authorize button in the html side on node red editor and the second way is to inject the opaca-access node with the username and password.
+                Below code enables us to use the first way of authentication.
+            */
+            document.getElementById('authorize-button').addEventListener('click', function() {  // Add a click event listener to the authorize button
+                var username = document.getElementById('node-input-username').value;            // Get the value of the username input
+                var password = document.getElementById('node-input-password').value;            // Get the value of the password input
                 
+                // Send a POST request to the /opaca-access/authorize endpoint with the username and password
                 $.ajax({
                     url: 'opaca-access/authorize',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ username: username, password: password}),
+                    // Define the success callback function
                     success: function(result) {
                         var messageBox = document.getElementById('message-box');
                         if (result.success) {
+                            // Display a success message if the authorization is successful
                             messageBox.textContent = "Authorization successful";
                             messageBox.className = "message-box success";
                         } else {
-                            messageBox.textContent = "Authorization failed: " + result.error;
+                            // Display an error message if the authorization fails
+                            messageBox.textContent = "Authorization failed";
                             messageBox.className = "message-box error";
                         }
                         messageBox.style.display = 'block';
                     },
+                    // Define the error callback function
                     error: function(xhr, status, error) {
+                        // Display an error message if the request fails
                         var messageBox = document.getElementById('message-box');
                         messageBox.textContent = "Authorization failed: ";
                         messageBox.className = "message-box error";
@@ -137,8 +153,6 @@
                 });
             });
         }
-
-        
 
     });
 </script>
