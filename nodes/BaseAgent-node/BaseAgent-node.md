@@ -3,6 +3,12 @@
 
 ## Overview
 The `BaseAgent-node` serves as a foundational node within the OPACA framework. It provides essential configuration and processing capabilities that other agent nodes can build upon. This node acts as a base, allowing for the extension and reuse of common methods across different agents.
+With the help of Agent ID dropdown select option on the edit dialog, this node can be configured to behave and work as every agent node.
+Let's imagine new agent is added to opaca framework, this agent node will not be shown on the node red `ZEKI` palette.
+However, this new opaca agent will be shown in the dropdown select option list. It means this new agent can bu used on the node red.
+
+There is another and very powerful method for users and programmers to use the new agent. This method enable user to add new agent as a node-red node
+without writng any code. This is explained in detail in the `NodeCreator-node`.
 
 ## Directory Structure
 
@@ -40,6 +46,10 @@ This file may be referenced in `BaseAgent.html` to standardize HTML manipulation
 2. Double-click the node to open its configuration UI.
 3. Set the agent ID and other parameters as required.
 4. Deploy the flow to start using the `BaseAgent` node.
+
+## Note : 
+    If you add this node to flow, do not forget to make authentication via `opaca-access-node`.
+
 
 The `BaseAgent` node will process messages according to the configurations set, interacting with other nodes and services as needed.
 
