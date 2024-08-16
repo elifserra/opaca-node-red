@@ -5,7 +5,7 @@ module.exports = function(RED) {
     var detectedObjects = [];
 
     // This function is responsible for creating the camera node
-    function CustomWebcamNode(config) {
+    function CameraNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
         // This function is responsible for getting the OpenAI API key from the environment variables
@@ -42,6 +42,6 @@ module.exports = function(RED) {
 
     }
     // Register the camera node
-    RED.nodes.registerType("camera", CustomWebcamNode);
+    RED.nodes.registerType("camera", CameraNode);
     
 }

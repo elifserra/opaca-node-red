@@ -41,9 +41,7 @@ The JavaScript file implements the runtime logic for the `camera-node`. It handl
 - Getting detected object results from `camera.html` and displaying results on the node-red debug screen and sending the detected object which has the highest detection percentage to next node.
 
 **Key Functions**:
-- **`RED.nodes.registerType("camera", CustomWebcamNode)`**: Registers the `camera-node` within Node-RED, making it available for use in flows.
-
-## Integration with Resources
+- **`RED.nodes.registerType("camera", CameraNode)`**: Registers the `camera-node` within Node-RED, making it available for use in flows.
 
 ## Usage Example
 
@@ -52,13 +50,13 @@ The JavaScript file implements the runtime logic for the `camera-node`. It handl
 2. Double-click the node to open its configuration UI.
 3. Open the camera and by pressing make detection button to make detections.
 
-![This is an image](camera_edit_dialog.png)
+![This is an image](./nodes/resources/images_for_md_files/camera_edit_dialog.png)
 
 4. Close edit dialog and return to the flow screen. 
 5. Drag official node-red `inject-node` to flow and connect to `camera-node`.
 6. Press inject node, this trigger the camera node to send the object that has the highest confidence.
 
-![This is an image](example_flow_for_camera_node.png)
+![This is an image](./nodes/resources/images_for_md_files/example_flow_for_camera_node.png)
 
 
 
