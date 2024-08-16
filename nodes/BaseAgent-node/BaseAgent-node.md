@@ -53,6 +53,8 @@ Second node finds the temperature of the given room that has sensorID which is k
 
 ![This is an image](base-agent_example_flow.png)
 
+There is another option to be able to invoke action, On edit dialog user can press the invoke action button. When it is pressed invoke result will be displayed on the screen. But, do not forget that this feature is not used in flow. If you want to use action result in flow you need to trigger the flow via inject node.
+
 
 ## Note : 
     If you add this node to flow, do not forget to make authentication via `opaca-access-node`.
