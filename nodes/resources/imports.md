@@ -7,6 +7,9 @@ The `imports.js` file serves as a centralized hub for importing and exporting th
 ## Purpose
 This file aims to streamline the management of dependencies by providing a single location from which all required resources can be imported. This approach reduces redundancy, avoids errors, and simplifies the process of updating or modifying dependencies.
 
+## Note:
+    If the opaca framework login and api urls are changed, you will need to change url from imports file. That is something crucial.
+
 ## Key Imports and Exports
 
 ### 1. **Paths**
