@@ -46,6 +46,13 @@ This file may be referenced in `BaseAgent.html` to standardize HTML manipulation
 2. Double-click the node to open its configuration UI.
 3. Set the agent ID and other parameters as required.
 4. Deploy the flow to start using the `BaseAgent` node.
+5. Use node-red official inject node to start the flow
+
+Below BaseAgent is configured to work as HomeAssistantAgent, it first get kitchen sensorID, sends result to another base agent works as HomeAssistantAgent.
+Second node finds the temperature of the given room that has sensorID which is kitchen.
+
+![This is an image](base-agent_example_flow.png)
+
 
 ## Note : 
     If you add this node to flow, do not forget to make authentication via `opaca-access-node`.
