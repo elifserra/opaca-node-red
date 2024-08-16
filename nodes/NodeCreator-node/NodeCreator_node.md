@@ -3,12 +3,34 @@
 
 ## Overview
 
-The **NodeCreator Node** is a custom Node-RED node designed to simplify the creation of new agent nodes in the OPACA framework. This node automates the process of generating JavaScript and HTML files necessary for defining and registering a new agent node within Node-RED, and also updates the Node-RED configuration and `package.json` file to make the new node available.
+The `NodeCreator-node` is a specialized tool designed to assist users in creating custom nodes within the OPACA framework in Node-RED. This node simplifies the process of generating new nodes by providing an intuitive interface for specifying the properties and behavior of the custom node. It is particularly useful for users who need to extend the functionality of OPACA agents as nodes within Node-RED.
+The **NodeCreator Node** is a actually custom Node-RED node designed to simplify the creation of new agent custom nodes in the OPACA framework. This node automates the process of generating JavaScript and HTML files necessary for defining and registering a new agent node within Node-RED, and also updates the Node-RED configuration, `package.json` and `node_config.json` file to make the new node available.
+
+## Note:
+   NodeCreator is only used to create agent nodes specific to opaca agents
+
+## Note:
+   <package.json> file is inside of the OPACA-NODE-RED main directory.
+   <node_config_json> file is inside of the nodes/resources direcotry.
+
+## Important Note
+The `NodeCreator-node` is specifically designed to work with OPACA framework agents. Before using this node, it is crucial to perform authorization using the `opaca-access-node`. This authorization step ensures that the user has the necessary permissions to create and interact with OPACA agents.
+
+
+## Importance of `package.json`
+
+The `package.json` file is a crucial component for the NodeCreator node because it ensures that the newly created node is correctly registered and available in the Node-RED editor. When a new node is created, the `package.json` file is automatically updated to include the path to the new node’s JavaScript file. This allows Node-RED to recognize and load the new node, making it available for use in the editor.
+
+## Importance of `node_config.json`
+
+The `node_config.json` file plays a vital role in the NodeCreator node's functionality. It serves as the central configuration file that stores the details of all the agent nodes available in Node-RED. This file ensures that when a new node is created, its configuration is saved and can be loaded used **makeNodeRegistration** method, making the node available in the editor for use in flows. Without this file, creating new agent without writing code approach will not work. 
+
+
 
 ## Features
 
 - **Automated Node Creation**: Automatically generates the JavaScript and HTML files required to define a new agent node.
-- **Easy Integration**: Updates the Node-RED configuration and `package.json` file to ensure the new node is immediately available in the editor.
+- **Easy Integration**: Updates the Node-RED configuration and `package.json` and `node_config.json` file to ensure the new node is immediately available in the editor (after restarting node-red).
 - **Customization**: Allows users to specify node attributes such as category, color, name, label, icon, and input/output counts.
 
 ## Node Configuration
@@ -49,8 +71,12 @@ The **NodeCreator Node** is a custom Node-RED node designed to simplify the crea
 4. **Create the Node**:
    - Click the **Create Node** button. The NodeCreator will generate the required files and update the necessary configurations.
 
-5. **Deploy**:
-   - Deploy your flow to apply the changes. The newly created node will appear in the Node-RED palette under the specified category.
+5. **Restart Node-RED**:
+   - **Important**: If a new agent node is created, you must restart Node-RED for the changes to take effect and for the new node to appear in the editor.
+   - To restart Node-RED, go to node-red intallation directory and follow these steps:
+     1. Stop the Node-RED service by running the command `ctrl-c` in your terminal.
+     2. Start the Node-RED service again by running the command `node-red` and go to url server now running at "http://127.0.0.1:1880/." should be default
+     3. Once Node-RED is restarted, the new agent node will be available in the editor and it can be used.
 
 ## HTTP Endpoints
 
@@ -90,7 +116,8 @@ The **NodeCreator Node** is a custom Node-RED node designed to simplify the crea
 ## Troubleshooting
 
 - **Node Not Appearing**:
-   - Ensure that the `package.json` file is correctly updated after creating a new node.
+   - Ensure that the node-red is restarted.
+   - Ensure that the `package.json` and `node_config_json` file is correctly updated after creating a new node.
    - Check the console for any errors during the creation process.
 
 - **File Creation Issues**:
