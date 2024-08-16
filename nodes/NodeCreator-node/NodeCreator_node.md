@@ -51,13 +51,16 @@ The `node_config.json` file plays a vital role in the NodeCreator node's functio
 
 ### Step-by-Step Guide
 
-1. **Drag the NodeCreator Node into Your Flow**:
-   - Drag the NodeCreator node from the Node-RED palette into your workspace.
+1. **Drag the Opaca Access Node into Your Flow**:
+   - Drag the Opaca Access node from the `ZEKI` palette into your workspace and make authentication.
 
-2. **Open the Configuration Dialog**:
+2. **Drag the NodeCreator Node into Your Flow**:
+   - Drag the NodeCreator node from the `ZEKI` palette into your workspace.
+
+3. **Open the Configuration Dialog**:
    - Double-click the NodeCreator node to open its configuration dialog.
 
-3. **Fill in the Required Fields**:
+4. **Fill in the Required Fields**:
    - **Config Name**: Provide a unique name for the new agent node configuration.
    - **Category**: Choose the category for the new node.
    - **Color**: Select the color for the node.
@@ -68,15 +71,17 @@ The `node_config.json` file plays a vital role in the NodeCreator node's functio
    - **Number of Inputs**: Set the number of input connections.
    - **Number of Outputs**: Set the number of output connections.
 
-4. **Create the Node**:
+5. **Create the Node**:
    - Click the **Create Node** button. The NodeCreator will generate the required files and update the necessary configurations.
 
-5. **Restart Node-RED**:
+6. **Restart Node-RED**:
    - **Important**: If a new agent node is created, you must restart Node-RED for the changes to take effect and for the new node to appear in the editor.
    - To restart Node-RED, go to node-red intallation directory and follow these steps:
      1. Stop the Node-RED service by running the command `ctrl-c` in your terminal.
      2. Start the Node-RED service again by running the command `node-red` and go to url server now running at "http://127.0.0.1:1880/." should be default
      3. Once Node-RED is restarted, the new agent node will be available in the editor and it can be used.
+
+![This is an image](node_creator_edit_dialog.png)     
 
 ## HTTP Endpoints
 
