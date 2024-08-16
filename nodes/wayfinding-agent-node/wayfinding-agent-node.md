@@ -23,7 +23,7 @@ This file sets up the Node-RED editor interface for the `wayfinding-agent-node`.
 ### 2. `WayFindingAgent.js`
 The JavaScript file implements the functionality of the `wayfinding-agent-node`.
 
-**Integration with Resources**:
+## Integration with Resources:
 
 ### 1. `js_common_methods.js`
 This file is imported and used within `WayFindingAgent.js` to be able to access makeNodeConfiguration method.

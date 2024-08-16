@@ -6,36 +6,41 @@ The `shelf-agent-node` is designed to manage smart shelves within a Node-RED flo
 
 ## Directory Structure
 
-- **`shelf-agent.html`**: This file defines the user interface (UI) for configuring the `shelf-agent-node` in the Node-RED editor.
-- **`shelf-agent.js`**: Contains the core logic and behavior of the `shelf-agent-node` in the Node-RED runtime.
+- **`ShelfAgent.html`**: This file defines the user interface (UI) for configuring the `shelf-agent-node` in the Node-RED editor.
+- **`ShelfAgent.js`**: Contains the core logic and behavior of the `shelf-agent-node` in the Node-RED runtime.
 
 ## Detailed Explanation of Files
 
-### 1. `shelf-agent.html`
-This file sets up the Node-RED editor interface for the `shelf-agent-node`. It includes form elements that allow users to configure the shelf parameters, manage item tracking, and set up alerts for stock levels.
+### 1. `ShelfAgent.html`
+This file sets up the Node-RED editor interface for the `shelf-agent-node`. It includes form elements that allow users to configure the shelf parameters, manage item tracking.
 
 **Key Components**:
-- **CSS Styling**: The file includes styles to ensure the UI components for managing smart shelves are visually consistent and user-friendly within the Node-RED editor.
-- **Form Elements**: Users can input and adjust settings related to the shelf's operation, such as setting thresholds for stock levels, configuring alerts, and managing the shelf's inventory tracking.
+- **Form Elements**: Users can input and adjust settings related to the shelf's operation such as opening, closing shelf and finding item in the shelf.
 
-### 2. `shelf-agent.js`
-The JavaScript file implements the functionality of the `shelf-agent-node`. It handles the interactions with smart shelves, processes data related to the shelf's status, and triggers actions based on user configurations.
+### 2. `ShelfAgent.js`
+The JavaScript file implements the functionality of the `shelf-agent-node`. It handles the interactions with smart shelves.
 
-**Key Functions**:
-- **Inventory Management**: The script tracks the items on the shelf, manages stock levels, and updates the inventory status within the Node-RED flow.
-- **Alerting**: Users can configure the node to send alerts when stock levels drop below a certain threshold or when other conditions are met.
 
-**Integration with Resources**:
-- **`js_common_methods.js`**: This file may provide utility functions for managing inventory data, handling alerts, and processing shelf status updates. These shared methods ensure the node operates efficiently and consistently.
-- **`html_common_methods.js`**: This file could be used in `shelf-agent.html` to standardize UI interactions, such as managing input fields for inventory settings and validating user input.
+## Integration with Resources:
+
+### `js_common_methods.js`:
+This file is imported and used within `ShelfAgent.js` to be able to access makeNodeConfiguration method.
+This method make node configuration and registration.
+
+### `html_common_methods.js`: 
+This file could be used in `ShelfAgent.html` to access Agent, Action and parameter class and also other common methods between agents. 
 
 ## Usage Example
 
 ### Adding the `shelf-agent-node` to a Flow
 1. Drag the `shelf-agent-node` from the Node-RED palette into your flow.
 2. Double-click the node to open its configuration UI.
-3. Set the thresholds for stock levels, configure alerts, and manage inventory tracking settings.
-4. Deploy the flow to start monitoring and managing your smart shelves automatically.
+3. Select the action that you want to invoke.
+4. Enter the necessary parameters to be able to run that action
+5. Drag official node-red `inject-node` to flow and connect to `shelf-agent-node`.
+6. Press inject node, this trigger the `shelf-agent-node` to invoke the action and send the action result to the next node if there is a next node.
+
+There is another option to be able to invoke action, On edit dialog user can press the invoke action button. When it is pressed invoke result will be displayed on the screen. But, do not forget that this feature is not used in flow. If you want to use action result in flow you need to trigger the flow via inject node.
 
 ## Conclusion
-The `shelf-agent-node` is a valuable tool for integrating smart shelf systems into your Node-RED environment. By leveraging shared resources and standardized methods, this node allows users to automate inventory management, ensuring optimal performance and efficient stock control.
+The `shelf-agent-node` is a valuable tool for integrating smart shelf systems into your Node-RED environment.
