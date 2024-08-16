@@ -83,6 +83,7 @@ class Agent{
         this.currentAction = this.actions.find(action => action.actionName === $("#node-input-action").val());  // find the selected action from the actions array  
         $("#node-input-action").val(this.currentAction.actionName);                                             // assign the selected action name to the action input
         this.currentAction.parameterHtml = "";                                                                  // assign the parameter html as an empty string
+        $("#node-input-name").val(this.agentName + " { " + this.currentAction.actionName+" }");                 // assign the node name as the agent name and the selected action name
         
         /*
             Create the parameter html for the selected action by using the action parameters of the selected action.
