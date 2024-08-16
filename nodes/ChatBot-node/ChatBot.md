@@ -75,7 +75,7 @@ The node provides feedback on the success or failure of each operation:
 ### OpenAI API
 
 ## Note:
-    Users should define their own api key in the computer environment variables with the name of "OPENAI_API_KEY" in order to use this `camera-node` on the node-red.
+    Users should define their own api key in the computer environment variables with the name of "OPENAI_API_KEY" in order to use this `ChatBot-node` on the node-red.
     Camera node and ChatBot node needs to "OPENAI_API_KEY" to be defined in the computer environment variables.
 
 The ChatBot node integrates with OpenAI's API for various tasks, including:
