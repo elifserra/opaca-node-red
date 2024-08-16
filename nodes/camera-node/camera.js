@@ -35,7 +35,7 @@ module.exports = function(RED) {
         node.on('input', function() {
             // send the detected objects to the next node in the flow
             var msg = {
-                payload: detectedObjects[0]
+                payload: detectedObjects[0] // send the first detected object which has the highest confidence
             }
             node.send(msg);
         });

@@ -2,17 +2,27 @@
 # Camera Node Documentation
 
 ## Overview
-The `camera-node` is designed to interface with camera devices within the Node-RED environment. It allows users to capture images, stream video, and process visual data within their Node-RED flows. This node is particularly useful for applications involving image recognition, surveillance, or any scenario where visual input is required.
+The `camera-node` is designed to interface with camera devices within the Node-RED environment. It allows users to make object detection and use object detection results within their Node-RED flows. This node is particularly useful for applications involving object detection. For example, the user may want to know about detected object location in the kitchen shelves. Firstly `camera-node` edit dialog should be opened. Secondly by pressing make detection button object detection should be made and by injecting the inject node detection results should be sent to `shelf-agent-node`. Thirdly, user can use `FindInShelf` action of the agent `shelf-agent` to find the location of the detected object.
 
 ## Directory Structure
 
 - **`camera.html`**: Defines the user interface (UI) for configuring the `camera-node` within the Node-RED editor.
-- **`camera.js`**: Implements the logic and behavior of the `camera-node` in the Node-RED runtime, handling tasks such as initializing the camera, capturing images, and processing video streams.
-
+- **`camera.js`**: Implements the logic and behavior of the `camera-node` in the Node-RED runtime.
 ## Detailed Explanation of Files
 
 ### 1. `camera.html`
-This file sets up the Node-RED editor interface for the `camera-node`. It includes elements for configuring camera settings, such as resolution, frame rate, and other parameters relevant to image and video capture.
+This file sets up the Node-RED editor interface for the `camera-node`. It includes elements for opening, closing camera and making detection.
+For object detection openai `gpt-4o-mini` model is used. This model is slow, but it's accuracy is high. On the `camere-node` edit dialog, when user press the make detection button, chat-gpt explanative response describing the detected objects is displayed on the screen in approximately three seconds.
+This `camera.hmtl` file gets detected objects and send results to `camera.js` in order to convey results to next node in the flow.
+
+For this camera node to be make detection, it needs open-ai key. In the `camera.js` below code gets OPENAI_API_KEY from computer environment variables.
+And then send this key to `camera.html` because we use apı key in method sendMessageWithImage.
+
+## Note:
+    Users should define their own api key in the computer environment variables with the name of "OPENAI_API_KEY" in order to use this `camera-node` on the node-red.
+
+## Note:
+    Camera class and captureImageFromCanvas, sendMessageWithImage, parseGPTResponse methods are already defined in `ChatBot-node`, it means there is no need to define them in this node again.
 
 **Key Components**:
 - **Video and Canvas Elements**: The HTML includes `<video>` and `<canvas>` elements for displaying the live camera feed and capturing images.
@@ -27,34 +37,27 @@ This file sets up the Node-RED editor interface for the `camera-node`. It includ
 
 ### 2. `camera.js`
 The JavaScript file implements the runtime logic for the `camera-node`. It handles tasks such as:
-- Initializing the camera and streaming the video feed to the `<video>` element.
-- Capturing images and rendering them onto the `<canvas>` element.
-- Processing the captured data and sending it through the Node-RED flow.
+- Sending open-ai key to `camera.html`
+- Getting detected object results from `camera.html` and displaying results on the node-red debug screen and sending the detected object which has the highest detection percentage to next node.
 
 **Key Functions**:
-- **`Camera` Class**: This class likely encapsulates all the logic for interacting with the camera. It includes methods for opening the camera stream, capturing images, and closing the stream when no longer needed.
 - **`RED.nodes.registerType("camera", CameraNode)`**: Registers the `camera-node` within Node-RED, making it available for use in flows.
 
-**Example Methods**:
-- **`openCamera()`**: Initializes the camera and starts streaming video.
-- **`captureImage()`**: Captures an image from the video stream and processes it as required.
-- **`closeCamera()`**: Closes the camera stream when the node is no longer in use.
-
 ## Integration with Resources
-
-### 1. `js_common_methods.js`
-This file may be imported within `camera.js` to provide shared methods for handling tasks like configuration, error handling, and communication with external services. By using common methods, the project ensures that the camera node behaves consistently with other nodes.
-
-### 2. `html_common_methods.js`
-Used in `camera.html` to standardize the creation and manipulation of HTML elements within the Node-RED editor. This helps maintain a consistent UI/UX across different nodes.
 
 ## Usage Example
 
 ### Adding the `camera-node` to a Flow
 1. Drag the `camera-node` from the Node-RED palette into your flow.
 2. Double-click the node to open its configuration UI.
-3. Adjust the camera settings, such as resolution and frame rate.
-4. Deploy the flow to start capturing and processing images within Node-RED.
+3. Open the camera and by pressing make detection button to make detections.
+4. Close edit dialog and return to the flow screen. 
+5. Drag official node-red `inject-node` to flow and connect to `camera-node`.
+6. Press inject node, this trigger the camera node to send the object that has the highest confidence.
+
+![This is an image](example_flow_for_camera_node.png)
+
+
 
 ### Practical Application
 - **Surveillance Systems**: Use the `camera-node` to monitor and capture images from a security camera.
