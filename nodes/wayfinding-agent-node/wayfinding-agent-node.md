@@ -2,7 +2,7 @@
 # Wayfinding Agent Node Documentation
 
 ## Overview
-The `wayfinding-agent-node` is designed to assist with navigation and route finding within a Node-RED flow. This node enables users to find the location of the room in `ZEKI` office. When it works, it open the lights that show the way to go target room.
+The `wayfinding-agent-node` is designed to assist with navigation and route finding within a Node-RED flow. This node enables users to find the location of the room in `ZEKI` office. When it works, it open the lights that show the way to go to target room.
 
 ## Note:
     This node is not working correctly now. Because it has a different wifi connections from other agents. But when this wifi issue is resolved, it will work correctly.
@@ -48,4 +48,4 @@ There is another option to be able to invoke action, On edit dialog user can pre
     If you add this node to flow, do not forget to make authentication via `opaca-access-node`.
 
 ## Conclusion
-The `wayfinding-agent-node` is an essential tool for applications that require navigation and route finding. By leveraging shared resources and standardized methods, this node allows users to calculate routes and provide navigation instructions seamlessly within Node-RED, making it a powerful addition to any flow that involves wayfinding.
+The `wayfinding-agent-node` is an essential tool for applications that require navigation and route finding.
