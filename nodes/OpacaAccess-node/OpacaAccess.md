@@ -95,8 +95,8 @@ This endpoint serves a common HTML template used across multiple nodes:
 ### Adding New Features
 
 To extend the functionality of the Opaca Access Node:
-1. Modify the `opaca-access.js` file to include new methods or properties.
-2. Update the `opaca-access.html` file to reflect any new configuration options.
+1. Modify the `OpacaAccess.js` file to include new methods or properties.
+2. Update the `OpacaAccess.html` file to reflect any new configuration options.
 3. Test the node thoroughly in a Node-RED environment.
 
 ## Troubleshooting
