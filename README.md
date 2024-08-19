@@ -140,7 +140,13 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
    ![This is an image](palette_shown.png)
 
 3. **Deploy the Project:**
-   - Import the provided JSON flow files into Node-RED and deploy them or you can make your own flows. These flows represent the interactions and operations of the OPACA agents within the Node-RED environment.
+   - Now, you can drag and connnect nodes to make flows. If you do not need to make flow, you can use every node to invoke action via edit dialog `invoke action` button. Invoke action result will be displayed on the custom node edit dialog screen. As it can be understood from below: 
+
+   ![This is an image](example_distinct_node.png)
+
+   - If you want to make a flow, do not forget to add and connect official `NODE-RED Inject Node`. Because it enable us to trigger the flow to be started. You can see the invoke action results on the NODE-RED debug screen as a messagge by adding and connecting official `NODE-RED Debug Node` to end of your flow. As it can be understood from below:
+
+   ![This is an image](example_flow.png)
 
 
 ## Important Notes
