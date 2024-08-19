@@ -88,5 +88,15 @@
     "agentId": "base-agent",
     "numberOfInputs": 1,
     "numberOfOutputs": 1
+  },
+  "BeIntelliAgent": {
+    "category": "ZEKI",
+    "color": "#ff9999",
+    "name": "BeIntelliAgent",
+    "label": "BeIntelliAgent",
+    "icon": "default-icon",
+    "agentId": "beintelli_agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
   }
 }

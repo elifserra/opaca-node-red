@@ -75,6 +75,11 @@ The project is organized into multiple directories, each corresponding to a part
       This agent is not working with ZEKI-WIFI. Because it has its own WIFI. When this issue is fixed. This agent node will work properly.
    - [Detailed Documentation](./nodes/wayfinding-agent-node/WayfindingAgent.md)
 
+## 14. **BeIntelliAgent**
+   - **Purpose:** Manages vehicle fleet operations, such as locating vehicles, finding nearby parking spots, and checking air quality around specific locations.
+   - **Role in NODE-RED:** Integrates these functionalities into Node-RED, allowing for automated management of vehicle-related tasks within the BeIntelli fleet.
+   - [Detailed Documentation](./nodes/BeIntelliAgent-node/BeIntelliAgent.md)
+
 ## Resources Directory
 
 ###  **Common HTML Template**

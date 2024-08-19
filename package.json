@@ -21,7 +21,8 @@
       "RoomBookingAgent": "/nodes/room-booking-agent-node/RoomBookingAgent.js",
       "ChatBot": "/nodes/ChatBot-node/ChatBot.js",
       "ExchangeAgent": "/nodes/exchange-agent-node/ExchangeAgent.js",
-      "NodeCreator": "/nodes/NodeCreator-node/NodeCreator.js"
+      "NodeCreator": "/nodes/NodeCreator-node/NodeCreator.js",
+      "BeIntelliAgent": "/nodes/BeIntelliAgent-node/BeIntelliAgent.js"
     }
   },
   "dependencies": {
