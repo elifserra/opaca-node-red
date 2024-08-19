@@ -36,7 +36,7 @@ The project is organized into multiple directories, each corresponding to a part
 ### 6. **InvokeAction**
    - **Purpose:** Use all agents actions in one node.
    - **Role in Node-RED:** This node is not specific to any agent. This node has all the agents actions to be invoked.
-   - [Detailed Documentation](./nodes/InvokeAction-node/invoke-action.md)
+   - [Detailed Documentation](./nodes/InvokeAction-node/InvokeaAction.md)
 
 ### 7. **ExchangeAgent**
    - **Purpose:** Facilitates secure and efficient data exchange within the OPACA framework.
