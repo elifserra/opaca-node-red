@@ -124,12 +124,12 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
    - Open this directoy, you should see a javascript file called as `settings`. Then open this js file to make configurations to to be able to see custom nodes on the palette and to be able to see the custom nodes under the category name `ZEKI`.
    1) NODE-RED needs you to provide custom nodes directoy path to upload them to NODE-RED editor. Therefore, you need to enter the `opaca-node-red/nodes` directory full path to setting file. Assign your full path to `nodesDir` property in the settings file as shown below.
 
-   ![This is an image](nodesDir_register.png)
+   ![This is an image](./nodes/resources/Images/nodesDir_register.png)
 
 
    2) As you can see in the example flow below under the title of `Start Node-RED`, `ZEKI` palette is shown on at the top. If you want `ZEKI` palette to be shown at top. You need to assign categories property as shown below.
 
-   ![This is an image](zeki_palette_register.png)
+   ![This is an image](./nodes/resources/Images/zeki_palette_register.png)
 
    ## Note:
          If you do not assign catehory property, `ZEKI` category custom nodes will be shown at the bottom by default.
@@ -137,16 +137,16 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
 2. **Start Node-RED:**
    - After installation and making necessary configurations, run Node-RED by entering `node-red` in your terminal. The Node-RED editor will be accessible at `http://localhost:1880`. You can see the `ZEKI` palette and custom nodes as shown below.
 
-   ![This is an image](palette_shown.png)
+   ![This is an image](./nodes/resources/Images/palette_shown.png)
 
 3. **Deploy the Project:**
    - Now, you can drag and connnect nodes to make flows. If you do not need to make flow, you can use every node to invoke action via edit dialog `invoke action` button. Invoke action result will be displayed on the custom node edit dialog screen. As it can be understood from below: 
 
-   ![This is an image](example_distinct_node.png)
+   ![This is an image](./nodes/resources/Images/example_distinct_node.png)
 
    - If you want to make a flow, do not forget to add and connect official `NODE-RED Inject Node`. Because it enable us to trigger the flow to be started. You can see the invoke action results on the NODE-RED debug screen as a messagge by adding and connecting official `NODE-RED Debug Node` to end of your flow. As it can be understood from below:
 
-   ![This is an image](example_flow.png)
+   ![This is an image](./nodes/resources/Images/example_flow.png)
 
 
 ## Important Notes
@@ -164,7 +164,7 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
 
    For example, as shown in the image below, if you want the result of a previous node to be used as the recipientEmails for an email node, you should select msg.payload in the recipientEmails field. This ensures that the value passed from the previous node will be used correctly in the next step of your flow.
 
-   ![This is an image](msg_payload_property.png)
+   ![This is an image](./nodes/resources/Images/msg_payload_property.png)
 
    By setting the fields to msg.payload, you allow the flow to dynamically pass data from one node to another, making your automation more flexible and powerful.
 
