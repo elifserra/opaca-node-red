@@ -83,7 +83,10 @@ The project is organized into multiple directories, each corresponding to a part
 ## 15. **NavigationAgent**
    - **Purpose:**  Manages navigation-related tasks such as converting addresses to geographic locations, finding directions between locations, and navigating from one address to another.
    - **Role in NODE-RED:** Integrates these functionalities into Node-RED, allowing for automated handling of navigation and location-based tasks within your flows.
-   - [Detailed Documentation](./nodes/BeIntelliAgent-node/BeIntelliAgent.md)
+   - [Detailed Documentation](./nodes/NavigationAgent-node/NavigationAgent.md)
+
+## Note:
+   The last two opaca agents are created without writing code with the help of `NodeCreator` node. This info is just for showing power of `NodeCreator` node. In this way, user does not need to worry about writing code and creating custom nodes for opaca agents.
 
 ## Resources Directory
 
