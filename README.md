@@ -157,6 +157,17 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
 2. **Deploying Changes:**
    - Whenever you make any changes to the nodes in your flow, it is crucial to click the **Deploy** button in Node-RED. If you do not deploy after making changes, the flow will continue to run with the old parameters, which could lead to unexpected behavior. Always ensure that your changes are deployed to keep the flow operating with the latest configuration.
 
+3. **Using Nodes in flows:**
+   - When building flows in Node-RED, it is common to connect one node to another, passing the result from one node as the input to the next. To ensure that the output from one node becomes the input for the subsequent node, you need to configure the receiving node correctly.
+
+   In the receiving node's edit dialog, you should set the relevant fields (such as msg.payload) to accept the output from the previous node. This allows the result of the previous node's execution to be used as the input for the next node.
+
+   For example, as shown in the image below, if you want the result of a previous node to be used as the recipientEmails for an email node, you should select msg.payload in the recipientEmails field. This ensures that the value passed from the previous node will be used correctly in the next step of your flow.
+
+   ![This is an image](msg_payload_property.png)
+
+   By setting the fields to msg.payload, you allow the flow to dynamically pass data from one node to another, making your automation more flexible and powerful.
+
 ---
 
 This README provides a detailed overview of how the OPACA framework agents are represented and utilized within Node-RED, offering a clear guide for setting up and using this integrated system.
