@@ -1,0 +1,220 @@
+<!-- This file is html side of the NodeCreator node. It gets necessary parameter to create a new agent node  and send this parameters when the button is clicked to create a new agent node -->
+
+<style>    
+    .node-create-button {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        width: 100%;
+    }
+    
+    .node-create-button button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background: linear-gradient(45deg, #007BFF, #00C6FF);
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .node-create-button button:hover {
+        background: linear-gradient(45deg, #d11151, #0099cc); 
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .node-create-button button:active {
+        transform: scale(0.98);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-box {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            display: none;
+    }
+    .message-box.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    .message-box.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+</style>
+
+<!-- The following script tag contains the HTML template for the NodeCreator node. -->
+<script type="text/html" data-template-name="NodeCreator">
+    <div class="form-row">
+        <label for="node-input-config_name"><i class="fa fa-tag"></i> Config Name</label>
+        <input type="text" id="node-input-config_name" placeholder="Config Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-category"><i class="fa fa-tag"></i>Category</label>
+        <input type="text" id="node-input-category" placeholder="Category" value="ZEKI">
+    </div>
+    <div class="form-row">
+        <label for="node-input-color"><i class="fa fa-tag"></i>Colour</label>
+        <select id="node-input-color">
+            <option value="">Gray</option>
+            <option value="#a6bbcf">Light Blue</option>
+            <option value="#a6bbc1">Teal</option>
+            <option value="#d3a29c">Pink</option>
+            <option value="#c0c0c0">Silver</option>
+            <option value="#a4b7a4">Pale Green</option>
+            <option value="#e5c0a1">Peach</option>
+            <option value="#ffcc00">Yellow</option>
+            <option value="#cc99ff">Purple</option>
+            <option value="#99ccff">Light Blue 2</option>
+            <option value="#ff9999">Light Red</option>
+            <option value="#e8e8e8">Gray</option>
+            <option value="#ccccff">Lavender</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-cog"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-label"><i class="fa fa-cog"></i> Label</label>
+        <input type="text" id="node-input-label" placeholder="Label">
+    </div>
+    <div class="form-row">
+        <label for="node-input-icon"><i class="fa fa-cog"></i> Icon</label>
+        <input type="text" id="node-input-icon" placeholder="Icon">
+    </div>
+    <div class="form-row">
+        <label for="node-input-agentId"><i class="fa fa-tag"></i> Agent ID</label>
+        <select id="node-input-agentId">
+            <option value="">Select an Agent to Create as a Node</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-inputs"><i class="fa fa-cog"></i>NumberOf Inputs</label>
+        <input type="text" id="node-input-inputs" placeholder="NumberOf Inputs" value="1">
+    </div>
+    <div class="form-row">
+        <label for="node-input-outputs"><i class="fa fa-cog"></i>NumberOf Outputs</label>
+        <input type="text" id="node-input-outputs" placeholder="NumberOf Outputs" value="1">
+    </div>
+    <div class="node-create-button">
+        <button id="node-create-button">Create Node</button>
+    </div>
+    <div id="message-box" class="message-box"></div>
+</script>
+
+<!-- The following script tag is responsible for registering the NodeCreator node in the Node-RED editor. -->
+<script type="text/javascript">
+    
+    RED.nodes.registerType('NodeCreator', {                            // Register the node
+        category: 'ZEKI',                                              // Define the category of the node
+        color: '#a6bbcf',                                              // Define the color of the node
+        defaults: {                                                    // Define the default properties of the node
+            name: { value: "" }                                        // Define the default value of the name property
+        },               
+        inputs: 0,                                                     // Define the number of inputs of the node which is 0
+        outputs: 0,                                                    // Define the number of outputs of the node which is 0
+        icon: "file.png",                                              // Define the icon of the node
+        label: function () {
+            return  "NodeCreator";                                     // Define the label of the node
+        },
+
+        // This function is called when the node is being prepared for editing
+        oneditprepare : async function () {
+
+            // Get the reference to the node
+            var that = this;
+
+            // Fetch the list of all agent IDs
+            if(!this.allAgentIds){
+                this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
+            }
+
+            // Populate the agent ID dropdown
+            $("#node-input-agentId").empty().append(`<option value=${""}>${""}</option>`);
+                that.allAgentIds.forEach(agentId => {
+                $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
+            });
+
+            // Add an event listener to the create node button. When the button is clicked, the following function is executed
+            document.getElementById('node-create-button').addEventListener('click', async function() {
+                // Collect data from the form fields
+                const configName = document.getElementById('node-input-config_name').value;
+                const category = document.getElementById('node-input-category').value;
+                const color = document.getElementById('node-input-color').value;
+                const name = document.getElementById('node-input-name').value;
+                const label = document.getElementById('node-input-label').value;
+                const icon = document.getElementById('node-input-icon').value;
+                const agentId = document.getElementById('node-input-agentId').value;
+                const inputs = parseInt(document.getElementById('node-input-inputs').value, 10);
+                const outputs = parseInt(document.getElementById('node-input-outputs').value, 10);
+
+                // Fetch the existing config file
+                const response = await fetch('node_config.json');
+                const config = await response.json();
+
+                // Add the new config entry
+                if (configName && name) {
+                    const newConfig = {
+                        category: category || "ZEKI",
+                        color: color || "gray",
+                        name: name,
+                        label: label || name,
+                        icon: icon || "default-icon",
+                        agentId: agentId || "",
+                        numberOfInputs: inputs || 1,
+                        numberOfOutputs: outputs || 1
+                    };
+
+                    // Add the new config to the existing config
+                    config[configName] = newConfig;
+
+                    // Prepare the data to save
+                    const dataToSave = {
+                        config: config,
+                        configName: configName
+                    };
+
+                    // Send the updated config back to the server to save it
+                    const saveResponse = await fetch('/update_node_config', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(dataToSave)
+                    });
+                    var messageBox = document.getElementById('message-box');
+                    if (saveResponse.ok) {
+                        messageBox.textContent = `Creating node ${name} with config ${configName} successful`;
+                        messageBox.className = "message-box success";
+                    } else {
+                        messageBox.textContent = `Failed to create node ${name} with config ${configName}`;
+                        messageBox.className = "message-box error";
+                    }
+                    messageBox.style.display = 'block';
+
+                } else {
+                    alert("Config Name and Name are required fields.");
+                }
+
+                
+            });
+            
+        },
+
+        oneditsave: function () {
+        },
+
+        oneditcancel: function () {
+        },
+    });
+
+</script>

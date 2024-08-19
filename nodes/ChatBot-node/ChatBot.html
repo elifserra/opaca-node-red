@@ -351,6 +351,11 @@
         var jsonString = "{";
         var keys = Object.keys(actionParameters);
         var length = keys.length-1;
+
+        if(keys.length === 0){
+            return "{}";
+        }
+
         var count = 0;
 
         for(var param in actionParameters){
@@ -358,12 +363,18 @@
             if(actionsMap.get(actionName)[param].type === "integer"){
                 jsonString += actionParameters[param]; 
             }
+            else if(actionsMap.get(actionName)[param].type === "array"){
+                jsonString += JSON.stringify(actionParameters[param]);
+                console.log("array");
+            }
+
             else{
                 jsonString += "\""+actionParameters[param]+"\""; 
             }
             count !== length ? jsonString += "," : jsonString += "}";
             count++;
         }
+        console.log(jsonString);
         return jsonString; 
     }
 

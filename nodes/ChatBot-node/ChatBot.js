@@ -6,12 +6,6 @@ module.exports = function(RED) {
         RED.httpAdmin.get('/openAIKey', function(req, res) {
             res.json({ value: openaiAPIKey });
         });
-
-        node.on('input', function(msg) {
-            node.warn("ChatBot node called");
-            node.warn(openaiAPIKey);
-            node.send(msg);
-        });
     }
     RED.nodes.registerType("ChatBot", ChatBot);
 };

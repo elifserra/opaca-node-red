@@ -1,30 +1,9 @@
+<!-- This file is the HTML file for the HomeAssistantAgent node. It is responsible for the visual representation of the node in the Node-RED editor. -->
+
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
+<!-- The following script tag is responsible for registering the HomeAssistantAgent node in the Node-RED editor. -->
 <script type="text/javascript">
-
-    RED.nodes.registerType('HomeAssistantAgent',{
-        category: homeAssistantAgentCategory,
-        color   : homeAssistantAgentColor,
-        defaults: {
-            name: { value: homeAssistantAgentName },
-            agentId: { value: homeAssistantAgentID },
-            agentCurrentActionParametersInfo: { value: null },
-        },
-        inputs : homeAssistantAgentNumberOfInputs,
-        outputs: homeAssistantAgentNumberOfOutputs,
-        icon   : homeAssistantAgentIcon,
-        labe   : homeAssistantAgentLabel,
-
-        oneditprepare : async function(){ 
-            if(!this.HomeAssistantAgent){
-                this.HomeAssistantAgent = new Agent(homeAssistantAgentName,homeAssistantAgentID);
-            }
-            await this.HomeAssistantAgent.oneditPrepareFunction();
-        },
-
-        oneditcancel  : function()      { this.HomeAssistantAgent.oneditCancelFunction(this); },
-
-        oneditsave    : function()      { this.HomeAssistantAgent.oneditSaveFunction(this);   }
-    });
-    
+    makeNodeRegistration("HomeAssistantAgent");  // Make the HomeAssistantAgent node available in the Node-RED editor
 </script>

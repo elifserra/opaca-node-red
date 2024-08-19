@@ -1,30 +1,9 @@
+<!-- This file is the HTML file for the InvokeAction node. It is responsible for the visual representation of the node in the Node-RED editor. -->
+
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
+<!-- The following script tag is responsible for registering the InvokeAction node in the Node-RED editor. -->
 <script type="text/javascript">
-    
-    RED.nodes.registerType('invoke-action', {
-        category: invokeActionAgentCategory,
-        color: invokeActionAgentColor,
-        defaults: {
-            name: { value: invokeActionAgentName },
-            agentCurrentActionParametersInfo: { value: null },
-        },
-        inputs: invokeActionAgentNumberOfInputs,
-        outputs: invokeActionAgentNumberOfOutputs,
-        icon: invokeActionAgentIcon,
-        label: invokeActionAgentLabel,
-        
-        oneditprepare: async function() {
-            if(!this.Agent){
-                this.Agent = new Agent(invokeActionAgentName, null);
-            }
-            await this.Agent.oneditPrepareFunction();
-        },
-
-        oneditcancel: function() { this.Agent.oneditCancelFunction(this); },
-        
-        oneditsave  : function() {  this.Agent.oneditSaveFunction(this)   },
-
-    });
-
+    makeNodeRegistration("invoke-action");  // Make the InvokeAction node available in the Node-RED editor
 </script>

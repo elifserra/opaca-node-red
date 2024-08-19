@@ -1,15 +1,179 @@
+<style>/* Container for the buttons */
+    .open-camera-button, .close-camera-button, .make-detection-button {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        width: 100%;
+    }
+    
+    /* Styling for the buttons */
+    .open-camera-button button, .close-camera-button button, .make-detection-button button {
+        padding: 12px 24px; /* Slightly larger padding for a more substantial look */
+        font-size: 16px;
+        color: white;
+        background: linear-gradient(45deg, #007BFF, #00C6FF); /* Gradient background */
+        border: none;
+        border-radius: 30px; /* More rounded corners for a modern look */
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    /* Hover effect for buttons */
+    .open-camera-button button:hover, .close-camera-button button:hover, .make-detection-button button:hover {
+        background: linear-gradient(45deg, #d11151, #0099cc); /* Color change on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+    }
+    
+    /* Active effect for buttons */
+    .open-camera-button button:active, .close-camera-button button:active, .make-detection-button button:active {
+        transform: scale(0.98); /* Slight scale down on click */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow when active */
+    }
+    
+    /* Add a little margin between the buttons */
+    .open-camera-button button, .close-camera-button button, .make-detection-button button {
+        margin: 10px;
+    }
+
+    .message-box {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            display: none;
+    }
+    .message-box.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    .message-box.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    
+</style>
+
+<!-- The following script tag contains the HTML template for the camera node. -->
+<script type="text/html" data-template-name="camera">
+<div class="form-row" id="camera-container">
+    <video id="webcam" autoplay playsinline width="800" height="640"></video>
+    <canvas id="canvas" width="800" height="640" style="display: none;"></canvas>
+</div>
+<div class="open-camera-button">
+    <button id="open-camera-button">Open Camera</button>
+</div>
+<div class="close-camera-button">
+    <button id="close-camera-button">Close Camera</button>
+</div>
+<div class="make-detection-button">
+    <button id="make-detection-button">Make Detecion</button>
+</div>
+<div id="message-box" class="message-box"></div>
+</script>
+
+
+<!-- The following script tag contains the JavaScript code for the camera node. -->
 <script type="text/javascript">
     RED.nodes.registerType('camera', {
         category: 'ZEKI',
         color: '#a6bbcf',
         defaults: {
-            name: { value: "" }
+            name: { value: "" },
+            detectedObjects: { value: null },
+            parsedResponse: { value: null }
         },
         inputs: 1,
         outputs: 1,
-        icon: 'icons/zekı_logo.png',
+        icon: 'icons/logo.png',
         label: function() {
             return this.name || 'camera';
-        }
+        },
+
+
+        /*
+          Here is important becuas Camera class, captureImageFromCanvas , sendMessageWithImage and parseGPTResponse functions are defined  already in ChatBot node.
+          Therefore we can use same functions in this node.
+          This is node red property. Enables to use same functions in different nodes.
+        */
+        
+        oneditprepare: async function () {
+            // assign this to that to use this in the inner functions
+            const that = this;
+            // get the openAI key from the server
+            var data = await fetch('openAIKey').then(response => response.json());
+            that.apiKey = data.value;
+
+            // get the message box element
+            var messageBox = document.getElementById('message-box');
+
+            // get the video element
+            if(!this.video){
+                this.video = document.getElementById('webcam');
+            }
+            
+            // create a new camera object
+            if(!this.camera){
+                this.camera = new Camera(this.video);
+                await this.camera.openCamera();
+            };
+            // add event listeners foe open camera
+            document.getElementById('open-camera-button').addEventListener('click', async () => {
+                this.video = document.getElementById('webcam'); 
+                this.camera = new Camera(this.video);
+                await this.camera.openCamera();
+            });
+
+            // add event listeners for close camera
+            document.getElementById('close-camera-button').addEventListener('click', async () => {
+                await this.camera.closeCamera();
+                this.camera = undefined;
+                this.video = undefined;
+                messageBox.style.display = 'none';
+            });
+
+            // add event listeners for make detection
+            document.getElementById('make-detection-button').addEventListener('click', async () => {
+                // capture image from the canvas
+                const base64Image = await captureImageFromCanvas(that.camera.video,document.getElementById('canvas'));
+                // send the image to the openAI
+                const response = await sendMessageWithImage("Make Detection on this image",base64Image,that.apiKey);
+                // parse the response
+                that.parsedResponse = parseGPTResponse(response);
+                // get the detected objects
+                that.detectedObjects = that.parsedResponse["DetectedObjects"];
+                // send the detected objects to the server
+                $.ajax({
+                    url: 'detectedObjects',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ detectedObjects: that.detectedObjects}),
+                });
+                // show the response in the message box
+                messageBox.textContent = `${that.parsedResponse["Answer"]}`;
+                messageBox.className = "message-box success";
+                // show the message box
+                messageBox.style.display = 'block';
+            });
+
+
+        },
+
+        // This function is called when the node is deployed
+        oneditsave: async function() {
+            // These lines important because to be able to open the camera again after exiting the edit dialog we need to close the camera and delete the camera object.
+            this.camera = undefined;
+            this.video = undefined;
+        },
+
+        oneditcancel: async  function() {
+            // These lines important because to be able to open the camera again after exiting the edit dialog we need to close the camera and delete the camera object.
+            this.camera = undefined;
+            this.video = undefined;
+        },
+        
     });
 </script>

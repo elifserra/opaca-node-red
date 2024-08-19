@@ -1,3 +1,40 @@
+<!-- This is the HTML template for the node's configuration dialog. This HTML file is shared among multiple agents.
+    ->HomeAssistantAgent.html
+    ->RoomBookingAgent.html
+    ->ServletAgent.html
+    ->ShelfAgent.html
+    ->FridgeAgent.html
+    ->invoke-action.html
+    ->RoomBookingAgent.html
+    ->WayfindingAgent.html
+
+    These files all use same HTML template for the configuration dialog. Whenever edit dialog is opened for any of these agents, 
+    This HTML template is used to render the dialog by calling appenTheSelectedAgentCommonHtml() function.
+    This methods get this file and append to document and alose this template contains the common properties that are shared among these agents. The common properties are:
+    - Name
+    - Action
+    - Parameters
+    - Invoke Action Button
+    - Result Container
+    - Result Text
+
+    Pay attention to the following:
+    BaseAgent.html does not contain the common properties. It is specific to the BaseAgent node. Because BaseAgent node includes agentID property.
+    Therefore, it does not call appendTheSelectedAgentCommonHtml() function.
+    There is special condition in the method of oneditPrepareFunction which is member function of Agent class. This condition is used to check if the agent is BaseAgent or not.
+    /*
+        if(this.agentName != baseAgentName){
+            this.appenTheSelectedAgentCommonHtml();
+        }
+    */
+
+    For base agent, new oneditprepare function could be defined however this leads to redundancy. Therefore, this condition is used to prevent redundancy and enable this node to use the common methods.   
+
+    
+    appendTheSelectedAgentCommonHtml() method is called in the oneditPrepareFunction(node) method of the agent nodes. This method appends the common properties to the document.
+
+
+-->
 <style>
     .form-row {
         margin-bottom: 15px;
@@ -95,20 +132,37 @@
 </style>
 
 <div class="form-row">
+    <!-- The name of the agent. -->
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name">
 </div>
 <div class="form-row">
+    <!-- The action that the agent will perform. -->
     <label for="node-input-action"><i class="fa fa-cog"></i> Action</label>
     <select id="node-input-action">
         <option value="">Select an action</option>
     </select>
 </div>
+<!-- The parameters that the agent will use to perform the action. -->
 <div class="form-row" id="parameters-container">
+    <!-- Parameters will be added dynamically depending on the selected action. Below code segment inside of the oneditPrepareFunction(node) provide dynamic adding -->
+    <!--
+        /*
+            These actionParameters are the parameters of the selected action and they are added dynamically in the oneditPrepareFunction(node) method of the agent nodes.
+            if(this.actionParameters){
+                this.parameterHtml = "";
+                for(var key in this.actionParameters){
+                    this.parameterHtml += `<label for="${this.actionParameters[key].name}">${this.actionParameters[key].name}</label><input type="text" id="${this.actionParameters[key].name}" value="${this.actionParameters[key].value}" placeholder="${this.actionParameters[key].type}">`;
+                }
+            }
+        */
+    -->
 </div>
 <div class="invoke-action-button">
+    <!-- The button that will invoke the action. -->
     <button id="invoke-action-button">Invoke Action</button>
 </div>
+<!-- The container that will display the result of the action. -->
 <div id="result-container" class="result-container hidden">
     <p id="result-text"></p>
 </div>

@@ -1,4 +1,7 @@
-<style>
+<!-- This file is used to create the UI for the BaseAgent node. -->
+<!-- The BaseAgent node is the node that is configurable for all the agent nodes depending on the agentID property -->
+
+<style>    
 .invoke-action-button {
     display: flex;
     justify-content: center;
@@ -51,6 +54,8 @@
     color: #333;
 }
 </style>
+
+<!-- The following script is not common to all the nodes. It is specific to the BaseAgent node. Beacuse baseAgent Node includes agentID propert -->
 <script type="text/html" data-template-name="BaseAgent">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -59,7 +64,7 @@
     <div class="form-row">
         <label for="node-input-agentId"><i class="fa fa-tag"></i> Agent ID</label>
         <select id="node-input-agentId">
-            <option value="">Select an action</option>
+            <option value="">Select an Agent</option>
         </select>
     </div>
     <div class="form-row">
@@ -79,59 +84,10 @@
 </script>
 
 
+<!-- The following script tag includes the common html methods that are used in the HTML files of the nodes. -->
 <script type="text/javascript" src="html_common_methods.js"></script>
 
-
+<!-- The following script tag is responsible for registering the BaseAgent node in the Node-RED editor. -->
 <script type="text/javascript">
-
-    RED.nodes.registerType('BaseAgent', {
-        category: baseAgentCategory,
-        color: baseAgentColor,
-        defaults: {
-            name: { value: baseAgentName },
-            agentId: { value: null },
-            prevAgentId: { value: null },
-            agentCurrentActionParametersInfo: { value: null },
-        },
-        inputs: baseAgentNumberOfInputs,
-        outputs: baseAgentNumberOfOutputs,
-        icon: baseAgentIcon,
-        label: baseAgentLabel,
-
-        oneditprepare : async function(){
-
-            var that = this;
-            if(!this.allAgentIds){
-                this.allAgentIds = await fetch('agents').then(response=>response.json()).then(data=>data.value).then(agents=>agents.map(agent=>agent.agentId));
-                that.agentId = that.agentId === null ? that.allAgentIds[0] : that.agentId;
-            }
-
-            $("#node-input-agentId").empty().append(`<option value=${that.agentId}>${that.agentId}</option>`);
-                that.allAgentIds.forEach(agentId => {
-                $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
-            });
-
-            if(!this.Agent){
-                this.Agent = new Agent(baseAgentName,$("#node-input-agentId").val());
-            }
-
-            $("#node-input-agentId").on('change', async function(){
-                that.prevAgentId = that.agentId;
-                that.agentId = $("#node-input-agentId").val();
-                if(that.prevAgentId != that.agentId){
-                    $("#node-input-agentId").val(that.agentId);
-                    that.Agent.applyChangesForAgentChange(that.agentId);
-                    await that.Agent.oneditPrepareFunction();
-                }  
-            });
-
-            await that.Agent.oneditPrepareFunction();
-
-        },
-
-        oneditcancel : function(){ this.Agent.oneditCancelFunction(this); },
-
-        oneditsave : function() {  this.Agent.oneditSaveFunction(this); },
-
-    });
+    makeBaseNodeRegistration("BaseAgent");  // Make the BaseAgent node available in the Node-RED editor
 </script>
