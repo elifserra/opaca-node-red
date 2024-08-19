@@ -11,7 +11,7 @@ The project is organized into multiple directories, each corresponding to a part
 ### 1. **OpacaAccess**
    - **Purpose:** Manages access control and security within the OPACA framework, ensuring that only authorized agents and users can interact with the system.
    - **Role in Node-RED:** Enforces security measures within Node-RED, protecting the system from unauthorized access.
-   - [Detailed Documentation](./nodes/opaca-access-node/opaca-access.md)
+   - [Detailed Documentation](./nodes/OpacaAccess-node/opaca-access.md)
 
 ### 2. **NodeCreator**
    - **Purpose:** Provides utilities for creating custom nodes in Node-RED, allowing for the expansion of OPACA framework functionalities within the Node-RED environment.
@@ -26,7 +26,7 @@ The project is organized into multiple directories, each corresponding to a part
 ### 4. **Camera**
    - **Purpose:** Manages camera devices, including image capture and video streaming, crucial for monitoring and real-time analysis.
    - **Role in Node-RED:** Integrates visual data into Node-RED flows, enabling real-time image processing within the OPACA framework.
-   - [Detailed Documentation](./nodes/camera-node/camera.md)
+   - [Detailed Documentation](./nodes/Camera-node/camera.md)
 
 ### 5. **ChatBot**
    - **Purpose:** Provides a conversational interface for users, allowing interaction with the system via natural language processing, voice recognition and object detection.
@@ -36,44 +36,44 @@ The project is organized into multiple directories, each corresponding to a part
 ### 6. **InvokeAction**
    - **Purpose:** Use all agents actions in one node.
    - **Role in Node-RED:** This node is not specific to any agent. This node has all the agents actions to be invoked.
-   - [Detailed Documentation](./nodes/invoke-action-node/invoke-action.md)
+   - [Detailed Documentation](./nodes/InvokeAction-node/invoke-action.md)
 
 ### 7. **ExchangeAgent**
    - **Purpose:** Facilitates secure and efficient data exchange within the OPACA framework.
    - **Role in Node-RED:** Handles the flow of data between various nodes, ensuring seamless communication within the system.
-   - [Detailed Documentation](./nodes/exchange-agent-node/ExchangeAgent.md)
+   - [Detailed Documentation](./nodes/ExchangeAgent-node/ExchangeAgent.md)
 
 ### 8. **FridgeAgent**
    - **Purpose:** Manages smart fridge operations, such as adding removing groceries from fridge.
    - **Role in Node-RED:** Integrates these functionalities into Node-RED, allowing for automated control of the fridge environment.
-   - [Detailed Documentation](./nodes/fridge-agent-node/FridgeAgent.md)
+   - [Detailed Documentation](./nodes/FridgeAgent-node/FridgeAgent.md)
 
 ### 9. **HomeAssistantAgent**
    - **Purpose:** Interfaces with home automation platforms like Home Assistant, extending the OPACA framework's reach into home automation.
    - **Role in Node-RED:** Acts as a bridge between Node-RED and smart home devices, enabling their integration into the OPACA-based system.
-   - [Detailed Documentation](./nodes/home-assistant-agent-node/HomeAssistantAgent.md)
+   - [Detailed Documentation](./nodes/HomeAssistantAgent-node/HomeAssistantAgent.md)
 
 ### 10. **RoomBookingAgent**
    - **Purpose:** Manages room booking and scheduling, providing a system for reserving and managing shared spaces.
    - **Role in Node-RED:** Integrates room scheduling into Node-RED flows, allowing for automated booking and management within the OPACA framework.
-   - [Detailed Documentation](./nodes/room-booking-agent-node/RoomBookingAgent.md)
+   - [Detailed Documentation](./nodes/RoomBookingAgent-node/RoomBookingAgent.md)
 
 ### 11. **ServletAgent**
    - **Purpose:** Provides servlet-based interactions, enabling web-based control and monitoring of the system.
    - **Role in Node-RED:** Integrates web interfaces with the OPACA framework, allowing for browser-based management of system components.
-   - [Detailed Documentation](./nodes/servlet-agent-node/ServletAgent.md)
+   - [Detailed Documentation](./nodes/ServletAgent-node/ServletAgent.md)
 
 ### 12. **ShelfAgent**
    - **Purpose:** Manages smart shelves, opening closing a shelf or controling shelf contents.
    - **Role in Node-RED:** Essential for inventory management within the OPACA framework, integrating real-time tracking into Node-RED.
-   - [Detailed Documentation](./nodes/shelf-agent-node/ShelfAgent.md)
+   - [Detailed Documentation](./nodes/ShelfAgent-node/ShelfAgent.md)
 
 ### 13. **WayfindingAgent**
    - **Purpose:** Provides wayfinding assistance, helping users navigate complex environments within large facilities.
    - **Role in Node-RED:** Integrates navigation support into Node-RED flows, enabling real-time guidance within the OPACA framework.
    ## Note:
       This agent is not working with ZEKI-WIFI. Because it has its own WIFI. When this issue is fixed. This agent node will work properly.
-   - [Detailed Documentation](./nodes/wayfinding-agent-node/WayfindingAgent.md)
+   - [Detailed Documentation](./nodes/WayFindingAgent-node/WayfindingAgent.md)
 
 ## 14. **BeIntelliAgent**
    - **Purpose:** Manages vehicle fleet operations, such as locating vehicles, finding nearby parking spots, and checking air quality around specific locations.
