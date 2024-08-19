@@ -33,25 +33,25 @@ The project is organized into multiple directories, each corresponding to a part
    - **Role in Node-RED:** Translates user input into actions within Node-RED flows, facilitating a user-friendly interface for the OPACA framework.
    - [Detailed Documentation](./nodes/ChatBot-node/ChatBot.md)
 
-### 6. **ExchangeAgent**
+### 6. **InvokeAction**
+   - **Purpose:** Use all agents actions in one node.
+   - **Role in Node-RED:** This node is not specific to any agent. This node has all the agents actions to be invoked.
+   - [Detailed Documentation](./nodes/invoke-action-node/invoke-action.md)
+
+### 7. **ExchangeAgent**
    - **Purpose:** Facilitates secure and efficient data exchange within the OPACA framework.
    - **Role in Node-RED:** Handles the flow of data between various nodes, ensuring seamless communication within the system.
    - [Detailed Documentation](./nodes/exchange-agent-node/ExchangeAgent.md)
 
-### 7. **FridgeAgent**
+### 8. **FridgeAgent**
    - **Purpose:** Manages smart fridge operations, such as adding removing groceries from fridge.
    - **Role in Node-RED:** Integrates these functionalities into Node-RED, allowing for automated control of the fridge environment.
    - [Detailed Documentation](./nodes/fridge-agent-node/FridgeAgent.md)
 
-### 8. **HomeAssistantAgent**
+### 9. **HomeAssistantAgent**
    - **Purpose:** Interfaces with home automation platforms like Home Assistant, extending the OPACA framework's reach into home automation.
    - **Role in Node-RED:** Acts as a bridge between Node-RED and smart home devices, enabling their integration into the OPACA-based system.
    - [Detailed Documentation](./nodes/home-assistant-agent-node/HomeAssistantAgent.md)
-
-### 9. **InvokeAction**
-   - **Purpose:** Use all agents actions in one node.
-   - **Role in Node-RED:** This node is not specific to any agent. This node has all the agents actions to be invoked.
-   - [Detailed Documentation](./nodes/invoke-action-node/invoke-action.md)
 
 ### 10. **RoomBookingAgent**
    - **Purpose:** Manages room booking and scheduling, providing a system for reserving and managing shared spaces.
