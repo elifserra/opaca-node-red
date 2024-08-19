@@ -8,50 +8,50 @@ This project integrates the OPACA framework agens with Node-RED, a visual progra
 
 The project is organized into multiple directories, each corresponding to a particular agent or utility within the OPACA framework. These directories contain the necessary logic to define the behavior of each agent when represented as a Node-RED node. Below is a detailed description of each module:
 
-### 1. **BaseAgent**
-   - **Purpose:** This agent is not directly a opaca agent. This agent actually can be any opaca agent depending on the selected agent id by user.
-   - **Role in Node-RED:** It has an input filed called as Agent ID. User can select the agent based on agent id. With the help of `opaca-access` node current agents are shown in the dropdown menu on the BaseAgent edit dialog. If new agent is added to stystem. User can use this node to use this new agent. However, if the user wants to use this new agent as a distinct node, user should create this agent node. Normally creating new agent node consists of creating two files. One of them is with .hmtl extension, the other is with .js extension. Thanks to `NodeCreator` node, user can automatically add new agent as NODE-RED node by filling the input fields of `NodeCreator` edit dialog.
-   - [Detailed Documentation](./nodes/BaseAgent-node/BaseAgent.md)
+### 1. **OpacaAccess**
+   - **Purpose:** Manages access control and security within the OPACA framework, ensuring that only authorized agents and users can interact with the system.
+   - **Role in Node-RED:** Enforces security measures within Node-RED, protecting the system from unauthorized access.
+   - [Detailed Documentation](./nodes/opaca-access-node/opaca-access.md)
 
-### 2. **Camera**
-   - **Purpose:** Manages camera devices, including image capture and video streaming, crucial for monitoring and real-time analysis.
-   - **Role in Node-RED:** Integrates visual data into Node-RED flows, enabling real-time image processing within the OPACA framework.
-   - [Detailed Documentation](./nodes/camera-node/camera.md)
-
-### 3. **ChatBot**
-   - **Purpose:** Provides a conversational interface for users, allowing interaction with the system via natural language processing, voice recognition and object detection.
-   - **Role in Node-RED:** Translates user input into actions within Node-RED flows, facilitating a user-friendly interface for the OPACA framework.
-   - [Detailed Documentation](./nodes/ChatBot-node/ChatBot.md)
-
-### 4. **ExchangeAgent**
-   - **Purpose:** Facilitates secure and efficient data exchange within the OPACA framework.
-   - **Role in Node-RED:** Handles the flow of data between various nodes, ensuring seamless communication within the system.
-   - [Detailed Documentation](./nodes/exchange-agent-node/ExchangeAgent.md)
-
-### 5. **FridgeAgent**
-   - **Purpose:** Manages smart fridge operations, such as adding removing groceries from fridge.
-   - **Role in Node-RED:** Integrates these functionalities into Node-RED, allowing for automated control of the fridge environment.
-   - [Detailed Documentation](./nodes/fridge-agent-node/FridgeAgent.md)
-
-### 6. **HomeAssistantAgent**
-   - **Purpose:** Interfaces with home automation platforms like Home Assistant, extending the OPACA framework's reach into home automation.
-   - **Role in Node-RED:** Acts as a bridge between Node-RED and smart home devices, enabling their integration into the OPACA-based system.
-   - [Detailed Documentation](./nodes/home-assistant-agent-node/HomeAssistantAgent.md)
-
-### 7. **InvokeAction**
-   - **Purpose:** Use all agents actions in one node.
-   - **Role in Node-RED:** This node is not specific to any agent. This node has all the agents actions to be invoked.
-   - [Detailed Documentation](./nodes/invoke-action-node/invoke-action.md)
-
-### 8. **NodeCreator**
+### 2. **NodeCreator**
    - **Purpose:** Provides utilities for creating custom nodes in Node-RED, allowing for the expansion of OPACA framework functionalities within the Node-RED environment.
    - **Role in Node-RED:** Facilitates the development of new, specialized agents within Node-RED. Do not forget that users can use this node to create only opaca agents specific nodes. If you successfully create a new node, you will see success messagge on the `NodeCreator` edit dialog. Do not fortget to restart node-red after creating new node. It is about NODE-RED. If a custom node is created, NODE-RED should be restarted to register this newly created node to node red editor.
    - [Detailed Documentation](./nodes/NodeCreator-node/NodeCreator.md)
 
-### 9. **OpacaAccess**
-   - **Purpose:** Manages access control and security within the OPACA framework, ensuring that only authorized agents and users can interact with the system.
-   - **Role in Node-RED:** Enforces security measures within Node-RED, protecting the system from unauthorized access.
-   - [Detailed Documentation](./nodes/opaca-access-node/opaca-access.md)
+### 3. **BaseAgent**
+   - **Purpose:** This agent is not directly a opaca agent. This agent actually can be any opaca agent depending on the selected agent id by user.
+   - **Role in Node-RED:** It has an input filed called as Agent ID. User can select the agent based on agent id. With the help of `opaca-access` node current agents are shown in the dropdown menu on the BaseAgent edit dialog. If new agent is added to stystem. User can use this node to use this new agent. However, if the user wants to use this new agent as a distinct node, user should create this agent node. Normally creating new agent node consists of creating two files. One of them is with .hmtl extension, the other is with .js extension. Thanks to `NodeCreator` node, user can automatically add new agent as NODE-RED node by filling the input fields of `NodeCreator` edit dialog.
+   - [Detailed Documentation](./nodes/BaseAgent-node/BaseAgent.md)
+
+### 4. **Camera**
+   - **Purpose:** Manages camera devices, including image capture and video streaming, crucial for monitoring and real-time analysis.
+   - **Role in Node-RED:** Integrates visual data into Node-RED flows, enabling real-time image processing within the OPACA framework.
+   - [Detailed Documentation](./nodes/camera-node/camera.md)
+
+### 5. **ChatBot**
+   - **Purpose:** Provides a conversational interface for users, allowing interaction with the system via natural language processing, voice recognition and object detection.
+   - **Role in Node-RED:** Translates user input into actions within Node-RED flows, facilitating a user-friendly interface for the OPACA framework.
+   - [Detailed Documentation](./nodes/ChatBot-node/ChatBot.md)
+
+### 6. **ExchangeAgent**
+   - **Purpose:** Facilitates secure and efficient data exchange within the OPACA framework.
+   - **Role in Node-RED:** Handles the flow of data between various nodes, ensuring seamless communication within the system.
+   - [Detailed Documentation](./nodes/exchange-agent-node/ExchangeAgent.md)
+
+### 7. **FridgeAgent**
+   - **Purpose:** Manages smart fridge operations, such as adding removing groceries from fridge.
+   - **Role in Node-RED:** Integrates these functionalities into Node-RED, allowing for automated control of the fridge environment.
+   - [Detailed Documentation](./nodes/fridge-agent-node/FridgeAgent.md)
+
+### 8. **HomeAssistantAgent**
+   - **Purpose:** Interfaces with home automation platforms like Home Assistant, extending the OPACA framework's reach into home automation.
+   - **Role in Node-RED:** Acts as a bridge between Node-RED and smart home devices, enabling their integration into the OPACA-based system.
+   - [Detailed Documentation](./nodes/home-assistant-agent-node/HomeAssistantAgent.md)
+
+### 9. **InvokeAction**
+   - **Purpose:** Use all agents actions in one node.
+   - **Role in Node-RED:** This node is not specific to any agent. This node has all the agents actions to be invoked.
+   - [Detailed Documentation](./nodes/invoke-action-node/invoke-action.md)
 
 ### 10. **RoomBookingAgent**
    - **Purpose:** Manages room booking and scheduling, providing a system for reserving and managing shared spaces.
