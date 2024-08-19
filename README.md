@@ -80,6 +80,11 @@ The project is organized into multiple directories, each corresponding to a part
    - **Role in NODE-RED:** Integrates these functionalities into Node-RED, allowing for automated management of vehicle-related tasks within the BeIntelli fleet.
    - [Detailed Documentation](./nodes/BeIntelliAgent-node/BeIntelliAgent.md)
 
+## 15. **NavigationAgent**
+   - **Purpose:**  Manages navigation-related tasks such as converting addresses to geographic locations, finding directions between locations, and navigating from one address to another.
+   - **Role in NODE-RED:** Integrates these functionalities into Node-RED, allowing for automated handling of navigation and location-based tasks within your flows.
+   - [Detailed Documentation](./nodes/BeIntelliAgent-node/BeIntelliAgent.md)
+
 ## Resources Directory
 
 ###  **Common HTML Template**
