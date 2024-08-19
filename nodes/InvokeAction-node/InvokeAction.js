@@ -1,4 +1,4 @@
-const imports = require('../../nodes/resources/imports.js');                     // This is the import statement for the imports.js file. This file is used to import all the necessary dependencies required for the agent node to work properly.
+const imports = require('../resources/imports.js');                              // This is the import statement for the imports.js file. This file is used to import all the necessary dependencies required for the agent node to work properly.
 const js_common_methods = imports.js_common_methods_import;                      // This is the import statement for the js_common_methods object. This object contains all the common methods that are used by the agent node.
 
 module.exports = function(RED) {                                                 // Export the function that defines the agent node.
