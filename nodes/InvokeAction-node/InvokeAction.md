@@ -16,7 +16,7 @@ The `InvokeAction` node is a special node within your Node-RED environment. Unli
 
 ### Implementation
 
-- **JavaScript File (invoke-action.js):**
+- **JavaScript File (InvokeAction.js):**
 
     ```javascript
     const imports = require('../../nodes/resources/imports.js');
@@ -30,7 +30,7 @@ The `InvokeAction` node is a special node within your Node-RED environment. Unli
     };
     ```
 
-- **HTML File (invoke-action.html):**
+- **HTML File (InvokeAction.html):**
 
     ```html
     <script type="text/javascript" src="html_common_methods.js"></script>
