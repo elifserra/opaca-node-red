@@ -1,127 +1,121 @@
-# IoT Smart System with Node-RED
+# OPACA Framework Node-RED Integration
 
 ## Overview
 
-This project is a sophisticated IoT application built using Node-RED, a flow-based development tool for visual programming. The project simulates a smart environment where various agents and services collaborate to monitor, manage, and interact with IoT devices. The application is structured into multiple modules, each serving a distinct purpose within the overall system.
+This project integrates the OPACA framework agens with Node-RED, a visual programming tool that allows for the flow-based development of applications. In this project, each Node-RED node represents a specific agent from the OPACA framework. These agents perform various roles, such as managing data exchange, interacting with external systems, and automating tasks. The goal of this project is to demonstrate how the OPACA framework can be effectively utilized within Node-RED to create a dynamic, responsive system.
 
 ## Project Structure
 
-The project is organized into several directories, each containing specific modules that contribute to the overall functionality. Below is a detailed overview of each directory:
+The project is organized into multiple directories, each corresponding to a particular agent or utility within the OPACA framework. These directories contain the necessary logic to define the behavior of each agent when represented as a Node-RED node. Below is a detailed description of each module:
 
 ### 1. **BaseAgent**
-   - **Purpose:** This module provides the core functionality for creating and managing agents within the Node-RED environment. These agents serve as the foundational elements for interacting with IoT devices.
-   - **Details:** It includes essential classes and methods used by other agents to ensure consistency and reliability across the system.
-   - [Detailed Documentation](./BaseAgent.md)
+   - **Purpose:** This agent is not directly a opaca agent. This agent actually can be any opaca agent depending on the selected agent id by user.
+   - **Role in Node-RED:** It has an input filed called as Agent ID. User can select the agent based on agent id. With the help of `opaca-access` node current agents are shown in the dropdown menu on the BaseAgent edit dialog. If new agent is added to stystem. User can use this node to use this new agent. However, if the user wants to use this new agent as a distinct node, user should create this agent node. Normally creating new agent node consists of creating two files. One of them is with .hmtl extension, the other is with .js extension. Thanks to `NodeCreator` node, user can automatically add new agent as NODE-RED node by filling the input fields of `NodeCreator` edit dialog.
+   - [Detailed Documentation](./nodes/BaseAgent-node/BaseAgent.md)
 
 ### 2. **Camera**
-   - **Purpose:** Manages camera devices within the IoT system, handling image capture, video streaming, and processing of visual data within Node-RED flows.
-   - **Details:** Integrates visual monitoring into the system, enabling the capture and analysis of images or video streams.
+   - **Purpose:** Manages camera devices, including image capture and video streaming, crucial for monitoring and real-time analysis.
+   - **Role in Node-RED:** Integrates visual data into Node-RED flows, enabling real-time image processing within the OPACA framework.
    - [Detailed Documentation](./camera.md)
 
 ### 3. **ChatBot**
-   - **Purpose:** Implements a chatbot interface that allows users to interact with the IoT system through natural language. This module processes user inputs and provides context-appropriate responses.
-   - **Details:** Facilitates voice or text-based control of the smart environment, making the system more user-friendly.
+   - **Purpose:** Provides a conversational interface for users, allowing interaction with the system via natural language processing.
+   - **Role in Node-RED:** Translates user input into actions within Node-RED flows, facilitating a user-friendly interface for the OPACA framework.
    - [Detailed Documentation](./ChatBot.md)
 
 ### 4. **ExchangeAgent**
-   - **Purpose:** Handles data exchange between different components of the system, ensuring secure and reliable communication.
-   - **Details:** Plays a critical role in maintaining data integrity and facilitating the smooth operation of interconnected devices.
+   - **Purpose:** Facilitates secure and efficient data exchange within the OPACA framework.
+   - **Role in Node-RED:** Handles the flow of data between various nodes, ensuring seamless communication within the system.
    - [Detailed Documentation](./ExchangeAgent.md)
 
 ### 5. **FridgeAgent**
-   - **Purpose:** Manages the smart fridge’s operations, including temperature control and inventory management. Ensures that perishable goods are stored under optimal conditions.
-   - **Details:** Essential for applications where environmental control and inventory tracking are crucial.
+   - **Purpose:** Manages smart fridge operations, such as temperature control and inventory management.
+   - **Role in Node-RED:** Integrates these functionalities into Node-RED, allowing for automated control of the fridge environment.
    - [Detailed Documentation](./FridgeAgent.md)
 
 ### 6. **HomeAssistantAgent**
-   - **Purpose:** Integrates with home automation platforms like Home Assistant, enabling control and interaction with various smart home devices through Node-RED.
-   - **Details:** Allows for seamless integration of the IoT system with existing smart home ecosystems.
+   - **Purpose:** Interfaces with home automation platforms like Home Assistant, extending the OPACA framework's reach into home automation.
+   - **Role in Node-RED:** Acts as a bridge between Node-RED and smart home devices, enabling their integration into the OPACA-based system.
    - [Detailed Documentation](./HomeAssistantAgent.md)
 
 ### 7. **InvokeAction**
-   - **Purpose:** Contains logic for triggering actions based on specific conditions or inputs within Node-RED flows, automating responses to sensor data or user commands.
-   - **Details:** Automates tasks such as sending alerts or activating devices in response to environmental changes.
+   - **Purpose:** Automates responses within the system by triggering actions based on specific conditions or inputs.
+   - **Role in Node-RED:** Enhances automation within Node-RED flows by allowing conditional actions and event-driven behaviors.
    - [Detailed Documentation](./invoke-action.md)
 
 ### 8. **NodeCreator**
-   - **Purpose:** Provides tools for creating custom nodes within Node-RED, extending its capabilities to meet specific project requirements.
-   - **Details:** Enables the development of reusable components that can enhance the functionality of Node-RED.
+   - **Purpose:** Provides utilities for creating custom nodes in Node-RED, allowing for the expansion of OPACA framework functionalities within the Node-RED environment.
+   - **Role in Node-RED:** Facilitates the development of new, specialized agents within Node-RED.
    - [Detailed Documentation](./NodeCreator.md)
 
 ### 9. **OpacaAccess**
-   - **Purpose:** Manages access control and security within the IoT system, ensuring that only authorized users and devices can interact with the system.
-   - **Details:** Implements security protocols to protect against unauthorized access.
+   - **Purpose:** Manages access control and security within the OPACA framework, ensuring that only authorized agents and users can interact with the system.
+   - **Role in Node-RED:** Enforces security measures within Node-RED, protecting the system from unauthorized access.
    - [Detailed Documentation](./opaca-access.md)
 
 ### 10. **RoomBookingAgent**
-   - **Purpose:** Manages the booking and scheduling of rooms within the smart environment, integrating with calendars and other scheduling tools.
-   - **Details:** Facilitates the efficient management of shared spaces within an organization.
+   - **Purpose:** Manages room booking and scheduling, providing a system for reserving and managing shared spaces.
+   - **Role in Node-RED:** Integrates room scheduling into Node-RED flows, allowing for automated booking and management within the OPACA framework.
    - [Detailed Documentation](./RoomBookingAgent.md)
 
 ### 11. **ServletAgent**
-   - **Purpose:** Provides servlet-based interactions within the IoT system, enabling web-based control and monitoring.
-   - **Details:** Allows for the integration of web interfaces with the IoT environment, providing a platform for user interaction.
+   - **Purpose:** Provides servlet-based interactions, enabling web-based control and monitoring of the system.
+   - **Role in Node-RED:** Integrates web interfaces with the OPACA framework, allowing for browser-based management of system components.
    - [Detailed Documentation](./ServletAgent.md)
 
 ### 12. **ShelfAgent**
-   - **Purpose:** Manages smart shelves that track inventory levels and ensure the proper organization of items within a storage space.
-   - **Details:** Essential for inventory management in warehouses or retail environments.
+   - **Purpose:** Manages smart shelves, tracking inventory levels and ensuring proper organization of items within storage spaces.
+   - **Role in Node-RED:** Essential for inventory management within the OPACA framework, integrating real-time tracking into Node-RED.
    - [Detailed Documentation](./ShelfAgent.md)
 
 ### 13. **WayfindingAgent**
-   - **Purpose:** Provides wayfinding assistance within large facilities, helping users navigate complex environments.
-   - **Details:** Integrates with mapping and GPS systems to offer real-time navigation support.
+   - **Purpose:** Provides wayfinding assistance, helping users navigate complex environments within large facilities.
+   - **Role in Node-RED:** Integrates navigation support into Node-RED flows, enabling real-time guidance within the OPACA framework.
    - [Detailed Documentation](./WayfindingAgent.md)
 
-## Common Components
-
-### **Common HTML Template**
+### 14. **Common HTML Template**
    - **Purpose:** Provides a standardized HTML template used across various web-based components of the project.
    - [Detailed Documentation](./common_html_template.md)
 
-### **HTML Common Methods**
+### 15. **HTML Common Methods**
    - **Purpose:** Contains reusable HTML methods that support the development of web interfaces within the project.
    - [Detailed Documentation](./html_common_methods.md)
 
-### **JavaScript Common Methods**
-   - **Purpose:** Offers a set of JavaScript methods that are commonly used across different modules in the project, facilitating code reuse.
+### 16. **JavaScript Common Methods**
+   - **Purpose:** Offers a set of JavaScript methods commonly used across different modules, facilitating code reuse.
    - [Detailed Documentation](./js_common_methods.md)
 
-### **Imports**
+### 17. **Imports**
    - **Purpose:** Manages the import of necessary libraries and dependencies required by the project’s modules.
    - [Detailed Documentation](./imports.md)
 
-### **Node Configuration**
-   - **Purpose:** Provides configuration settings for custom nodes within Node-RED, allowing for easier setup and integration of new nodes.
+### 18. **Node Configuration**
+   - **Purpose:** Provides configuration settings for custom nodes, allowing for easier setup and integration of new nodes in Node-RED.
    - [Detailed Documentation](./node_config.md)
 
 ## Prerequisites
 
 ### Node-RED Installation
 
-To run this project, you must have Node-RED installed on your system. Node-RED is a flow-based development tool that enables you to visually program IoT applications.
+To use this project, you need to have Node-RED installed. Node-RED is essential for deploying and interacting with the OPACA framework agents as nodes.
 
 1. **Install Node-RED:**
-   - Node-RED can be installed on various platforms, including Windows, macOS, and Linux. Detailed installation instructions can be found on the [Node-RED official website](https://nodered.org/docs/getting-started/).
+   - Node-RED can be installed on various operating systems. Follow the instructions on the [Node-RED official website](https://nodered.org/docs/getting-started/) to install it.
 
 2. **Start Node-RED:**
-   - After installation, start Node-RED by running the `node-red` command in your terminal. Access the Node-RED editor by navigating to `http://localhost:1880` in your web browser.
+   - After installation, run Node-RED by entering `node-red` in your terminal. The Node-RED editor will be accessible at `http://localhost:1880`.
 
 3. **Deploy the Project:**
-   - Import the JSON flow file into Node-RED and deploy it. The flow will immediately start running, enabling you to interact with the system’s components.
-
-### Additional Setup
-
-- **Custom Nodes:** The project may require the installation of additional nodes. For example, if the project includes dashboards, you might need to install the `node-red-dashboard` module. Install additional nodes via the "Manage Palette" section in Node-RED.
+   - Import the provided JSON flow files into Node-RED and deploy them. These flows represent the interactions and operations of the OPACA agents within the Node-RED environment.
 
 ## Usage
 
-Once Node-RED is running and the flows are deployed, you can interact with the system through the provided dashboard or APIs. Each module handles specific tasks, and their integration allows for comprehensive monitoring and control of the smart environment.
+Once Node-RED is running and the agents are deployed, you can interact with the system through the Node-RED dashboard or via direct API calls. Each agent is designed to perform specific tasks within the OPACA framework, making it easier to manage and automate complex environments.
 
-## Resources
+## Additional Resources
 
-- **Node-RED Documentation:** For further information about Node-RED, visit the [official Node-RED website](https://nodered.org/).
+For more information about Node-RED and how it integrates with the OPACA framework, visit the [official Node-RED website](https://nodered.org/).
 
 ---
 
-This README provides a detailed overview of the project structure, including installation and usage instructions. By following the steps outlined, you can set up and run the IoT application on your system, leveraging the full capabilities of Node-RED.
+This README provides a detailed overview of how the OPACA framework agents are represented and utilized within Node-RED, offering a clear guide for setting up and using this integrated system.
