@@ -50,7 +50,7 @@ The JavaScript file implements the runtime logic for the `camera-node`. It handl
 2. Double-click the node to open its configuration UI.
 3. Open the camera and by pressing make detection button to make detections.
 
-![This is an image](./resources/Images/camera_edit_dialog.png)
+![This is an image](../resources/Images/camera_edit_dialog.png)
 
 4. Close edit dialog and return to the flow screen. 
 5. Drag official node-red `inject-node` to flow and connect to `camera-node`.
