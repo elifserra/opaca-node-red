@@ -121,13 +121,13 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
 
 2. **Make Configurations:**
    - After installing go to installation directory named as `.node-red`.
-   - Open this directoy, you should see a javascript file called as `settings`. Then open this js file to make configurations to to be able to see custom nodes on the palette and to be able to see the custom nodes under the category name ``ZEKI`.
-   1) NODE-RED needs you to provide custom nodes directoy path to upload them to NODE-RED editor. Therefore you need to enter the `opaca-node-red/nodes` directory full path to setting file. Assign your full path to `nodesDir` property in the settings file as shown below.
+   - Open this directoy, you should see a javascript file called as `settings`. Then open this js file to make configurations to to be able to see custom nodes on the palette and to be able to see the custom nodes under the category name `ZEKI`.
+   1) NODE-RED needs you to provide custom nodes directoy path to upload them to NODE-RED editor. Therefore, you need to enter the `opaca-node-red/nodes` directory full path to setting file. Assign your full path to `nodesDir` property in the settings file as shown below.
 
    ![This is an image](nodesDir_register.png)
 
 
-   2) As you can see in the example flows, `ZEKI` palette is shown on at the top. If you want `ZEKI` palette to be shown at top. You need to assign categories property as shown below.
+   2) As you can see in the example flow below under the title of `Start Node-RED`, `ZEKI` palette is shown on at the top. If you want `ZEKI` palette to be shown at top. You need to assign categories property as shown below.
 
    ![This is an image](zeki_palette_register.png)
 
