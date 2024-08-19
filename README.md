@@ -116,7 +116,7 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
 
    2) As you can see in the example flows, `ZEKI` palette is shown on at the top. If you want `ZEKI` palette to be shown at top. You need to assign categories property as shown below.
 
-   ![This is an image](zeki_palette_shown.png)
+   ![This is an image](zeki_palette_register.png)
 
    ## Note:
          If you do not assign catehory property, `ZEKI` category custom nodes will be shown at the bottom by default.
