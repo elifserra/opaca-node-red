@@ -26,7 +26,7 @@ The project is organized into multiple directories, each corresponding to a part
 ### 4. **Camera**
    - **Purpose:** Manages camera devices, including image capture and video streaming, crucial for monitoring and real-time analysis.
    - **Role in Node-RED:** Integrates visual data into Node-RED flows, enabling real-time image processing within the OPACA framework.
-   - [Detailed Documentation](./nodes/Camera-node/camera.md)
+   - [Detailed Documentation](./nodes/Camera-node/Camera.md)
 
 ### 5. **ChatBot**
    - **Purpose:** Provides a conversational interface for users, allowing interaction with the system via natural language processing, voice recognition and object detection.
