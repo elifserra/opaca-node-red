@@ -51,7 +51,7 @@ This file may be referenced in `BaseAgent.html` to standardize HTML manipulation
 Below BaseAgent is configured to work as HomeAssistantAgent, it first get kitchen sensorID, sends result to another base agent works as HomeAssistantAgent.
 Second node finds the temperature of the given room that has sensorID which is kitchen.
 
-![This is an image](base-agent_example_flow.png)
+![This is an image](../resources/Images/base-agent_example_flow.png)
 
 There is another option to be able to invoke action, On edit dialog user can press the invoke action button. When it is pressed invoke result will be displayed on the screen. But, do not forget that this feature is not used in flow. If you want to use action result in flow you need to trigger the flow via inject node.
 

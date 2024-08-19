@@ -56,7 +56,7 @@ The JavaScript file implements the runtime logic for the `camera-node`. It handl
 5. Drag official node-red `inject-node` to flow and connect to `camera-node`.
 6. Press inject node, this trigger the camera node to send the object that has the highest confidence.
 
-![This is an image](./resources/Images/example_flow_for_camera_node.png)
+![This is an image](../resources/Images/example_flow_for_camera_node.png)
 
 
 

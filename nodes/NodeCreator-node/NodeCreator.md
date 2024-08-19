@@ -81,7 +81,7 @@ The `node_config.json` file plays a vital role in the NodeCreator node's functio
      2. Start the Node-RED service again by running the command `node-red` and go to url server now running at "http://127.0.0.1:1880/." should be default
      3. Once Node-RED is restarted, the new agent node will be available in the editor and it can be used.
 
-![This is an image](node_creator_edit_dialog.png)     
+![This is an image](../resources/Images/node_creator_edit_dialog.png)     
 
 ## HTTP Endpoints
 

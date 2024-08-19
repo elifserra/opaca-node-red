@@ -37,7 +37,7 @@ The **Opaca Access Node** is a Node-RED node designed to handle authentication a
 2. The Inject node should provide a `msg` object containing `username` and `password` properties.
 3. Upon injection, the node will automatically authenticate and fetch the OPACA token and agents.
 
-![This is an image](opaca-access-screen.png)     
+![This is an image](../resources/Images/opaca-access-screen.png)     
 
 ## API Integration
 
