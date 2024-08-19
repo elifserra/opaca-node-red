@@ -10,7 +10,7 @@
   "node-red": {
     "nodes": {
       "opaca-access": "/nodes/OpacaAccess-node/OpacaAccess.js",
-      "invoke-action": "/nodes/InvokeAction-node/invoke-action.js",
+      "invoke-action": "/nodes/InvokeAction-node/InvokeAction.js",
       "camera": "/nodes/Camera-node/Camera.js",
       "BaseAgent": "/nodes/BaseAgent-node/BaseAgent.js",
       "FridgeAgent": "/nodes/FridgeAgent-node/FridgeAgent.js",
