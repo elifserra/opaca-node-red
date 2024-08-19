@@ -122,7 +122,9 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
          If you do not assign catehory property, `ZEKI` category custom nodes will be shown at the bottom by default.
 
 2. **Start Node-RED:**
-   - After installation and making necessary configurations, run Node-RED by entering `node-red` in your terminal. The Node-RED editor will be accessible at `http://localhost:1880`.
+   - After installation and making necessary configurations, run Node-RED by entering `node-red` in your terminal. The Node-RED editor will be accessible at `http://localhost:1880`. You can see the `ZEKI` palette and custom nodes as shown below.
+
+   ![This is an image](palette_shown.png)
 
 3. **Deploy the Project:**
    - Import the provided JSON flow files into Node-RED and deploy them or you can make your own flows. These flows represent the interactions and operations of the OPACA agents within the Node-RED environment.
