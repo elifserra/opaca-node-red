@@ -11,7 +11,7 @@
     "nodes": {
       "opaca-access": "/nodes/OpacaAccess-node/opaca-access.js",
       "invoke-action": "/nodes/InvokeAction-node/invoke-action.js",
-      "camera": "/nodes/Camera-node/camera.js",
+      "camera": "/nodes/Camera-node/Camera.js",
       "BaseAgent": "/nodes/BaseAgent-node/BaseAgent.js",
       "FridgeAgent": "/nodes/FridgeAgent-node/FridgeAgent.js",
       "ShelfAgent": "/nodes/ShelfAgent-node/ShelfAgent.js",
