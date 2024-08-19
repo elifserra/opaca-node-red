@@ -71,27 +71,31 @@ The project is organized into multiple directories, each corresponding to a part
 ### 13. **WayfindingAgent**
    - **Purpose:** Provides wayfinding assistance, helping users navigate complex environments within large facilities.
    - **Role in Node-RED:** Integrates navigation support into Node-RED flows, enabling real-time guidance within the OPACA framework.
+   ## Note:
+      This agent is not working with ZEKI-WIFI. Because it has its own WIFI. When this issue is fixed. This agent node will work properly.
    - [Detailed Documentation](./nodes/wayfinding-agent-node/WayfindingAgent.md)
 
-### 14. **Common HTML Template**
+## Resources Directory
+
+###  **Common HTML Template**
    - **Purpose:** Provides a standardized HTML template used across various web-based components of the project.
-   - [Detailed Documentation](./common_html_template.md)
+   - [Detailed Documentation](./nodes/resources/common_html_template.md)
 
-### 15. **HTML Common Methods**
+###  **HTML Common Methods**
    - **Purpose:** Contains reusable HTML methods that support the development of web interfaces within the project.
-   - [Detailed Documentation](./html_common_methods.md)
+   - [Detailed Documentation](./nodes/resources/html_common_methods.md)
 
-### 16. **JavaScript Common Methods**
+###  **JavaScript Common Methods**
    - **Purpose:** Offers a set of JavaScript methods commonly used across different modules, facilitating code reuse.
-   - [Detailed Documentation](./js_common_methods.md)
+   - [Detailed Documentation](./nodes/resources/js_common_methods.md)
 
-### 17. **Imports**
+###  **Imports**
    - **Purpose:** Manages the import of necessary libraries and dependencies required by the project’s modules.
-   - [Detailed Documentation](./imports.md)
+   - [Detailed Documentation](./nodes/resources/imports.md)
 
-### 18. **Node Configuration**
+###  **Node Configuration**
    - **Purpose:** Provides configuration settings for custom nodes, allowing for easier setup and integration of new nodes in Node-RED.
-   - [Detailed Documentation](./node_config.md)
+   - [Detailed Documentation](./nodes/resources/node_config.md)
 
 ## Prerequisites
 
@@ -102,19 +106,32 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
 1. **Install Node-RED:**
    - Node-RED can be installed on various operating systems. Follow the instructions on the [Node-RED official website](https://nodered.org/docs/getting-started/) to install it.
 
+2. **Make Configurations**
+   - After installing go to installation directory named as `.node-red`.
+   - Open this directoy, you should see a javascript file called as `settings`. Then open this js file to make configurations to to be able to see custom nodes on the palette and to be able to see the custom nodes under the category name ``ZEKI`.
+   1) NODE-RED needs you to provide custom nodes directoy path to upload them to NODE-RED editor. Therefore you need to enter the `opaca-node-red/nodes` directory full path to setting file. Assign your full path to `nodesDir` property in the settings file as shown below.
+   ![This is an image](./nodesDir_shown)
+
+   2) As you can see in the example flows, `ZEKI` palette is shown on at the top. If you want `ZEKI` palette to be shown at top. You need to assign categories property as shown below.
+   ![This is an image](./zeki_palette_shown)
+
+   ## Note:
+         If you do not assign catehory property, `ZEKI` category custom nodes will be shown at the bottom by default.
+
 2. **Start Node-RED:**
-   - After installation, run Node-RED by entering `node-red` in your terminal. The Node-RED editor will be accessible at `http://localhost:1880`.
+   - After installation and making necessary configurations, run Node-RED by entering `node-red` in your terminal. The Node-RED editor will be accessible at `http://localhost:1880`.
 
 3. **Deploy the Project:**
-   - Import the provided JSON flow files into Node-RED and deploy them. These flows represent the interactions and operations of the OPACA agents within the Node-RED environment.
+   - Import the provided JSON flow files into Node-RED and deploy them or you can make your own flows. These flows represent the interactions and operations of the OPACA agents within the Node-RED environment.
 
-## Usage
 
-Once Node-RED is running and the agents are deployed, you can interact with the system through the Node-RED dashboard or via direct API calls. Each agent is designed to perform specific tasks within the OPACA framework, making it easier to manage and automate complex environments.
+## Important Notes
 
-## Additional Resources
+1. **Re-authentication with OpacaAccess Node:**
+   - When working with custom nodes in Node-RED, especially while accessing `http://localhost:1880`, it is important to note that if you refresh the Node-RED page, you will need to re-authenticate using the OpacaAccess node. This ensures that all interactions remain secure and that access control is maintained. Whenever you drag a new custom node from `ZEKI` palette you need to again make authorization.
 
-For more information about Node-RED and how it integrates with the OPACA framework, visit the [official Node-RED website](https://nodered.org/).
+2. **Deploying Changes:**
+   - Whenever you make any changes to the nodes in your flow, it is crucial to click the **Deploy** button in Node-RED. If you do not deploy after making changes, the flow will continue to run with the old parameters, which could lead to unexpected behavior. Always ensure that your changes are deployed to keep the flow operating with the latest configuration.
 
 ---
 
