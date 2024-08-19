@@ -16,62 +16,62 @@ The project is organized into multiple directories, each corresponding to a part
 ### 2. **Camera**
    - **Purpose:** Manages camera devices, including image capture and video streaming, crucial for monitoring and real-time analysis.
    - **Role in Node-RED:** Integrates visual data into Node-RED flows, enabling real-time image processing within the OPACA framework.
-   - [Detailed Documentation](./camera.md)
+   - [Detailed Documentation](./nodes/camera-node/camera.md)
 
 ### 3. **ChatBot**
-   - **Purpose:** Provides a conversational interface for users, allowing interaction with the system via natural language processing.
+   - **Purpose:** Provides a conversational interface for users, allowing interaction with the system via natural language processing, voice recognition and object detection.
    - **Role in Node-RED:** Translates user input into actions within Node-RED flows, facilitating a user-friendly interface for the OPACA framework.
-   - [Detailed Documentation](./ChatBot.md)
+   - [Detailed Documentation](./nodes/ChatBot-node/ChatBot.md)
 
 ### 4. **ExchangeAgent**
    - **Purpose:** Facilitates secure and efficient data exchange within the OPACA framework.
    - **Role in Node-RED:** Handles the flow of data between various nodes, ensuring seamless communication within the system.
-   - [Detailed Documentation](./ExchangeAgent.md)
+   - [Detailed Documentation](./nodes/exchange-agent-node/ExchangeAgent.md)
 
 ### 5. **FridgeAgent**
-   - **Purpose:** Manages smart fridge operations, such as temperature control and inventory management.
+   - **Purpose:** Manages smart fridge operations, such as adding removing groceries from fridge.
    - **Role in Node-RED:** Integrates these functionalities into Node-RED, allowing for automated control of the fridge environment.
-   - [Detailed Documentation](./FridgeAgent.md)
+   - [Detailed Documentation](./nodes/fridge-agent-node/FridgeAgent.md)
 
 ### 6. **HomeAssistantAgent**
    - **Purpose:** Interfaces with home automation platforms like Home Assistant, extending the OPACA framework's reach into home automation.
    - **Role in Node-RED:** Acts as a bridge between Node-RED and smart home devices, enabling their integration into the OPACA-based system.
-   - [Detailed Documentation](./HomeAssistantAgent.md)
+   - [Detailed Documentation](./nodes/home-assistant-agent-node/HomeAssistantAgent.md)
 
 ### 7. **InvokeAction**
-   - **Purpose:** Automates responses within the system by triggering actions based on specific conditions or inputs.
-   - **Role in Node-RED:** Enhances automation within Node-RED flows by allowing conditional actions and event-driven behaviors.
-   - [Detailed Documentation](./invoke-action.md)
+   - **Purpose:** Use all agents actions in one node.
+   - **Role in Node-RED:** This node is not specific to any agent. This node has all the agents actions to be invoked.
+   - [Detailed Documentation](./nodes/invoke-action-node/invoke-action.md)
 
 ### 8. **NodeCreator**
    - **Purpose:** Provides utilities for creating custom nodes in Node-RED, allowing for the expansion of OPACA framework functionalities within the Node-RED environment.
-   - **Role in Node-RED:** Facilitates the development of new, specialized agents within Node-RED.
-   - [Detailed Documentation](./NodeCreator.md)
+   - **Role in Node-RED:** Facilitates the development of new, specialized agents within Node-RED. Do not forget that users can use this node to create only opaca agents specific nodes. If you successfully create a new node, you will see success messagge on the `NodeCreator` edit dialog. Do not fortget to restart node-red after creating new node. It is about NODE-RED. If a custom node is created, NODE-RED should be restarted to register this newly created node to node red editor.
+   - [Detailed Documentation](./nodes/NodeCreator-node/NodeCreator.md)
 
 ### 9. **OpacaAccess**
    - **Purpose:** Manages access control and security within the OPACA framework, ensuring that only authorized agents and users can interact with the system.
    - **Role in Node-RED:** Enforces security measures within Node-RED, protecting the system from unauthorized access.
-   - [Detailed Documentation](./opaca-access.md)
+   - [Detailed Documentation](./nodes/opaca-access-node/opaca-access.md)
 
 ### 10. **RoomBookingAgent**
    - **Purpose:** Manages room booking and scheduling, providing a system for reserving and managing shared spaces.
    - **Role in Node-RED:** Integrates room scheduling into Node-RED flows, allowing for automated booking and management within the OPACA framework.
-   - [Detailed Documentation](./RoomBookingAgent.md)
+   - [Detailed Documentation](./nodes/room-booking-agent-node/RoomBookingAgent.md)
 
 ### 11. **ServletAgent**
    - **Purpose:** Provides servlet-based interactions, enabling web-based control and monitoring of the system.
    - **Role in Node-RED:** Integrates web interfaces with the OPACA framework, allowing for browser-based management of system components.
-   - [Detailed Documentation](./ServletAgent.md)
+   - [Detailed Documentation](./nodes/servlet-agent-node/ServletAgent.md)
 
 ### 12. **ShelfAgent**
-   - **Purpose:** Manages smart shelves, tracking inventory levels and ensuring proper organization of items within storage spaces.
+   - **Purpose:** Manages smart shelves, opening closing a shelf or controling shelf contents.
    - **Role in Node-RED:** Essential for inventory management within the OPACA framework, integrating real-time tracking into Node-RED.
-   - [Detailed Documentation](./ShelfAgent.md)
+   - [Detailed Documentation](./nodes/shelf-agent-node/ShelfAgent.md)
 
 ### 13. **WayfindingAgent**
    - **Purpose:** Provides wayfinding assistance, helping users navigate complex environments within large facilities.
    - **Role in Node-RED:** Integrates navigation support into Node-RED flows, enabling real-time guidance within the OPACA framework.
-   - [Detailed Documentation](./WayfindingAgent.md)
+   - [Detailed Documentation](./nodes/wayfinding-agent-node/WayfindingAgent.md)
 
 ### 14. **Common HTML Template**
    - **Purpose:** Provides a standardized HTML template used across various web-based components of the project.
