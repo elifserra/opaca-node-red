@@ -9,7 +9,7 @@
   "license": "ISC",
   "node-red": {
     "nodes": {
-      "opaca-access": "/nodes/OpacaAccess-node/opaca-access.js",
+      "opaca-access": "/nodes/OpacaAccess-node/OpacaAccess.js",
       "invoke-action": "/nodes/InvokeAction-node/invoke-action.js",
       "camera": "/nodes/Camera-node/Camera.js",
       "BaseAgent": "/nodes/BaseAgent-node/BaseAgent.js",

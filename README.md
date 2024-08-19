@@ -11,7 +11,7 @@ The project is organized into multiple directories, each corresponding to a part
 ### 1. **OpacaAccess**
    - **Purpose:** Manages access control and security within the OPACA framework, ensuring that only authorized agents and users can interact with the system.
    - **Role in Node-RED:** Enforces security measures within Node-RED, protecting the system from unauthorized access.
-   - [Detailed Documentation](./nodes/OpacaAccess-node/opaca-access.md)
+   - [Detailed Documentation](./nodes/OpacaAccess-node/OpacaAccess.md)
 
 ### 2. **NodeCreator**
    - **Purpose:** Provides utilities for creating custom nodes in Node-RED, allowing for the expansion of OPACA framework functionalities within the Node-RED environment.

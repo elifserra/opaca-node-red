@@ -1,4 +1,4 @@
-const imports = require('../../nodes/resources/imports.js');                        // This is the import statement for the imports.js file. This file is used to import all the necessary dependencies required for the agent node to work properly.
+const imports = require('../resources/imports.js');                                 // This is the import statement for the imports.js file. This file is used to import all the necessary dependencies required for the agent node to work properly.
 const js_commond_methods = imports.js_common_methods_import;                        // This is the import statement for the js_common_methods object. This object contains all the common methods that are used by the agent node.
 const apiUrl = imports.apiUrl_import;                                               // This is the import statement for the apiUrl variable. This variable contains the URL of the API that the agent node will interact with.
 const loginUrl = imports.loginUrl_import;                                           // This is the import statement for the loginUrl variable. This variable contains the URL of the login API that the agent node will interact with.
