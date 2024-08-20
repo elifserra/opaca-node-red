@@ -98,5 +98,15 @@
     "agentId": "beintelli_agent",
     "numberOfInputs": 1,
     "numberOfOutputs": 1
+  },
+  "NavigationAgent": {
+    "category": "ZEKI",
+    "color": "#99ccff",
+    "name": "NavigationAgent",
+    "label": "NavigationAgent",
+    "icon": "default-icon",
+    "agentId": "navigation_agent",
+    "numberOfInputs": 2,
+    "numberOfOutputs": 1
   }
 }

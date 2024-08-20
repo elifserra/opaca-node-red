@@ -22,7 +22,8 @@
       "ChatBot": "/nodes/ChatBot-node/ChatBot.js",
       "ExchangeAgent": "/nodes/ExchangeAgent-node/ExchangeAgent.js",
       "NodeCreator": "/nodes/NodeCreator-node/NodeCreator.js",
-      "BeIntelliAgent": "/nodes/BeIntelliAgent-node/BeIntelliAgent.js"
+      "BeIntelliAgent": "/nodes/BeIntelliAgent-node/BeIntelliAgent.js",
+      "NavigationAgent": "/nodes/NavigationAgent-node/NavigationAgent.js"
     }
   },
   "dependencies": {
