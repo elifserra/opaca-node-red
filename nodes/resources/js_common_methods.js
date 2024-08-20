@@ -76,7 +76,7 @@ function toJsonString(parameterArray, msg) {
         // here is the condition to check if the parameter is payload and the typedInputType is msg then the value of the parameter is the payload of the msg.
         if(parameter.value === "payload" && parameter.typedInputType === 'msg') {
             // But we need to again make sure control of the parameter type. If the parameter type is array then the value of the parameter is the array of the payload of the msg.
-            parameter.type === "array" || parameter.type === "tuple" ? valueAsPassed = "[" + JSON.stringify(msg.payload)+"]":
+            parameter.type === "array" ? valueAsPassed = "[" + JSON.stringify(msg.payload)+"]":
             // If the parameter type is string then the value of the parameter is the string of the payload of the msg.
             parameter.type === "string" ? valueAsPassed = `"${msg.payload}"` :
             // If the parameter type is not array and string then the value of the parameter is the payload of the msg.
@@ -85,7 +85,7 @@ function toJsonString(parameterArray, msg) {
         else{
             // If the parameter is not payload then the value of the parameter is the value of the parameter.
             // But we need to again make sure control of the parameter type. If the parameter type is array then the value of the parameter is the array of the value of the parameter.
-            parameter.type === "array" || parameter.type === "tuple" ?  valueAsPassed = "[" + JSON.stringify(parameter.value)+"]":  
+            parameter.type === "array" ?  valueAsPassed = "[" + JSON.stringify(parameter.value)+"]":  
             // If the parameter type is string then the value of the parameter is the string of the value of the parameter.
             parameter.type === "string" ? valueAsPassed = `"${parameter.value}"` : 
             // If the parameter type is not array and string then the value of the parameter is the value of the parameter.
