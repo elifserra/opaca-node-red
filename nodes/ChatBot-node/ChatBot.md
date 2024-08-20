@@ -33,6 +33,19 @@ The ChatBot node is a highly advanced and versatile tool designed to interact wi
 7. **Error Handling and Feedback**: 
     - The node provides real-time feedback to the user, displaying success or failure messages depending on the outcome of the requested actions.
 
+##  **Example Conversation**:
+    - Here example conversation is added. User can prompt anything about agent and actions.Maybe user wants this chatbot to be able to use other purposes. It can be done beacuse chatbot is able to differentiate between agent related prompts or not related prompts. You can see the exmaple conversation below.
+
+![This is an image](../resources/Images/chatbot_conversation.png)
+
+As you can see above, you can open or close the camera at the bottom of conversation history just by saying or writing "open or close the camera" or you can make chatbot speak just by saying or writing "enable ai voice". Also, you can disble AI voice, just by saying or writing "disable AI voice.
+This chatbot is powerful in terms of remembering past queries. For example above first prompt is "I want you to find sensorId of the kitchen". ChatBot finds the sesnorID.
+Second prompt is "What is temperature value of that room". Normally we do not expect to chatbot to understand this and give answer. However, with the help of history or context property that are implemented by me. It remmembers that "that toom means 'kitchen'"  and also use previous action result to get the temperature value of that sensor.
+
+## Note:
+    - If you want to ask question to chatbot with your voice, the only thing you shoud do is to press "R" keyword on the keybord. When you press "R", it starts to record your voice, when you release "R" keyword it converts detected voice command to text and send this messagge to chat-gpt api. 
+
+
 ## Usage
 
 ### Setting Up the Node
