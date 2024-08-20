@@ -404,6 +404,12 @@ class Action{
                 let inputArray = actualValue.split(",").map(item => item.trim());                             // if the parameter type is array or tuple, split the value by comma and map the items and trim them
                 valueAsPassed = JSON.stringify(inputArray);                                                   // convert the array to json string
             }
+            else if(parameter.type == "Location"){                                                           // if the parameter type is Location, add the value as a json string,
+                let array = actualValue.split(",").map(item => item.trim());                             // split the value by comma and map the items and trim them                                                     // map the items and trim them
+                valueAsPassed =   {"lat":parseFloat(array[0]),"lng": parseFloat(array[1])}     
+                valueAsPassed = JSON.stringify(valueAsPassed);                                             // convert the array to json string
+                console.log(valueAsPassed);
+            }
             else{
                 valueAsPassed = actualValue;                                                                 // otherwise add the value as it is
             }
@@ -464,6 +470,7 @@ class Action{
      */
     // Handle the invoke action. This method is used to handle the invoke action of the agent.
     async handleInvokeAction(node){
+        console.log(this.actionParameters);
         // Here is important because when the invoke action button is clicked, the parameters should be saved to be able to use parameter values for invoking the action.
         this.saveParameters(false,node);
         // convert the action parameters to json string

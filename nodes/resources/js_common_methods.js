@@ -100,6 +100,12 @@ function toJsonString(parameterArray, msg) {
             else if(parameter.type === "string"){
                 valueAsPassed = `"${msg.payload}"`;           // If the parameter type is string then the value of the parameter is the value of the payload.
             }
+            else if(parameter.type == "Location"){                                                           // if the parameter type is Location, add the value as a json string,
+                let array = msg.payload;                                                 // map the items and trim them
+                valueAsPassed =   {"lat":parseFloat(array[0]),"lng": parseFloat(array[1])}     
+                valueAsPassed = JSON.stringify(valueAsPassed);                                             // convert the array to json string
+                console.log(valueAsPassed);
+            }
             else{ 
                 valueAsPassed = msg.payload;                 // If the parameter type is not array or string then the value of the parameter is the value of the payload.
             }
@@ -113,6 +119,12 @@ function toJsonString(parameterArray, msg) {
             }
             else if(parameter.type === "string"){
                 valueAsPassed = `"${parameter.value}"`;                                     // If the parameter type is string then the value of the parameter is the value of the parameter.
+            }
+            else if(parameter.type == "Location"){                                                           // if the parameter type is Location, add the value as a json string,
+                let array = (parameter.value).split(",").map(item => item.trim());                             // split the value by comma and map the items and trim them                                                  // map the items and trim them
+                valueAsPassed =   {"lat":parseFloat(array[0]),"lng": parseFloat(array[1])}     
+                valueAsPassed = JSON.stringify(valueAsPassed);                                             // convert the array to json string
+                console.log(valueAsPassed);
             }
             else{
                 valueAsPassed = parameter.value;                                           // If the parameter type is not array or string then the value of the parameter is the value of the parameter.
