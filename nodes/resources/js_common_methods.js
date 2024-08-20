@@ -72,32 +72,65 @@ function toJsonString(parameterArray, msg) {
 
     // Loop through the parameters and convert them to json string depending on the type of the parameter.
     parameterArray.forEach(parameter => {
-        jsonString += "\"" + parameter.name + "\":"; 
-        // here is the condition to check if the parameter is payload and the typedInputType is msg then the value of the parameter is the payload of the msg.
-        if(parameter.value === "payload" && parameter.typedInputType === 'msg') {
-            // But we need to again make sure control of the parameter type. If the parameter type is array then the value of the parameter is the array of the payload of the msg.
-            parameter.type === "array" ? valueAsPassed = "[" + JSON.stringify(msg.payload)+"]":
-            // If the parameter type is string then the value of the parameter is the string of the payload of the msg.
-            parameter.type === "string" ? valueAsPassed = `"${msg.payload}"` :
-            // If the parameter type is not array and string then the value of the parameter is the payload of the msg.
-            valueAsPassed = msg.payload;
+        jsonString += "\"" + parameter.name + "\":";                                                                // Add the parameter name to the json string.
+        if(parameter.value === "payload" && parameter.typedInputType === 'msg') {                                   // If the parameter is payload and the type of the input is msg then the value of the parameter is the value of the payload.
+            if(parameter.type === "array" || parameter.type === "tuple"){                                           // If the parameter type is array or tuple then the value of the parameter is the array of the value of the payload.
+                /*
+                    When the parameter type is array or tuple then we need to make sure that the value of the payload is array.
+                */
+                let formattedArray = msg.payload;                               // Get the value of the payload.
+                let inputArray = [];                                            // Create an empty array to store the value of the payload.
+                // If the size of the msg.payload is greater than 1 then the value of the payload is array of the value of the payload.
+                // When msg payload has one element then it is not array. However the parameter type is array. So, in the catch block we push the value of formattedArray to the inputArray.
+                // This issue is just about msg payload. The value of the payload is array but it is not recognized as array. So, we need to make sure that the value of the payload is array.
+                try{
+                    // If the value of the payload is array then we need to convert the array or tuple to json string.
+                    formattedArray = formattedArray.map(item => JSON.stringify(item)); 
+                    // Push the value of each element of  the payload to the inputArray.
+                    formattedArray.forEach(item =>{
+                        inputArray.push(item);
+                    });
+                }                                                      
+                catch(e){
+                    // If the value of the payload is not array then push the value of the payload to the inputArray to be able to use as array or tuple.
+                    inputArray.push(formattedArray);
+                }                  
+                valueAsPassed = JSON.stringify(inputArray);    // Convert the array to json string.                                                
+            }
+            else if(parameter.type === "string"){
+                valueAsPassed = `"${msg.payload}"`;           // If the parameter type is string then the value of the parameter is the value of the payload.
+            }
+            else{ 
+                valueAsPassed = msg.payload;                 // If the parameter type is not array or string then the value of the parameter is the value of the payload.
+            }
         }
         else{
             // If the parameter is not payload then the value of the parameter is the value of the parameter.
             // But we need to again make sure control of the parameter type. If the parameter type is array then the value of the parameter is the array of the value of the parameter.
-            parameter.type === "array" ?  valueAsPassed = "[" + JSON.stringify(parameter.value)+"]":  
-            // If the parameter type is string then the value of the parameter is the string of the value of the parameter.
-            parameter.type === "string" ? valueAsPassed = `"${parameter.value}"` : 
-            // If the parameter type is not array and string then the value of the parameter is the value of the parameter.
-            valueAsPassed = parameter.value; 
+            if(parameter.type === "array" || parameter.type === "tuple"){
+                let inputArray = parameter.value.split(",").map(item => item.trim());       // Split the value of the parameter by comma and map each element to the inputArray.
+                valueAsPassed =  JSON.stringify(inputArray);                                // Convert the array to json string.
+            }
+            else if(parameter.type === "string"){
+                valueAsPassed = `"${parameter.value}"`;                                     // If the parameter type is string then the value of the parameter is the value of the parameter.
+            }
+            else{
+                valueAsPassed = parameter.value;                                           // If the parameter type is not array or string then the value of the parameter is the value of the parameter.
+            }
         }
 
-        jsonString += valueAsPassed; 
-        count !== length ? jsonString += "," : jsonString += "}"; 
-        count++;
+        jsonString += valueAsPassed;                                                      // Add the value of the parameter to the json string.
+        count !== length ? jsonString += "," : jsonString += "}";                         // If the parameter is not the last parameter then add comma to the json string. Otherwise add closing curly brace.
+        count++;                                                                          // Increment the count.
     });
 
     console.log(jsonString);
+    
+    /*
+        Here I add the console.log to log the json string. This is important to log the json string to see the format of the json string.
+        If somebody will imporove this project, this method is crucial to see the format of the json string.
+        I believe this method is likely to change in regard to the new type of parameters. So, it is important to log the json string and see the format of the json string.
+    */
     return jsonString;        // Return the json string.
 }
 
