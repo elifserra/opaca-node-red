@@ -33,7 +33,7 @@ The ChatBot node is a highly advanced and versatile tool designed to interact wi
 7. **Error Handling and Feedback**: 
     - The node provides real-time feedback to the user, displaying success or failure messages depending on the outcome of the requested actions.
 
-##  **Example Conversation**:
+8.  **Example Conversation**:
     - Here example conversation is added. User can prompt anything about agent and actions.Maybe user wants this chatbot to be able to use other purposes. It can be done beacuse chatbot is able to differentiate between agent related prompts or not related prompts. You can see the exmaple conversation below.
 
 ![This is an image](../resources/Images/chatbot_conversation.png)
@@ -41,6 +41,15 @@ The ChatBot node is a highly advanced and versatile tool designed to interact wi
 As you can see above, you can open or close the camera at the bottom of conversation history just by saying or writing "open or close the camera" or you can make chatbot speak just by saying or writing "enable ai voice". Also, you can disble AI voice, just by saying or writing "disable AI voice.
 This chatbot is powerful in terms of remembering past queries. For example above first prompt is "I want you to find sensorId of the kitchen". ChatBot finds the sesnorID.
 Second prompt is "What is temperature value of that room". Normally we do not expect to chatbot to understand this and give answer. However, with the help of history or context property that are implemented by me. It remmembers that "that toom means 'kitchen'"  and also use previous action result to get the temperature value of that sensor.
+
+Another powerful feature is to be able to use object detection. It is a bit slow but accuracy is very high and also when you make detections you can use this detection results to call another actions as you can see below.
+
+![This is an image](../resources/Images/object_detection.png)
+
+Here user wants chatbot to open the camera and make detections. After detection user wants to find the location of the first detected object (here, glass has the most detection percentage) location in the shelves. Then chatbot use detections results to call the `FindInShelf` action of the `ShelfAgent`.
+
+
+
 
 ## Note:
     - If you want to ask question to chatbot with your voice, the only thing you shoud do is to press "R" keyword on the keybord. When you press "R", it starts to record your voice, when you release "R" keyword it converts detected voice command to text and send this messagge to chat-gpt api. 
