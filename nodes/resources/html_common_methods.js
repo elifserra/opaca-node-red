@@ -405,6 +405,7 @@ class Action{
             count++;                                                                                         // increase the count
         });
      
+        console.log(jsonString);
         return jsonString;                                                                                   // return the json string
     }
 

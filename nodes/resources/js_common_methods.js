@@ -97,7 +97,7 @@ function toJsonString(parameterArray, msg) {
         count++;
     });
 
-
+    console.log(jsonString);
     return jsonString;        // Return the json string.
 }
 
