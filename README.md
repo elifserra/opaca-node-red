@@ -85,8 +85,14 @@ The project is organized into multiple directories, each corresponding to a part
    - **Role in NODE-RED:** Integrates these functionalities into Node-RED, allowing for automated handling of navigation and location-based tasks within your flows.
    - [Detailed Documentation](./nodes/NavigationAgent-node/NavigationAgent.md)
 
+## 16. **ControlCenterAgent**
+   - **Purpose:** Manages and visualizes geographical operations such as highlighting locations and paths on a map within a smart control center system.
+   - **Role in NODE-RED:** Integrates map-based functionalities into Node-RED, enabling automated and visual handling of geographical tasks within your flows.
+   - [Detailed Documentation](./nodes/ControlCenterAgent-node/ControlCenterAgent.md)
+
+
 ## Note:
-   The last two opaca agents are created without writing code with the help of `NodeCreator` node. This info is just for showing power of `NodeCreator` node. In this way, user does not need to worry about writing code and creating custom nodes for opaca agents.
+   The last three opaca agents are created without writing code with the help of `NodeCreator` node. This info is just for showing power of `NodeCreator` node. In this way, user does not need to worry about writing code and creating custom nodes for opaca agents.
 
 ## Resources Directory
 
