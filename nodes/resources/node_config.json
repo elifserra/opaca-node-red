@@ -108,5 +108,15 @@
     "agentId": "navigation_agent",
     "numberOfInputs": 2,
     "numberOfOutputs": 1
+  },
+  "ControlCenterAgent": {
+    "category": "ZEKI",
+    "color": "#a6bbc1",
+    "name": "ControlCenterAgent",
+    "label": "ControlCenterAgent",
+    "icon": "default-icon",
+    "agentId": "control_center_agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
   }
 }
