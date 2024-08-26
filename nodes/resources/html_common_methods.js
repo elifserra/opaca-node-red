@@ -381,7 +381,7 @@ class Action{
      */
     // Convert the action parameters to json string. This method is used to convert the action parameters to json string to be able to use invoke action method of the html side.
     // This method is called in the handleInvokeAction method and result is given as parameter to the invokeAction method of the html side.
-    toJsonString() {
+    toJsonString(){ 
 
         // if the action parameters length is 0, return an empty json string
         if(this.actionParameters.length === 0){
@@ -393,31 +393,27 @@ class Action{
         var jsonString = "{";
         var count = 0;
         var length = this.actionParameters.length - 1;
-        // create a json string for the action parameters
+
         this.actionParameters.forEach(parameter => {
-            jsonString += "\"" + parameter.name + "\":";                                                     // add the parameter name to the json string
-            actualValue = parameter.value;                                                                   // get the parameter value
-            if(parameter.type == "string"){                                                                  // if the parameter type is string, add the value as a string,
+            jsonString += "\"" + parameter.name + "\":";                                                     
+            actualValue = parameter.value;                                                                  
+            if(parameter.type == "string"){                                                                  
                 valueAsPassed = `"${actualValue}"`;
             }
-            else if(parameter.type == "array" || parameter.type == "tuple"){                                  // if the parameter type is or tuple array, add the value as a json string,
-                let inputArray = actualValue.split(",").map(item => item.trim());                             // if the parameter type is array or tuple, split the value by comma and map the items and trim them
-                valueAsPassed = JSON.stringify(inputArray);                                                   // convert the array to json string
-            }
-            else if(parameter.type == "Location"){                                                           // if the parameter type is Location, add the value as a json string,
-                let array = actualValue.split(",").map(item => item.trim());                             // split the value by comma and map the items and trim them                                                     // map the items and trim them
-                valueAsPassed =   {"lat":parseFloat(array[0]),"lng": parseFloat(array[1])}     
-                valueAsPassed = JSON.stringify(valueAsPassed);                                             // convert the array to json string
-                console.log(valueAsPassed);
+            else if(parameter.type == "array" || parameter.type == "tuple"){                                  
+                let inputArray = actualValue.split(",").map(item => item.trim());                             
+                valueAsPassed = JSON.stringify(inputArray);                                                   
             }
             else{
-                valueAsPassed = actualValue;                                                                 // otherwise add the value as it is
+                valueAsPassed = actualValue;                                                                 
             }
-            jsonString += valueAsPassed;                                                                     // add the value to the json string
-            count !== length ? jsonString += "," : jsonString += "}";                                        // if the parameter is not the last parameter, add a comma, otherwise add a closing curly brace
-            count++;                                                                                         // increase the count
+            jsonString += valueAsPassed;                                                                     
+            count !== length ? jsonString += "," : jsonString += "}";                                        
+            count++;                                                                                         
         });
-     
+
+        
+
         console.log(jsonString);
         return jsonString;                                                                                   // return the json string
     }

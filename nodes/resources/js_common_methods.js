@@ -84,8 +84,6 @@ function toJsonString(parameterArray, msg) {
                 // When msg payload has one element then it is not array. However the parameter type is array. So, in the catch block we push the value of formattedArray to the inputArray.
                 // This issue is just about msg payload. The value of the payload is array but it is not recognized as array. So, we need to make sure that the value of the payload is array.
                 try{
-                    // If the value of the payload is array then we need to convert the array or tuple to json string.
-                    formattedArray = formattedArray.map(item => JSON.stringify(item)); 
                     // Push the value of each element of  the payload to the inputArray.
                     formattedArray.forEach(item =>{
                         inputArray.push(item);
@@ -100,12 +98,6 @@ function toJsonString(parameterArray, msg) {
             else if(parameter.type === "string"){
                 valueAsPassed = `"${msg.payload}"`;           // If the parameter type is string then the value of the parameter is the value of the payload.
             }
-            else if(parameter.type == "Location"){                                                           // if the parameter type is Location, add the value as a json string,
-                let array = msg.payload;                                                 // map the items and trim them
-                valueAsPassed =   {"lat":parseFloat(array[0]),"lng": parseFloat(array[1])}     
-                valueAsPassed = JSON.stringify(valueAsPassed);                                             // convert the array to json string
-                console.log(valueAsPassed);
-            }
             else{ 
                 valueAsPassed = msg.payload;                 // If the parameter type is not array or string then the value of the parameter is the value of the payload.
             }
@@ -114,17 +106,10 @@ function toJsonString(parameterArray, msg) {
             // If the parameter is not payload then the value of the parameter is the value of the parameter.
             // But we need to again make sure control of the parameter type. If the parameter type is array then the value of the parameter is the array of the value of the parameter.
             if(parameter.type === "array" || parameter.type === "tuple"){
-                let inputArray = parameter.value.split(",").map(item => item.trim());       // Split the value of the parameter by comma and map each element to the inputArray.
-                valueAsPassed =  JSON.stringify(inputArray);                                // Convert the array to json string.
+                valueAsPassed = parameter.value.split(",").map(item => item.trim());       // Split the value of the parameter by comma and map each element to the valueasPassed.
             }
             else if(parameter.type === "string"){
                 valueAsPassed = `"${parameter.value}"`;                                     // If the parameter type is string then the value of the parameter is the value of the parameter.
-            }
-            else if(parameter.type == "Location"){                                                           // if the parameter type is Location, add the value as a json string,
-                let array = (parameter.value).split(",").map(item => item.trim());                             // split the value by comma and map the items and trim them                                                  // map the items and trim them
-                valueAsPassed =   {"lat":parseFloat(array[0]),"lng": parseFloat(array[1])}     
-                valueAsPassed = JSON.stringify(valueAsPassed);                                             // convert the array to json string
-                console.log(valueAsPassed);
             }
             else{
                 valueAsPassed = parameter.value;                                           // If the parameter type is not array or string then the value of the parameter is the value of the parameter.
