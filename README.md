@@ -90,6 +90,11 @@ The project is organized into multiple directories, each corresponding to a part
    - **Role in NODE-RED:** Integrates map-based functionalities into Node-RED, enabling automated and visual handling of geographical tasks within your flows.
    - [Detailed Documentation](./nodes/ControlCenterAgent-node/ControlCenterAgent.md)
 
+## 17. **KnowledgeAgent**
+   - **Purpose:** Interfaces with a specialized language model to provide information related to Berlin's administration, local events, attractions, and more.
+   - **Role in NODE-RED:** Enables users to ask questions and receive precise answers, assisting with administrative tasks and providing relevant local information.
+   - [Detailed Documentation](./nodes/KnowledgeAgent-node/KnowledgeAgent.md)
+
 
 ## Note:
    The last three opaca agents are created without writing code with the help of `NodeCreator` node. This info is just for showing power of `NodeCreator` node. In this way, user does not need to worry about writing code and creating custom nodes for opaca agents.
