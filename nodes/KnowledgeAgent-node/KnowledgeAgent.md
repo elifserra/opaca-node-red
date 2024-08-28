@@ -20,7 +20,7 @@ The `KnowledgeAgent` node is designed to interface with a language model special
 
 ### JavaScript File (KnowledgeAgent.js)
 
-\`\`\`javascript
+```javascript
 const imports = require('../../nodes/resources/imports.js');
 const js_common_methods = imports.js_common_methods_import;
 
@@ -30,16 +30,16 @@ module.exports = function(RED) {
     }
     RED.nodes.registerType("KnowledgeAgent", KnowledgeAgentNode);
 }
-\`\`\`
+```
 
 ### HTML File (KnowledgeAgent.html)
 
-\`\`\`html
+```html
 <script type="text/javascript" src="html_common_methods.js"></script>
 <script type="text/javascript">
     makeNodeRegistration("KnowledgeAgent");
 </script>
-\`\`\`
+```
 
 ## Usage
 
