@@ -15,7 +15,7 @@ var token = null;
  */
 // This function is used to invoke the action by sending the action parameters to the endpoint.
 // The endpoint which is actually action name is the url of the server where the action is to be invoked. 
-async function invokeAction(endpoint, actionParameters, msg) {
+async function invokeAction(endpoint, actionParameters,nextNodeMsgChoice, msg) {
 
     var queryString = toJsonString(actionParameters, msg);                                // Convert the action parameters to json string. 
 
@@ -37,7 +37,15 @@ async function invokeAction(endpoint, actionParameters, msg) {
         */
        
         await response.json().then(data => {
-            msg.payload = data;                                 // Store the response from the server in the msg.payload.
+
+            let sendedData = {
+                data : data,
+                nextNodeMsgChoice : nextNodeMsgChoice
+            }
+
+            console.log(sendedData);
+
+            msg.payload = sendedData;
         });
 
     } catch (error) {
@@ -73,12 +81,12 @@ function toJsonString(parameterArray, msg) {
     // Loop through the parameters and convert them to json string depending on the type of the parameter.
     parameterArray.forEach(parameter => {
         jsonString += "\"" + parameter.name + "\":";                                                                // Add the parameter name to the json string.
-        if(parameter.value === "payload" && parameter.typedInputType === 'msg') {                                   // If the parameter is payload and the type of the input is msg then the value of the parameter is the value of the payload.
+        if(parameter.typedInputType === 'msg') {                                   // If the parameter is payload and the type of the input is msg then the value of the parameter is the value of the payload.
             if(parameter.type === "array" || parameter.type === "tuple"){                                           // If the parameter type is array or tuple then the value of the parameter is the array of the value of the payload.
                 /*
                     When the parameter type is array or tuple then we need to make sure that the value of the payload is array.
                 */
-                let formattedArray = msg.payload;                               // Get the value of the payload.
+                let formattedArray = parameter.value;                               // Get the value of the payload.
                 let inputArray = [];                                            // Create an empty array to store the value of the payload.
                 // If the size of the msg.payload is greater than 1 then the value of the payload is array of the value of the payload.
                 // When msg payload has one element then it is not array. However the parameter type is array. So, in the catch block we push the value of formattedArray to the inputArray.
@@ -96,10 +104,10 @@ function toJsonString(parameterArray, msg) {
                 valueAsPassed = JSON.stringify(inputArray);    // Convert the array to json string.                                                
             }
             else if(parameter.type === "string"){
-                valueAsPassed = `"${msg.payload}"`;           // If the parameter type is string then the value of the parameter is the value of the payload.
+                valueAsPassed = `"${parameter.value}"`;           // If the parameter type is string then the value of the parameter is the value of the payload.
             }
             else{ 
-                valueAsPassed = msg.payload;                 // If the parameter type is not array or string then the value of the parameter is the value of the payload.
+                valueAsPassed = parameter.value;                 // If the parameter type is not array or string then the value of the parameter is the value of the payload.
             }
         }
         else{
@@ -214,17 +222,60 @@ async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RE
 function makeNodeConfiguration(RED, node, config){
     RED.nodes.createNode(node,config);                                                        // Create the node.
     node.agentCurrentActionParametersInfo = config.agentCurrentActionParametersInfo;          // Store the agent current action parameters info in the node.
+    var allMsgInputs = new Set();
+    var msgCounter = 0;
+    var control = [];
+
     node.on('input', async function(msg){ 
         if(node.agentCurrentActionParametersInfo  != null){
-            node.warn(node.agentCurrentActionParametersInfo);                                 // Log the agent current action parameters info.
-            // Invoke the action by sending the action parameters to the server. 
-            /*
-                The invokeAction function is called to invoke the action by sending the action parameters to the server.
-                The action name and action parameters are passed to the invokeAction function. Calling this function in node.on('input') method is important.
-                This enables the node to invoke the action when the input is received and enavle the flow of the data from one node to another node by sending the output of the action as input to the next node.
-            */
-            await invokeAction(node.agentCurrentActionParametersInfo .actionName, node.agentCurrentActionParametersInfo.actionParameters, msg);
-            node.send(msg);    // Send the output of the action as input to the next node. In invokeAction function, the output of the action is stored in the msg.payload. and send this msg to the next node.
+
+            console.log("Input is received");
+            console.log(msg.payload);
+
+           var numberOfMsgPayloads = node.agentCurrentActionParametersInfo.actionParameters.filter(parameter => parameter.typedInputType === 'msg').length;
+
+           node.agentCurrentActionParametersInfo.actionParameters.forEach(parameter => {
+                if(parameter.typedInputType === 'msg'){
+                    allMsgInputs.add(msg.payload);
+                }
+           });
+
+           if(numberOfMsgPayloads === allMsgInputs.size){
+            
+                console.log("All inputs are received");
+                console.log(allMsgInputs);
+                
+                                // Set'i diziye dönüştür
+                let myArray = Array.from(allMsgInputs);
+
+                // Dizi üzerinde sıralama işlemi yap
+                myArray.sort((a, b) => {
+                    return a.nextNodeMsgChoice - b.nextNodeMsgChoice;
+                });
+
+                console.log(myArray);
+
+                myArray.forEach(item => {
+                    var isFound = false;
+                    node.agentCurrentActionParametersInfo.actionParameters.forEach(parameter => {    
+                        if(parameter.value === "payload" && parameter.typedInputType === 'msg' && isFound === false){
+                            parameter.value = item.data;
+                            isFound = true;
+                        }
+                    });
+                });
+
+
+                allMsgInputs = new Set();
+
+                node.warn(node.agentCurrentActionParametersInfo); 
+
+                await invokeAction(node.agentCurrentActionParametersInfo.actionName, node.agentCurrentActionParametersInfo.actionParameters, node.agentCurrentActionParametersInfo.nextNodeMsgChoice, msg);
+                node.send(msg);    // Send the output of the action as input to the next node. In invokeAction function, the output of the action is stored in the msg.payload. and send this msg to the next node.
+           }
+           
+           
+
         }
     });
 }

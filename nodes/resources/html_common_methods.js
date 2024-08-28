@@ -210,6 +210,8 @@ class Agent{
         // Display the node name in the name input element
         document.getElementById('node-input-name').value = node.name;
 
+        document.getElementById('node-input-msg-choice').value = node.nextNodeMsgChoice;
+
     }
 
 
@@ -319,11 +321,12 @@ class Action{
         For js side to be able to call invokeAction method of the js side, the action name and action parameters should be sent to the js side.
         Depending on the action name and action parameters, the js side will call the invokeAction method of the js side.
     */
-    sendJsSide(){
+    sendJsSide(node){
         // create an object to send the action name and action parameters to the js side
         const dataToSend = {
             actionName : this.actionName,
-            actionParameters : this.actionParameters
+            actionParameters : this.actionParameters,
+            nextNodeMsgChoice : node.nextNodeMsgChoice
         }
     
         return dataToSend;        // return the dataToSend object
@@ -356,7 +359,7 @@ class Action{
             And this method is used for handling the invoke action for html side. Therefore, when the sendFlag is true, send the action name and action parameters to the js side.
         */
         if(sendFlag === true){
-            node.agentCurrentActionParametersInfo = this.sendJsSide();
+            node.agentCurrentActionParametersInfo = this.sendJsSide(node);
         }
 
         /*
@@ -367,6 +370,9 @@ class Action{
 
         // set the node name as the name input element value
         node.name = document.getElementById('node-input-name').value;
+
+        // set the nextNodeMsgChoice as the msg choice input element value
+        node.nextNodeMsgChoice = document.getElementById('node-input-msg-choice').value;
 
     }
 
@@ -401,8 +407,9 @@ class Action{
                 valueAsPassed = `"${actualValue}"`;
             }
             else if(parameter.type == "array" || parameter.type == "tuple"){                                  
-                let inputArray = actualValue.split(",").map(item => item.trim());                             
-                valueAsPassed = "["+inputArray+"]";                                                
+                let inputArray = actualValue.split(",").map(item => item.trim());   
+                inputArray = JSON.stringify(inputArray);                          
+                valueAsPassed = inputArray;                                                
             }
             else{
                 valueAsPassed = actualValue;                                                                 
@@ -547,7 +554,8 @@ async function makeNodeRegistration(agentNodeName){
         defaults : {
             name : {value: nodeConfig.name},
             agentId : {value: nodeConfig.agentId},
-            agentCurrentActionParametersInfo : {value: null}
+            agentCurrentActionParametersInfo : {value: null},
+            nextNodeMsgChoice : {value: null}
         },
         inputs : nodeConfig.numberOfInputs,
         outputs : nodeConfig.numberOfOutputs,
