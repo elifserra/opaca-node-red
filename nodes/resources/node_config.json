@@ -118,5 +118,15 @@
     "agentId": "control_center_agent",
     "numberOfInputs": 1,
     "numberOfOutputs": 1
+  },
+  "KnowledgeAgent": {
+    "category": "ZEKI",
+    "color": "#ccccff",
+    "name": "KnowledgeAgent",
+    "label": "KnowledgeAgent",
+    "icon": "default-icon",
+    "agentId": "bobbi-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
   }
 }

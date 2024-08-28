@@ -24,7 +24,8 @@
       "NodeCreator": "/nodes/NodeCreator-node/NodeCreator.js",
       "BeIntelliAgent": "/nodes/BeIntelliAgent-node/BeIntelliAgent.js",
       "NavigationAgent": "/nodes/NavigationAgent-node/NavigationAgent.js",
-      "ControlCenterAgent": "/nodes/ControlCenterAgent-node/ControlCenterAgent.js"
+      "ControlCenterAgent": "/nodes/ControlCenterAgent-node/ControlCenterAgent.js",
+      "KnowledgeAgent": "/nodes/KnowledgeAgent-node/KnowledgeAgent.js"
     }
   },
   "dependencies": {

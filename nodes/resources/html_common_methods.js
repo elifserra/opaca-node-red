@@ -402,7 +402,7 @@ class Action{
             }
             else if(parameter.type == "array" || parameter.type == "tuple"){                                  
                 let inputArray = actualValue.split(",").map(item => item.trim());                             
-                valueAsPassed = JSON.stringify(inputArray);                                                   
+                valueAsPassed = "["+inputArray+"]";                                                
             }
             else{
                 valueAsPassed = actualValue;                                                                 
