@@ -29,7 +29,7 @@ To address this limitation, we've implemented a custom solution that allows a si
    - A `Set` is initialized to store the incoming `msg.payload` values. The `Set` ensures that each input is stored only once, avoiding duplicate processing.
 
    ```javascript
-   let allMsgInputs = new Set();
+   var allMsgInputs = new Set();
    ```
 
 2. **Counting Expected Inputs:**
@@ -98,7 +98,7 @@ Here is a complete example of how this solution is implemented within a Node-RED
 ```javascript
 
 // Initialize the Set to store unique msg.payload inputs.
-let allMsgInputs = new Set();
+var allMsgInputs = new Set();
 
 node.on('input', async function(msg){ 
     if(node.agentCurrentActionParametersInfo  != null){

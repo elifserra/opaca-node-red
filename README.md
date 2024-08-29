@@ -112,8 +112,7 @@ The project is organized into multiple directories, each corresponding to a part
 
    This solution showcases the power and flexibility of custom nodes within Node-RED, providing capabilities beyond what standard nodes offer, and enabling the creation of more complex and reliable automation flows within the OPACA framework.
 
-
-
+   - [Detailed Documentation](Multi-Input_Handling_Custom_NodeRED.md)
 
 ## Resources Directory
 
