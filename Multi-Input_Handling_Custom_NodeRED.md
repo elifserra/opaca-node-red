@@ -143,9 +143,56 @@ node.on('input', async function(msg){
 });
 ```
 
-### Node-RED Multi-input Flow Example
+### Multi-Input Handling in Custom Nodes: A Practical Example
 
-![This is an image](./nodes/resources/Images/multi-input-sample.png)
+In this section, we will illustrate how our custom multi-input handling solution works with specific examples. We will walk through a sample flow that shows how multiple inputs are gathered from different nodes, processed, and then used in a subsequent node.
+
+#### Image 1: KnowledgeAgent Node Configuration
+![KnowledgeAgent Node](./nodes/resources/Images/input1.png)
+
+- **Node Name:** KnowledgeAgent {AskKnowledgeLLM}
+- **Action:** AskKnowledgeLLM
+- **Question Parameter:** The parameter `question` is set to `"What is Berlin"`. This input will be sent as part of the `msg.payload` to the next node.
+- **Msg Choice:** This is set to `1`, which is used to determine which parameter the incoming `msg.payload` should populate in the following node.
+
+In this configuration, the `KnowledgeAgent` node is prepared to send its output (`msg.payload`) with the question "What is Berlin" and associate it with the parameter identified by `Msg Choice` value `1` in the next node.
+
+#### Image 2: ExchangeAgent Node Configuration
+![ExchangeAgent Node](./nodes/resources/Images/input2.png)
+
+- **Node Name:** ExchangeAgent {FindEmailAddress}
+- **Action:** FindEmailAddress
+- **nameQuery Parameter:** The parameter `nameQuery` is set to `"oruc"`. This will be sent as part of the `msg.payload` to the next node.
+- **Msg Choice:** This is set to `2`, which will identify which parameter in the next node should be populated with the output of this node.
+
+In this example, the `ExchangeAgent` node is configured to send its output (`msg.payload`) containing the name query "oruc" and assign it to the parameter identified by `Msg Choice` value `2` in the next node.
+
+#### Image 3: Multi-Input Handling Flow
+
+![Multi-Input Flow](./nodes/resources/Images/multi-input-sample.png)
+
+This image shows a complete flow in Node-RED where multiple inputs are combined and processed:
+
+- **Timestamp Node:** Triggers the flow.
+- **KnowledgeAgent Node:** Sends the `question` parameter ("What is Berlin") as `msg.payload`, with `Msg Choice` set to `1`.
+- **ExchangeAgent Node:** Sends the `nameQuery` parameter ("oruc") as `msg.payload`, with `Msg Choice` set to `2`.
+- **Function Nodes (`Time`, `Hours`, `Date`):** Additional nodes that generate specific inputs like time, hours, and date. These nodes also send their outputs with specific `Msg Choice` values.
+- **ExchangeAgent Node (MakeAppointment):** This node is configured to receive multiple inputs. It waits for all the expected `msg.payload` inputs, and once all are received, it processes them according to the `Msg Choice` values.
+
+##### How It Works:
+
+1. **Gathering Inputs:**
+   - Each preceding node sends a `msg.payload` that contains specific data (e.g., question, email query, time, date) along with a `Msg Choice` identifier.
+   - These inputs are stored in a `Set` within the node, ensuring each input is unique and waiting until all required inputs are received.
+
+2. **Processing Inputs:**
+   - Once all expected inputs are received, the `Set` is converted to an array, sorted based on the `Msg Choice`, and then processed.
+   - The sorted data is assigned to the correct parameters in the `MakeAppointment` node.
+
+3. **Executing the Action:**
+   - After sorting and assigning the inputs, the action (`MakeAppointment`) is triggered, combining all the inputs to make a comprehensive appointment request.
+
+By using the `Msg Choice` parameter, this flow ensures that each piece of data is assigned to the correct parameter in the final node, demonstrating the flexibility and power of custom nodes in handling complex workflows.
 
 ## Why This Solution is Effective
 
