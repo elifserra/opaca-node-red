@@ -17,7 +17,7 @@ This asynchronous function sends a POST request to the server to invoke a specif
   - `actionParameters`: The parameters required for the action.
   - `msg`: The Node-RED message object.
 
-### 2. **toJsonString(parameterArray, msg)**
+### 2. **toJsonString(parameterArray)**
 This function converts an array of action parameters into a JSON string. It checks the parameter type and processes it accordingly, ensuring that the resulting JSON string is correctly formatted for the action.
 
 ### 3. **fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RED)**

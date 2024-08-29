@@ -17,7 +17,7 @@ var token = null;
 // The endpoint which is actually action name is the url of the server where the action is to be invoked. 
 async function invokeAction(endpoint, actionParameters,nextNodeMsgChoice, msg) {
 
-    var queryString = toJsonString(actionParameters, msg);                                // Convert the action parameters to json string. 
+    var queryString = toJsonString(actionParameters);                                // Convert the action parameters to json string. 
 
     var url = "http://10.42.6.107:8000/invoke/" + endpoint;                               // The url of the server where the action is to be invoked.
     try {
@@ -72,7 +72,7 @@ async function invokeAction(endpoint, actionParameters,nextNodeMsgChoice, msg) {
     If the new type of parameter is added then the conversion of the parameter to json string can be done in this function by adding the new type of parameter.
     for example by adding exchange node required to include the array type of parameter in the action parameters. This will be added in this function.
 */
-function toJsonString(parameterArray, msg) {
+function toJsonString(parameterArray) {
 
     if(parameterArray.length === 0){        // If there are no parameters then return empty json
         return "{}";
