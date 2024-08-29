@@ -190,7 +190,7 @@ When using nodes other than the OPACA framework agent nodes (e.g., Node-RED’s 
 
 ![This is an image](./nodes/resources/Images/non_opaca_agent_node_in_multi_input.png)
 
-    ``` javascript
+```javascript
             let data = {
             data: <value>,                 // The value you want to send to the next node can be any type of data
             nextNodeMsgChoice: <integer>    // The specific Msg Choice identifier that determines which parameter this data should populate in the next node
@@ -198,7 +198,7 @@ When using nodes other than the OPACA framework agent nodes (e.g., Node-RED’s 
 
         msg.payload = data;
         return msg;
-    ```
+```
 
 
 ##### How It Works:
