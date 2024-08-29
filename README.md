@@ -99,6 +99,22 @@ The project is organized into multiple directories, each corresponding to a part
 ## Note:
    The last three opaca agents are created without writing code with the help of `NodeCreator` node. This info is just for showing power of `NodeCreator` node. In this way, user does not need to worry about writing code and creating custom nodes for opaca agents.
 
+## Multi-Input Handling in Custom Nodes
+
+   **Purpose:** Demonstrates a novel solution for handling multiple inputs in a single Node-RED custom node.
+   **Role in NODE-RED:** In standard Node-RED nodes, only a single input (msg.payload) can typically be processed at a time. This limitation can be challenging in scenarios where multiple inputs from different sources need to be processed together before executing an action. However, in our custom nodes, we've developed a unique solution that overcomes this limitation, enabling the processing of multiple inputs seamlessly.
+   **How It Works:** The solution leverages a Set data structure to temporarily store incoming messages `(msg.payload)` uniquely. It waits until all expected inputs are received before proceeding. Once all inputs are gathered, they are sorted and processed in the correct order, ensuring that the node's action is executed with the complete and correctly ordered data.
+   This approach not only maintains data integrity but also ensures that actions are invoked only when all necessary information is available, making it a robust solution for complex workflows.
+   **Why It’s Effective:** 
+   - **Flexibility:** Allows custom nodes to manage and process multiple asynchronous inputs seamlessly, a feature not supported by standard Node-RED nodes.
+   - **Order Preservation:** Ensures that inputs are processed in the correct sequence, which is critical for certain operations.
+   - **Reliability:** Prevents partial data processing by ensuring that all required inputs are present before triggering an action.
+
+   This solution showcases the power and flexibility of custom nodes within Node-RED, providing capabilities beyond what standard nodes offer, and enabling the creation of more complex and reliable automation flows within the OPACA framework.
+
+
+
+
 ## Resources Directory
 
 ###  **Common HTML Template**
