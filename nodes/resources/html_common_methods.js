@@ -192,7 +192,7 @@ class Agent{
         }
 
         // Below code is used to append the agent actions to the action input element.
-        //$("#node-input-action").empty().append(`<option value=${""}>${this.currentAction === null ? "" : this.currentAction.actionName}</option>`); 
+        $("#node-input-action").empty().append(`<option value=${this.currentAction === null ? "" : this.currentAction.actionName}</option>`); 
         this.actions.forEach(action => {
             $("#node-input-action").append(`<option value="${action.actionName}">${action.actionName}</option>`);  // append the agent actions to the action input element
         });
@@ -382,7 +382,6 @@ class Action{
 
         // set the action name as the action input element value
         this.actionName = document.getElementById('node-input-action').value;
-
     }
 
 
@@ -642,7 +641,8 @@ async function makeBaseNodeRegistration(baseAgentNodeName){
 
             // Empty the agentId select element and append the agentIds to the select element.
             $("#node-input-agentId").empty().append(`<option value=${that.agentId}>${that.agentId}</option>`);
-                that.allAgentIds.forEach(agentId => {
+
+            that.allAgentIds.forEach(agentId => {
                 $("#node-input-agentId").append(`<option value="${agentId}">${agentId}</option>`);
             });
 
@@ -683,11 +683,14 @@ async function makeBaseNodeRegistration(baseAgentNodeName){
                     */
 
                     await that.Agent.oneditPrepareFunction(that);
+
                 }  
+
             });
 
             // Call the oneditPrepareFunction of the Agent. When the agentID is not changed, this behaves as default oneditPrepareFunction.
             await that.Agent.oneditPrepareFunction(that);
+
         },
 
         oneditsave: function(){

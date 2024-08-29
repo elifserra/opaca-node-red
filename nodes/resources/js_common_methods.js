@@ -198,6 +198,7 @@ async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RE
         // get the agents from the response.
         const agents = await response.json();
         
+        sendParametersFormatInfoToHtmlSide(agents); // Send the parameters format info to the html side.
 
         // Send the agents to the html side. This is actully used by BaseAgent node because it needs to serve as all agents to the html side.
         RED.httpAdmin.get(`/agents`, function(req, res) { 
@@ -290,6 +291,21 @@ function makeNodeConfiguration(RED, node, config){
 
         }
     });
+}
+
+
+async function sendParametersFormatInfoToHtmlSide(agents){
+    
+    agents.forEach(agent => {
+        console.log(agent.agentId);
+        agent.actions.forEach(action => {
+            console.log(action.name);
+            for(var parameter in action.parameters){
+                console.log(parameter);
+            }
+        });
+    });
+
 }
 
 
