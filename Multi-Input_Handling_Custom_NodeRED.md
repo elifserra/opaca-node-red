@@ -143,6 +143,10 @@ node.on('input', async function(msg){
 });
 ```
 
+### Node-RED Multi-input Flow Example
+
+![This is an image](./nodes/resources/Images/multi-input-sample.png)
+
 ## Why This Solution is Effective
 
 ### Flexibility
