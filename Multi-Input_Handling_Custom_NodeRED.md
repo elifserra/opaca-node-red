@@ -3,7 +3,7 @@
 
 ## Overview
 
-In standard Node-RED, each node is typically designed to process a single input (`msg.payload`) at a time. This can be limiting when building complex flows that require multiple inputs from different sources to be processed together. To overcome this limitation, we developed a custom solution within the OPACA framework that allows a single node to handle multiple inputs before triggering an action.
+In standard Node-RED, each node is typically designed to process a single input (`msg.payload`) at a time. This can be limiting when building complex flows that require multiple inputs from different sources to be processed together. To overcome this limitation, I developed a custom solution within the OPACA framework that allows a single node to handle multiple inputs before triggering an action.
 
 This README provides a comprehensive guide on how this custom multi-input handling works, complete with code examples and detailed explanations.
 
@@ -96,11 +96,12 @@ To address this limitation, we've implemented a custom solution that allows a si
 Here is a complete example of how this solution is implemented within a Node-RED custom node:
 
 ```javascript
+
+// Initialize the Set to store unique msg.payload inputs.
+let allMsgInputs = new Set();
+
 node.on('input', async function(msg){ 
     if(node.agentCurrentActionParametersInfo  != null){
-
-       // Initialize the Set to store unique msg.payload inputs.
-       let allMsgInputs = new Set();
 
        // Get the number of expected msg.payload inputs.
        var numberOfMsgPayloads = node.agentCurrentActionParametersInfo.actionParameters.filter(parameter => parameter.typedInputType === 'msg').length;
