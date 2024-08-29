@@ -90,10 +90,20 @@ class Agent{
             For each parameter, create a label and an input element and append them to the parameters-container div.
         */
         for(var key in this.currentAction.actionParameters){
-            this.currentAction.parameterHtml += `<label for="${this.currentAction.actionParameters[key].name}">${this.currentAction.actionParameters[key].name}</label><input type="text" id="${this.currentAction.actionParameters[key].name}" value="${""}" placeholder="${this.currentAction.actionParameters[key].type}">`;
+            this.currentAction.parameterHtml += `<label for="${this.currentAction.actionParameters[key].name}">${this.currentAction.actionParameters[key].name}</label><input type="text" id="${this.currentAction.actionParameters[key].name}" value="${""}" placeholder="${this.currentAction.actionParameters[key].type}"><button type="button" class="info-button" onclick="toggleFormatInfo('${this.currentAction.actionParameters[key].name}')">?</button><span id="${this.currentAction.actionParameters[key].name}-format-info" class="format-info" style="display: none;">${this.currentAction.actionParameters[key].formatInfo}</span>`;
         }
 
         $("#parameters-container").html(this.currentAction.parameterHtml);                                      // append the parameter html to the parameters-container div
+
+        // This just to be able to display the format info of the parameters. When the info ? button is clicked, the format info will be displayed.
+        window.toggleFormatInfo = function(paramName) {
+            var formatInfoElement = document.getElementById(`${paramName}-format-info`);
+            if (formatInfoElement.style.display === "none") {
+                formatInfoElement.style.display = "inline-block";
+            } else {
+                formatInfoElement.style.display = "none";
+            }
+        };
  
         /*
             For each parameter, create a typed input element and append it to the input element.
@@ -208,6 +218,8 @@ class Agent{
         });
 
 
+
+
         // Display the node name in the name input element
         document.getElementById('node-input-name').value = node.name;
 
@@ -278,9 +290,18 @@ class Action{
             this.actionParameters.push(new Parameter(key,actionParameters[key].type)); // create a parameter object for each parameter and push it to the action parameters array
         }
         this.parameterHtml = "";                                                       // assign the parameter html as an empty string
+        this.getAllParametersFormatInfo();                                            // get all the parameters format info
     }
 
 
+    async getAllParametersFormatInfo(){
+
+        for(var key in this.actionParameters){
+            var fetchKey = `${this.actionName}_${this.actionParameters[key].name}`;
+            this.actionParameters[key].formatInfo = await fetch(fetchKey).then(response=>response.json()).then(data=>data.value);
+        }
+
+    }
 
 
 
@@ -294,7 +315,7 @@ class Action{
         if(this.actionParameters){
             this.parameterHtml = "";
             for(var key in this.actionParameters){
-                this.parameterHtml += `<label for="${this.actionParameters[key].name}">${this.actionParameters[key].name}</label><input type="text" id="${this.actionParameters[key].name}" value="${this.actionParameters[key].value}" placeholder="${this.actionParameters[key].type}">`;
+                this.parameterHtml += `<label for="${this.actionParameters[key].name}">${this.actionParameters[key].name}</label><input type="text" id="${this.actionParameters[key].name}" value="${this.actionParameters[key].value}" placeholder="${this.actionParameters[key].type}"><button type="button" class="info-button" onclick="toggleFormatInfo('${this.actionParameters[key].name}')">?</button><span id="${this.actionParameters[key].name}-format-info" class="format-info" style="display: none;">${this.actionParameters[key].formatInfo}</span>`;
             }
         }
         $("#parameters-container").empty().append(this.parameterHtml); // append the parameter html to the parameters-container div
@@ -522,6 +543,7 @@ class Parameter {
         this.type = type;                                         // assign the type to the type
         this.value = value;                                       // assign the value to the value
         this.typedInputType = "str";                              // assign the typedInputType as str
+        this.formatInfo = null;                                   // assign the formatInfo as null
         /*
             Do not forget that the typedInputType is used to get the type of the parameter whether it is a str or a msg.
             It is not type of the parameter. It is type of input.

@@ -198,7 +198,7 @@ async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RE
         // get the agents from the response.
         const agents = await response.json();
         
-        sendParametersFormatInfoToHtmlSide(agents); // Send the parameters format info to the html side.
+        await sendParametersFormatInfoToHtmlSide(agents,RED); // Send the parameters format info to the html side.
 
         // Send the agents to the html side. This is actully used by BaseAgent node because it needs to serve as all agents to the html side.
         RED.httpAdmin.get(`/agents`, function(req, res) { 
@@ -294,14 +294,50 @@ function makeNodeConfiguration(RED, node, config){
 }
 
 
-async function sendParametersFormatInfoToHtmlSide(agents){
+async function sendParametersFormatInfoToHtmlSide(agents, RED){
     
     agents.forEach(agent => {
-        console.log(agent.agentId);
         agent.actions.forEach(action => {
-            console.log(action.name);
             for(var parameter in action.parameters){
-                console.log(parameter);
+                let parameterFormatInfo = "";
+                switch(action.parameters[parameter].type){
+                    case "string":
+                        parameterFormatInfo = "Enter a text string without double quotes.";
+                        break;
+                    case "integer":
+                        parameterFormatInfo = "Enter an integer.";
+                        break;
+                    case "float":
+                        parameterFormatInfo = "Enter a float number.";
+                        break;
+                    case "boolean":
+                        parameterFormatInfo = "Enter a boolean value.";
+                        break;
+                    case "array":
+                        if(action.parameters[parameter].items.type === "string"){
+                            parameterFormatInfo = `Enter a comma separated list of text strings with double quotes. Example: ["item1", "item2"]`;
+                        }
+                        else if (action.parameters[parameter].items.type === "integer"){
+                            parameterFormatInfo = `Enter a comma separated list of integers. Example: [1, 2]`;
+                        }
+                        else if (action.parameters[parameter].items.type === "float"){
+                            parameterFormatInfo = `Enter a comma separated list of float numbers. Example: [1.1, 2.2]`;
+                        }
+                        else if (action.parameters[parameter].items.type === "number"){
+                            parameterFormatInfo = `Enter a comma separated list of numbers. Example: [1.1, 2.2]`;
+                        }
+                        else if (action.parameters[parameter].items.type === "boolean"){
+                            parameterFormatInfo = `Enter a comma separated list of boolean values. Example: [true, false]`;
+                        }
+                        break;
+                }
+                
+                var fetchKey = `/${action.name}_${parameter}`;
+
+                RED.httpAdmin.get(fetchKey, function(req, res) { 
+                    res.json({ value: parameterFormatInfo});
+                });
+
             }
         });
     });

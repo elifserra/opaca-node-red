@@ -2,6 +2,55 @@
 <!-- The BaseAgent node is the node that is configurable for all the agent nodes depending on the agentID property -->
 
 <style>    
+
+.form-row {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        background: #f1f1f1;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-row label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .form-row input[type="text"], 
+    .form-row select {
+        border: 1px solid #ccc;
+        font-size: 14px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background: #fff;
+    }
+
+    .form-row input[type="text"]:focus, 
+    .form-row select:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+        background: #fff;
+    }
+
+    .form-row select {
+        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxMCI+PHBvbHlnb24gcG9pbnRzPSIwLDAgNSw1IDAsMTAiIHN0eWxlPSJmaWxsOiMwMDA7Ii8+PC9zdmc+') no-repeat right 10px center;
+        background-size: 15px 15px;
+        background: #fff;
+    }
+
+    .form-row #parameters-container {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+    }
+
+
 .invoke-action-button {
     display: flex;
     justify-content: center;
@@ -53,6 +102,38 @@
     font-size: 14px;
     color: #333;
 }
+
+.info-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.info-button:hover {
+    background-color: #0056b3;
+}
+
+.format-info {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 12px;
+    color: #333;
+    margin-left: 10px;
+    display: inline-block; /* Will be toggled to show or hide */
+}
+
+
+
 </style>
 
 <!-- The following script is not common to all the nodes. It is specific to the BaseAgent node. Beacuse baseAgent Node includes agentID propert -->
