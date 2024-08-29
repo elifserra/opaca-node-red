@@ -152,7 +152,7 @@ In this section, we will illustrate how our custom multi-input handling solution
 
 - **Node Name:** KnowledgeAgent {AskKnowledgeLLM}
 - **Action:** AskKnowledgeLLM
-- **Question Parameter:** The parameter `question` is set to `"What is Berlin"`. This input will be sent as part of the `msg.payload` to the next node.
+- **Question Parameter:** The parameter `question` is set to `"What is Berlin"`. This invoke result will be sent as part of the `msg.payload` to the next node.
 - **Msg Choice:** This is set to `1`, which is used to determine which parameter the incoming `msg.payload` should populate in the following node.
 
 In this configuration, the `KnowledgeAgent` node is prepared to send its output (`msg.payload`) with the question "What is Berlin" and associate it with the parameter identified by `Msg Choice` value `1` in the next node.
@@ -178,6 +178,28 @@ This image shows a complete flow in Node-RED where multiple inputs are combined 
 - **ExchangeAgent Node:** Sends the `nameQuery` parameter ("oruc") as `msg.payload`, with `Msg Choice` set to `2`.
 - **Function Nodes (`Time`, `Hours`, `Date`):** Additional nodes that generate specific inputs like time, hours, and date. These nodes also send their outputs with specific `Msg Choice` values.
 - **ExchangeAgent Node (MakeAppointment):** This node is configured to receive multiple inputs. It waits for all the expected `msg.payload` inputs, and once all are received, it processes them according to the `Msg Choice` values.
+
+## Important Note for Sending Message Payloads to OPACA Framework Agent Nodes
+When using nodes other than the OPACA framework agent nodes (e.g., Node-RED’s official nodes or your custom nodes), it is essential that the input message payloads follow a specific format. This ensures that the OPACA framework agent nodes, such as the ExchangeAgent or KnowledgeAgent, can correctly process the incoming data.
+
+## NOTE:
+    For OPACA framework agent nodes themselves, this formatting is handled automatically in the backend. This instruction applies only when you're using non-OPACA nodes to send data into OPACA nodes.
+
+**Required Payload Format:**    
+    To ensure that the OPACA framework agent nodes correctly process the incoming data, the message payload must always be structured as follows when sending from non-OPACA nodes:
+
+![This is an image](./nodes/resources/Images/non_opaca_agent_node_in_multi_input.png)
+
+    ``` javascript
+            let data = {
+            data: <value>,                 // The value you want to send to the next node can be any type of data
+            nextNodeMsgChoice: <integer>    // The specific Msg Choice identifier that determines which parameter this data should populate in the next node
+        };
+
+        msg.payload = data;
+        return msg;
+    ```
+
 
 ##### How It Works:
 
