@@ -207,9 +207,11 @@ class Agent{
             agent.currentAction.handleInvokeAction(node);         // call the handleInvokeAction method of the current action when the invoke action button is clicked
         });
 
+
         // Display the node name in the name input element
         document.getElementById('node-input-name').value = node.name;
 
+        // Display the nextNodeMsgChoice in the msg choice input element
         document.getElementById('node-input-msg-choice').value = node.nextNodeMsgChoice;
 
     }
@@ -326,7 +328,7 @@ class Action{
         const dataToSend = {
             actionName : this.actionName,
             actionParameters : this.actionParameters,
-            nextNodeMsgChoice : node.nextNodeMsgChoice
+            nextNodeMsgChoice : parseInt(node.nextNodeMsgChoice)
         }
     
         return dataToSend;        // return the dataToSend object
@@ -372,6 +374,7 @@ class Action{
         node.name = document.getElementById('node-input-name').value;
 
         // set the nextNodeMsgChoice as the msg choice input element value
+        console.log(document.getElementById('node-input-msg-choice').value);
         node.nextNodeMsgChoice = document.getElementById('node-input-msg-choice').value;
 
     }
@@ -606,7 +609,8 @@ async function makeBaseNodeRegistration(baseAgentNodeName){
         defaults : {
             name : {value: nodeConfig.name},
             agentId : {value: nodeConfig.agentId},
-            agentCurrentActionParametersInfo : {value: null}
+            agentCurrentActionParametersInfo : {value: null},
+            nextNodeMsgChoice : {value: null}
         },
         inputs : nodeConfig.numberOfInputs,
         outputs : nodeConfig.numberOfOutputs,
@@ -642,6 +646,7 @@ async function makeBaseNodeRegistration(baseAgentNodeName){
             
             // Listen for the change event of the agentId select element.
             $("#node-input-agentId").on('change', async function(){
+
                 /* 
                     The following code is used to check if the agentId is changed. If the agentId is changed, the agentId property of the BaseAgent node is updated with the new agentId.
                     The applyChangesForAgentChange function is called to apply the changes for the agentId change. The oneditPrepareFunction of the Agent is called to prepare the agent for editing.
@@ -667,6 +672,7 @@ async function makeBaseNodeRegistration(baseAgentNodeName){
                       Important to call this function inside of the change event listener because we need to update the agent actions and actions paramaters immediately when the agentID is changed.
                       Otherwise the update would be done after opening edit screen again.             
                     */
+
                     await that.Agent.oneditPrepareFunction(that);
                 }  
             });

@@ -38,14 +38,19 @@ async function invokeAction(endpoint, actionParameters,nextNodeMsgChoice, msg) {
        
         await response.json().then(data => {
 
+            // Store the response from the server in the msg.payload to send the invoke actual result output as input to the next node.
             let sendedData = {
-                data : data,
-                nextNodeMsgChoice : nextNodeMsgChoice
+                data : data, // This is the invoke actual result output.
+
+                /*
+                    This is added because node-red does not support multiple outputs to be input for the next node.
+                    So, I added this to send the data to the next node in the correct order to be able to use multiple outputs as input for the next node.
+                */
+
+                nextNodeMsgChoice : nextNodeMsgChoice // This is the next msg payload order. It is used to send the data to the next node in the correct order.
             }
 
-            console.log(sendedData);
-
-            msg.payload = sendedData;
+            msg.payload = sendedData; // Store the response from the server in the msg.payload to send the invoke actual result output as input and nextNodeMsgChoice to the next node.
         });
 
     } catch (error) {
@@ -222,54 +227,61 @@ async function fetchOpacaTokenAndAgents(username, password, apiUrl, loginUrl, RE
 function makeNodeConfiguration(RED, node, config){
     RED.nodes.createNode(node,config);                                                        // Create the node.
     node.agentCurrentActionParametersInfo = config.agentCurrentActionParametersInfo;          // Store the agent current action parameters info in the node.
-    var allMsgInputs = new Set();
-    var msgCounter = 0;
-    var control = [];
+    var allMsgInputs = new Set();                                                             // Create a set to store the msg inputs.
 
     node.on('input', async function(msg){ 
         if(node.agentCurrentActionParametersInfo  != null){
 
-            console.log("Input is received");
-            console.log(msg.payload);
-
+           // Get the number of msg payloads.
            var numberOfMsgPayloads = node.agentCurrentActionParametersInfo.actionParameters.filter(parameter => parameter.typedInputType === 'msg').length;
 
+           // Add the msg payload to the set to store the msg inputs as unique.
            node.agentCurrentActionParametersInfo.actionParameters.forEach(parameter => {
                 if(parameter.typedInputType === 'msg'){
                     allMsgInputs.add(msg.payload);
                 }
            });
 
+           /*
+             Here is important. Because this code enable our custom nodes to get multiple inputs from the previous nodes.
+             It waits for all the inputs to be received and then invoke the action.
+             If the number of msg payloads is equal to the size of the set then invoke the action.
+           */
+
+           // If the number of msg payloads is equal to the size of the set then invoke the action.
            if(numberOfMsgPayloads === allMsgInputs.size){
             
-                console.log("All inputs are received");
-                console.log(allMsgInputs);
+                console.log(allMsgInputs); // Log the msg inputs to see the msg inputs.
                 
-                                // Set'i diziye dönüştür
-                let myArray = Array.from(allMsgInputs);
+                let msgInputsAsArray = Array.from(allMsgInputs); // Convert the set to array to be able to sort the array.
 
-                // Dizi üzerinde sıralama işlemi yap
-                myArray.sort((a, b) => {
+                // Sort the array to send the data to the next node in the correct order.
+                msgInputsAsArray.sort((a, b) => {
                     return a.nextNodeMsgChoice - b.nextNodeMsgChoice;
                 });
 
-                console.log(myArray);
+                console.log(msgInputsAsArray);  // Log the sorted array to see the sorted array.
 
-                myArray.forEach(item => {
-                    var isFound = false;
+                // Loop through the sorted array and set the value of the payload to the parameter value.
+                msgInputsAsArray.forEach(item => {
+                    var isFound = false; // This is used to control the value of the payload is set to the parameter value.
                     node.agentCurrentActionParametersInfo.actionParameters.forEach(parameter => {    
+                        // If the parameter value is payload and the type of the input is msg and the value of the payload is not set to the parameter value then set the value of the payload to the parameter value.
                         if(parameter.value === "payload" && parameter.typedInputType === 'msg' && isFound === false){
-                            parameter.value = item.data;
-                            isFound = true;
+                            parameter.value = item.data; // Set the value of the payload to the parameter value.
+                            isFound = true;              // Set the isFound to true to control the value of the payload is set to the parameter value.
                         }
                     });
                 });
 
 
+                // Clear the set to store the msg inputs.
                 allMsgInputs = new Set();
 
+                // This will be seen on the node-red debug tab. It is important to see the action parameters info.
                 node.warn(node.agentCurrentActionParametersInfo); 
 
+                // Invoke the action by sending the action parameters to the server.
                 await invokeAction(node.agentCurrentActionParametersInfo.actionName, node.agentCurrentActionParametersInfo.actionParameters, node.agentCurrentActionParametersInfo.nextNodeMsgChoice, msg);
                 node.send(msg);    // Send the output of the action as input to the next node. In invokeAction function, the output of the action is stored in the msg.payload. and send this msg to the next node.
            }
