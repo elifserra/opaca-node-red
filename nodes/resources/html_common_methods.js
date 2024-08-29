@@ -411,15 +411,18 @@ class Action{
 
         this.actionParameters.forEach(parameter => {
             jsonString += "\"" + parameter.name + "\":";                                                     
-            actualValue = parameter.value;                                                                  
+            actualValue = parameter.value;    
+                              
+            // if the parameter type is string, add double quotes to the value
             if(parameter.type == "string"){                                                                  
                 valueAsPassed = `"${actualValue}"`;
             }
-            else if(parameter.type == "array" || parameter.type == "tuple"){                                  
-                let inputArray = actualValue.split(",").map(item => item.trim());   
-                inputArray = JSON.stringify(inputArray);                          
-                valueAsPassed = inputArray;                                                
-            }
+            // If not, add the value as it is passed
+
+            /*
+                Important because we always trust the user to enter the parameter value correct json format.
+                Later I will use ChatGPT to produce informative messages for user to enter the correct json format.
+            */
             else{
                 valueAsPassed = actualValue;                                                                 
             }
