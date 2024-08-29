@@ -192,7 +192,7 @@ class Agent{
         }
 
         // Below code is used to append the agent actions to the action input element.
-        $("#node-input-action").empty().append(`<option value=${""}>${this.currentAction === null ? "" : this.currentAction.actionName}</option>`); 
+        //$("#node-input-action").empty().append(`<option value=${""}>${this.currentAction === null ? "" : this.currentAction.actionName}</option>`); 
         this.actions.forEach(action => {
             $("#node-input-action").append(`<option value="${action.actionName}">${action.actionName}</option>`);  // append the agent actions to the action input element
         });
@@ -213,6 +213,9 @@ class Agent{
 
         // Display the nextNodeMsgChoice in the msg choice input element
         document.getElementById('node-input-msg-choice').value = node.nextNodeMsgChoice;
+
+        // Display the action name in the action input element
+        document.getElementById('node-input-action').value = this.currentAction === null ? "" : this.currentAction.actionName; // display the current action name in the action input element
 
     }
 
@@ -376,6 +379,9 @@ class Action{
         // set the nextNodeMsgChoice as the msg choice input element value
         console.log(document.getElementById('node-input-msg-choice').value);
         node.nextNodeMsgChoice = document.getElementById('node-input-msg-choice').value;
+
+        // set the action name as the action input element value
+        this.actionName = document.getElementById('node-input-action').value;
 
     }
 
