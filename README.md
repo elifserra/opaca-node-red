@@ -95,6 +95,11 @@ The project is organized into multiple directories, each corresponding to a part
    - **Role in NODE-RED:** Enables users to ask questions and receive precise answers, assisting with administrative tasks and providing relevant local information.
    - [Detailed Documentation](./nodes/KnowledgeAgent-node/KnowledgeAgent.md)
 
+## 18. **DataAgent**
+- **Purpose:** is designed for performing advanced data analysis within the OPACA framework.  
+- **Role in NODE-RED:**  serves as a critical node for accessing and analyzing large datasets.
+- [Detailed Documentation](./nodes/DataAgent-node/DataAgent.md)
+
 
 ## Note:
    The last three opaca agents are created without writing code with the help of `NodeCreator` node. This info is just for showing power of `NodeCreator` node. In this way, user does not need to worry about writing code and creating custom nodes for opaca agents.
