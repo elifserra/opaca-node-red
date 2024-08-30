@@ -212,8 +212,8 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
 
    In summary, when working within the OPACA framework:
 
-   Direct Connections: If the output from one node is already in the required format, you can connect nodes directly without any additional processing.
-   Format Mismatch: If the formats do not align, you'll need to use a function node and write simple code to transform the data into the correct format before passing it on to the next node.
+   - Direct Connections: If the output from one node is already in the required format, you can connect nodes directly without any additional processing.
+   - Format Mismatch: If the formats do not align, you'll need to use a function node and write simple code to transform the data into the correct format before passing it on to the next node.
    This approach provides the necessary adaptability to handle various data formats and ensures that your workflow remains robust and error-free.
 
    This concept is crucial for users building complex flows within the OPACA framework and should be kept in mind when designing data flows and node connections.
