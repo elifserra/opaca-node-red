@@ -128,5 +128,15 @@
     "agentId": "bobbi-agent",
     "numberOfInputs": 1,
     "numberOfOutputs": 1
+  },
+  "DataAgent": {
+    "category": "ZEKI",
+    "color": "#c0c0c0",
+    "name": "DataAgent",
+    "label": "DataAgent",
+    "icon": "default-icon",
+    "agentId": "data-agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
   }
 }
