@@ -199,20 +199,21 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
 
    By setting the fields to msg.payload, you allow the flow to dynamically pass data from one node to another, making your automation more flexible and powerful.
 
+4. **Formatting issue in flows:**
    ![This is an image](./nodes/resources/Images/complex_flow.png)
 
    In the OPACA framework, it's important to understand that not all action results from one node may be in the correct format for direct input into another OPACA agent node. This is particularly true when dealing with complex data types or when the output from an action needs to be transformed before it can be utilized by subsequent nodes.
 
-   For instance, when invoking an action, the result might be an array, an object, or a specific data structure that doesn't directly match the expected input format of the next node in your flow. In such cases, you need to employ intermediary functions to convert the data into the appropriate format. This is where format transformation functions come into play.
+   For instance, when invoking an action, the result might be an array, an object, or a specific data structure that doesn't directly match the expected input format of the next node in your flow. In such cases, you need to employ intermediary functions to convert the data into the appropriate format. This is where format transformation functions come into play. Actually They are node-red official `function` nodes.
 
-   These format transformation functions, like the ones seen in the provided example, allow you to modify the output data to match the required input format for the next node. This ensures smooth data flow within your Node-RED environment and helps prevent errors or unexpected behaviors in your OPACA-based system.
+   These format transformation functions, like the ones seen in the provided example, should be used to modify the output data to match the required input format for the next node. This ensures smooth data flow within your Node-RED environment and helps prevent errors or unexpected behaviors in your OPACA-based system.
 
    For example, if a node outputs an array of coordinates, but the next node expects a single coordinate in a specific structure, you would use a function to extract and reformat the data accordingly. This flexibility allows for greater control over how data is passed between nodes and ensures that each node receives the data exactly as it needs.
 
    In summary, when working within the OPACA framework:
 
    Direct Connections: If the output from one node is already in the required format, you can connect nodes directly without any additional processing.
-   Format Mismatch: If the formats do not align, you'll need to use a function node to transform the data into the correct format before passing it on to the next node.
+   Format Mismatch: If the formats do not align, you'll need to use a function node and write simple code to transform the data into the correct format before passing it on to the next node.
    This approach provides the necessary adaptability to handle various data formats and ensures that your workflow remains robust and error-free.
 
    This concept is crucial for users building complex flows within the OPACA framework and should be kept in mind when designing data flows and node connections.
