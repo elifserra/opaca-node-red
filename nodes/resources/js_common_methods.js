@@ -329,6 +329,28 @@ async function sendParametersFormatInfoToHtmlSide(agents, RED){
                         else if (action.parameters[parameter].items.type === "boolean"){
                             parameterFormatInfo = `Enter a comma separated list of boolean values. Example: [true, false]`;
                         }
+                        else if(action.parameters[parameter].items.type === "array"){
+
+                            switch(action.parameters[parameter].items.items.type){
+
+                                case "string":
+                                    parameterFormatInfo = `Enter a comma separated list of arrays of text strings with double quotes. Example: [["item1", "item2"], ["item3", "item4"]]`;
+                                    break;
+                                case "integer":
+                                    parameterFormatInfo = `Enter a comma separated list of arrays of integers. Example: [[1, 2], [3, 4]]`;
+                                    break;
+                                case "float":
+                                    parameterFormatInfo = `Enter a comma separated list of arrays of float numbers. Example: [[1.1, 2.2], [3.3, 4.4]]`;
+                                    break;
+                                case "number":
+                                    parameterFormatInfo = `Enter a comma separated list of arrays of numbers. Example: [[1.1, 2.2], [3.3, 4.4]]`;
+                                    break;
+                                case "boolean":
+                                    parameterFormatInfo = `Enter a comma separated list of arrays of boolean values. Example: [[true, false], [false, true]]`;
+                                    break;
+                            }
+
+                        }
                         break;
                 }
                 
