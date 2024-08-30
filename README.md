@@ -200,6 +200,7 @@ To use this project, you need to have Node-RED installed. Node-RED is essential 
    By setting the fields to msg.payload, you allow the flow to dynamically pass data from one node to another, making your automation more flexible and powerful.
 
 4. **Formatting issue in flows:**
+
    ![This is an image](./nodes/resources/Images/complex_flow.png)
 
    In the OPACA framework, it's important to understand that not all action results from one node may be in the correct format for direct input into another OPACA agent node. This is particularly true when dealing with complex data types or when the output from an action needs to be transformed before it can be utilized by subsequent nodes.
