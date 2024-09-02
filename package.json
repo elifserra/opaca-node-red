@@ -26,7 +26,8 @@
       "NavigationAgent": "/nodes/NavigationAgent-node/NavigationAgent.js",
       "ControlCenterAgent": "/nodes/ControlCenterAgent-node/ControlCenterAgent.js",
       "KnowledgeAgent": "/nodes/KnowledgeAgent-node/KnowledgeAgent.js",
-      "DataAgent": "/nodes/DataAgent-node/DataAgent.js"
+      "DataAgent": "/nodes/DataAgent-node/DataAgent.js",
+      "BeIntelliForecastingAgent": "/nodes/BeIntelliForecastingAgent-node/BeIntelliForecastingAgent.js"
     }
   },
   "dependencies": {

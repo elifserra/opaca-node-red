@@ -138,5 +138,15 @@
     "agentId": "data-agent",
     "numberOfInputs": 1,
     "numberOfOutputs": 1
+  },
+  "BeIntelliForecastingAgent": {
+    "category": "ZEKI",
+    "color": "#e5c0a1",
+    "name": "BeIntelliForecastingAgent",
+    "label": "BeIntelliForecastingAgent",
+    "icon": "default-icon",
+    "agentId": "beintelli_forecasting_agent",
+    "numberOfInputs": 1,
+    "numberOfOutputs": 1
   }
 }
