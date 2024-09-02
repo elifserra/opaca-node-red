@@ -5,6 +5,9 @@
 
 The ChatBot node is a highly advanced and versatile tool designed to interact with the OPACA framework. This node is capable of understanding and executing various tasks based on user input provided via text, voice, or images. It can invoke specific actions on agents registered within the OPACA framework, handle custom agents like `camera-agent` and `voice-agent`, and respond to the user in a meaningful and context-aware manner.
 
+You can find the improved version of this chatbot nodes as seperate website at below another git repo:
+    https://github.com/oruccakir/Smart-Applications-CHAT-BOT
+
 ## Features
 
 1. **Multi-Modal Input Handling**: 
