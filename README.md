@@ -101,6 +101,13 @@ The project is organized into multiple directories, each corresponding to a part
 - [Detailed Documentation](./nodes/DataAgent-node/DataAgent.md)
 
 
+## 19. **BeIntelliForecastingAgent**
+   - **Purpose:** Provides forecasting of pollution metrics such as NO, NO2, O3, PM1, PM10, and PM2.5 at specified sensor locations over a defined number of hours.
+   - **Role in NODE-RED:** Integrates pollution forecasting capabilities into Node-RED, enabling automated environmental monitoring and data-driven decision-making within your flows.
+   - [Detailed Documentation](./nodes/BeIntelliForecastingAgent-node/BeIntelliForecastingAgent.md)
+
+
+
 ## Note:
    The last three opaca agents are created without writing code with the help of `NodeCreator` node. This info is just for showing power of `NodeCreator` node. In this way, user does not need to worry about writing code and creating custom nodes for opaca agents.
 
